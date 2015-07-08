@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock the Web with NodeJS - jour 2</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="components/normalize-css/normalize.css" />
+  <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="components/highlightjs/styles/tomorrow.css" />
+  <link rel="stylesheet" href="css/ruban.min.css" />
+  <link rel="stylesheet" href="css/ruban-print.min.css" media="print" />
+  <link rel="stylesheet" href="css/day2.min.css" />
+</head>
+
+<body>
+  <div class="time"></div>
+
+  <section class="title main">
+    <img class="bg" src="images/rock-blur.jpg">
+    <h1>Rock The Web with Node.js</h1>
+  </section>
+
+  <section class="title">
+    <div class="bg">
+      <img src="images/event-programming.jpg">
+    </div>
+    <h1>Programmez avec des évènements</h1>
+  </section>
+
+  <section>
+    <h1>The hollywood principle</h1>
+    <ul class="steps">
+      <li>L'auditeur enregistre un callback auprès de l'émetteur : <i>Don't call us, we'll call you</i></li>
+      <li>La boucle évènementielle dépile les callbacks lorsque l'évènement survient</li>
+      <li>Une fonction asynchrone d'I/O = <br/>1 émetteur avec 1 seul évènement</li>
+      <li>La UI d'un navigateur = <br/>N émetteurs (noeuds DOM) avec N évènements</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Le callback sera exécuté uniquement lorsque l'évènement sera survenu, et s'il n'y a pas d'autres instructions en cours (mono-thread non intéruptible)</p>
+      <p>Génèralement, les callbacks sont dépilés dans l'ordre d'enregistrement, mais il est périlleux de présumer de cet ordre</p>
+      <p>Une fonction asynchrone est un cas spécifique d'émission d'évènement : il n'y a qu'un type d'évènement (la fin de l'opération), et qu'un seul auditeur possible (le code appelant)</p>
+      <p>La programmation évènementielle en NodeJS n'est qu'une généralisation de ce que vous connaissez en JS dans un navigateur avec les <code>onclick=...</code> et autre <code>node.addEventListener(...)</code>, les phases de <strong>bubble</strong>  (remonté de l'enfant vers son parent) et de <strong>capture</strong> (descente du parent vers les enfants) en moins.</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Le module <i>events</i></h1>
+    <ul class="steps">
+      <li>Classe <strong>EventEmitter</strong> qui implémente ce pattern</li>
+      <li><code>on(evt, cb)</code> enregistre un auditeurs pour <strong>evt</strong></li>
+      <li><code>emit(evt, arg1, arg2...)</code> déclenche tous les auditeurs de <strong>evt</strong> en leur passant tous les paramètres</li>
+      <li><code>removeListener(evt, cb)</code> désinscrit un auditeur</li>
+      <li><code>removeAllListener(evt)</code> les désinscrit tous</li>
+      <li><code>once(evt, cb)</code> inscrit un auditeur qui sera automatiquement désinscrit après le 1er évènement</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>addListener()</code> est un alias de <code>on</code></p>
+      <p>Une instance d'<strong>EventEmitter</strong> émet elle même des évènement lorsqu'on ajoute un auditeur (<strong>newListener</strong>) et lorsqu'on en retire un (<strong>removeListener</strong>)</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Le module <i>events</i></h1>
+    <ul class="steps">
+      <li class="warning">Il est impératif de désinscrire les auditeurs !</li>
+      <li class="guideline">Warning est émit pour chaque émetteur ayant plus de 10 auditeurs sur un évènement.<br/>Paramétrable avec <code>setMaxListeners(n)</code></li>
+      <li class="convention">Les noms des évènements sont en <strong>camel-case</strong></li>
+      <li>De nombreuses classes NodeJS hérite d'<strong>EventEmitter</strong>: <strong>Server</strong>, <strong>Socket</strong>, <strong>Stream</strong>, <strong>ChildProcess</strong>, <strong>Cluster</strong>...</li> 
+    </ul>
+    <details open>
+      <summary/>
+      <p>L'absence de désinscription d'un auditeur est une source de fuite mémoire, car cette référence sur l'auditeur l'empêche d'être <i>garbage-collecté</i>, lui ou ses éventuelles <i>closures</i></p>
+      <p>Le warning sur le nombre d'auditeurs est purement indicatif, et n'empèche pas d'en enregistrer plus.</p>
+      <p><code>setMaxListener(0)</code> désactive complètement le warning, mais c'est peu recommandé</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Le module <i>events</i></h1>
+    <ol class="steps hands-on">
+      <li>Créez un module <strong>countdown</strong> qui exporte une objet ayant une méthode <strong>start(n)</strong>. Cette méthode emettra immédiatement un évènement <strong>start</strong> avec le nombre n, puis toutes les secondes, un évènement <strong>tick</strong> avec les secondes restantes (utilisez <a href="http://nodejs.org/api/timers.html#timers_settimeout_callback_delay_arg"><code>setTimeout</code></a>). Lorsqu'il ne reste plus de temps, un évènement <strong>stop</strong> est envoyé.</li>
+      <li>Dans un autre module <strong>ignition</strong>, importez l'objet, enregistrez des callbacks sur ses évènements qui afficheront la progression du compte à rebourd sur la console</li>
+      <li class="bonus">Transformez l'objet <strong>countdown</strong> par une classe qui hérite de <strong>EventEmitter</strong></li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Le plus simple est de récupérer la classe <strong>EventEmitter</strong>, et de créer un instance avec <code>new</code></p>
+      <p>On ajoute une méthode start à cet objet, et c'est lui qui sera exporté</p>
+      <p>Il est plus simple de créer une fonction <strong>tick</strong> à part qui s'invoque récursivement</p>
+      <p>La création d'une classe spécifique est de loin une solution plus élégante.</p>
+      <p><a href="http://runnable.com/VK6pitgw-DEDVvWn/rocktheweb-countdown">Correction</a></p>
+      <p><a href="http://runnable.com/VK6r-5NB9FAGhRnx/rocktheweb-countdown-class">Correction classe</a></p>
+    </details>
+    <div class="timing" data-duration>40</div>
+  </section>
+
+  <section class="title">
+    <div class="timing" data-pause>15</div>
+    <div class="bg">
+      <img src="images/streams.png">
+    </div>
+    <h1>Streams et buffers</h1>
+  </section>
+
+  <section>
+    <h1>Streamz ?</h1>
+    <ul class="steps">
+      <li>Les streams traitent la donnée au fil de l'eau</li>
+      <li>Ils sont en <strong>Readable</strong>, <strong>Writable</strong>, <strong>Duplex</strong> ou <strong>Transform</strong></li>
+      <li>Ce sont des objets qui héritent d'<strong>EventEmitter</strong></li>
+      <li>Utilisent une structure de données binaire : <strong>Buffer</strong></li>
+      <li><strong>Buffer</strong> est un tableau de mémoire pré-allouée</li>
+      <li>Il stocke efficacement du binaire, et peut l'encoder en string : <strong>'utf8'</strong> (défaut), <strong>'utf16le'</strong>, <strong>'ascii'</strong>, <strong>'base64'</strong>, <strong>'hex'</strong></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Les streams en NodeJS sont l'équivalent du pipe Unix</p>
+      <p>Les buffers stocke les données sous format binaire et sont capable de les convertir dans un encodage spécifique (méthode <code>toString(encoding)</code>)</p>
+      <p>L'encoding <strong>'binary'</strong> est déprécié</p>
+      <p>Les buffers sont des tableau pré-alloués non dynamique qui pointe vers une zone mémoire</p>
+      <p>L'implémentation de nouveaux streams est assez rare, il existe de nombreux formats déjà supportés (<a href="https://www.npmjs.com/browse/keyword/stream">1344 package taggés avec le mot clé <strong>stream</strong> sur NPM</a>)</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Quand les utiliser ?</h1>
+    <ul>
+      <li class="step guideline">Pour économiser la mémoire : on traite les données par blocs</li>
+      <li class="step guideline">Pour traiter les données au plus vite</li>
+      <li class="step guideline">Pour enchainer différentes opérations :<br/> lecture disque > compression > ecriture réseau</li>
+      <li class="step">A la base de nombreuses API NodeJS<span class="hints line"><span class="step">fs</span><span class="step">net</span><span class="step">zlib</span><span class="step">crypto</span></span></li> 
+      <li class="step">Refondus avec la version 0.10</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Un <a href="https://github.com/substack/stream-handbook">guide pratique</a> pour utiliser et implémenter les stream</p>
+      <p>Un <a href="https://github.com/substack/stream-adventure">tutoriel interractif</a> pour expérimenter les streams (14 challenges)</p>
+      <p>L'annonce du changement de l'implémentation des stream en version <a href="http://blog.nodejs.org/2012/12/20/streams2/">0.10</a></p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Stream en lecture</h1>
+    <ul class="steps">
+      <li><strong>Flowing mode</strong> : emet l'évènement <strong>data</strong> dès qu'un bloc de donnée est prêt, et <strong>end</strong> lorsqu'il n'y a plus rien</li>
+      <li><strong>Non-flowing mode</strong> : émet l'évènement <strong>readable</strong> dès la donnée est prête à être lue, et <strong>end</strong> à la fin</li>
+      <li><strong>Non-flowing mode</strong> : à vous d'appeler la méthode <code>read()</code> jusqu'à ce qu'elle renvoit null</li>
+      <li class="convention"><strong>Flowing mode</strong> automatique dès qu'il y a un auditeur de <strong>data</strong></li>
+      <li class="warning">Si <strong>error</strong> n'est pas écouté, il lévera une exception !</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Le déclenchement automatique du <strong>flowing mode</strong> permet la compatibilité avec les version antérieures à la 0.10</p>
+      <p>Le <strong>non-flowing mode</strong> fut ajouté pour offrir plus de possibilité aux programmeurs, notamment pour consommer la donnée que lorsque le programme est prêt à la traiter</p>
+      <p>L'évènement <strong>error</strong> ne signifie pas nécessairement que la lecture est stoppée</p>
+      <p>Quelques flux <strong>Readable</strong> : réponse HTTP (ClientRequest), requête HTTP (Server), fichiers en lecture, socket tcp, stdout/stderr des processus enfant, stdin du processus courant</p> 
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Stream en ecriture</h1>
+    <ul class="steps">
+      <li>Invoquez la méthode <code>write()</code> pour écrire dans le flux, <code>end()</code> lorsque vous avez terminé</li>
+      <li class="convention">Lorsque <code>write()</code> renvoie <code>false</code> attendez l'évènement <strong>drain</strong> avant d'écrire à nouveau</li>
+      <li class="warning">Si vous n'attendez pas <strong>drain</strong> les données seront alors stockées temporairement en mémoire</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>write()</code> prend en paramètre un callback, invoqué lorsque les données ont été flushé dans la destination, ce qui garantie qu'on puisse écrire à nouveau</p>
+      <p>Une fois que vous avez appelez <code>end()</code>, vous ne pouvez plus écrire</p>
+      <p>Quelques flux <strong>Readable</strong> : requête HTTP (ClientRequest), réponse HTTP (Server), fichiers en écriture, socket tcp, stdin des processus enfant, stdout/stderr du processus courant</p> 
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Pipes !</h1>
+    <ul class="steps">
+      <li><strong>Readable</strong> propose une méthode <code>pipe(writable)</code> qui écrit les données lisible au fil de l'eau dans la destination, et la ferme lorsqu'il n'y a plus de données<pre><code class="javascript">var input = fs.createReadStream('file.txt');
+var compressor = zlib.createGzip();
+var output = fs.createWriteStream('file.txt.gz');
+input.pipe(compressor).pipe(output);</code></pre></li>
+      <li><code>pipe()</code> gère les évènement <strong>readable</strong> de la source, et invoque la méthode <code>write()</code> de la destination</li>
+      <li class="warning">Les erreurs doivent toujours être gérées</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>pipe()</code> ne surcharge pas la destination si la source est plus véloce</p>
+      <p>Elle renvoit le stream de destination pour permettre le chaînage</p>
+      <p>Pour une fois, la syntaxe la plus simple est également la plus efficace ! Usez et abusez de pipe lorsque vous manipulez des fichiers, des sockets, des connexions HTTP...</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Sockets and Buffers</h1>
+    <ol class="steps hands-on">
+      <li>Créez un module <strong>cat</strong> qui lit le fichier passé en paramètre de l'exécutable et qui l'affiche sur la sortie standard</li>
+      <li>Créez un module <strong>analyze</strong> qui lit un fichier volumineux (chemin passé en paramètre de l'exécutable), et qui affiche sur la console : <ol>
+        <li>Le nombre d'évènements <strong>readable</strong></li>
+        <li>Le nombre d'opération <code>read()</code></li>
+        <li>Le nombre d'octets lus par lecture</li>
+        <li>La taille du fichier en octets</li>
+      </ol></li>
+      <li>Créez un module <strong>encoder</strong> qui lit un fichier (chemin passé en paramètre de l'exécutable) et qui sauvergarde une copie encodée (chemin passé en paramètre) en base 64. Utilisez un <a href="https://www.base64decode.org/">decoder en ligne</a> pour vérifier votre travail</li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Attention, dans l'ordre des arguments du programme, <code>node</code> est le premier, le nom du fichier est le second, vos paramètres sont donc à partir du 3ème</p>
+      <p>Les fonctions de création de stream à partir de fichier sont <code>fs.createReadStream()</code> et <code>fs.createWriteStream()</code></p>
+      <p>Pour <strong>analyze</strong>, il est nécessaire d'écouter <strong>readable</strong>, et d'invoker <code>read()</code></p>
+      <p>Sans arguments, <code>read()</code> lit autant d'octets qu'il le peut, mais il est possible de spécifier une taille, et de lire jusqu'à ce qu'il renvoi <code>null</code></p>
+      <p>Dans le cas d'encoder, on pourrait aussi créer un <strong>stream</strong> de type <strong>Transform</strong></p>
+      <p><a href="http://runnable.com/VLEaR7roaoU0P1wf/rocktheweb-streams">Correction</a></p>
+    </details>
+    <div class="timing" data-duration>50</div>
+  </section>
+
+  <section class="title">
+    <div class="bg">
+      <img src="images/http-server.jpg">
+    </div>
+    <h1>Rocking Http</h1>
+  </section>
+
+  <section>
+    <h1>Le module <i>http</i></h1>
+    <ul class="steps">
+      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_server"><strong>Server</strong></a> implémente un serveur Http basique, héritant de <strong>EventEmitter</strong></li>
+      <li><code>connect</code> est appelé pour chaque client qui se connecte</li>
+      <li><code>request</code> est appelé pour chaque requête entrante. Le callback doit constituer la réponse</li>
+      <li><code>listen(port, hostname, cb)</code> démarre le serveur sur un port</li>
+      <li><code>close()</code> stoppe le serveur</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Pour créer un serveur, il suffit d'instancier la classe <strong>Server</strong>, ou d'utiliser la fonction <code>http.createServer()</code></p>
+      <p>Il est possible d'ouvrir un serveur en écoute sur socket unix</p>
+      <p>D'autres évènement existe pour la gestion des protocoles (<strong>upgrade</strong>, <strong>checkContinue</strong>), ou la terminaison du server (<strong>close</strong>)</p>
+      <p>En cas d'échec du démarrage du serveur (port déjà utilisé), le serveur émet l'évènement <strong>error</strong></p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Anatomie du serveur</h1>
+    <ul class="steps">
+      <li>Constitution de la résponse<pre><code class="javascript">var http = require('http');
+var server = http.createServer();
+
+server.on('request', function(req, resp) {
+  resp.setHeader('Content-Type', 'text/plain');
+  resp.statusCode = 200;
+  resp.write('Hello world !', 'utf8');
+  resp.end();
+});
+
+server.listen(8080, function() {
+  console.log('serveur starged on 8080');
+});</code></pre></li>
+      <li><strong>req</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_http_incomingmessage"><strong>IncomingMessage</strong></a></li>
+      <li><strong>resp</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_class_http_serverresponse"><strong>ServerResponse</strong></a></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>createServer()</code> accepte un paramètre qui est un auditeur enregistré sur l'évènement <strong>request</strong></p>
+      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extême : <pre><code class="javascript">var http = require('http');
+var port = 8080;
+
+http.createServer(function(req, resp) {
+  res.end('Hello world !');
+}).listen(port, function() {
+  console.log('server started on port', port);
+}).on('error', function(err) {
+  console.error('failed to start server:', err);
+});</code></pre></div>
+      <p><strong>IncomingMessage</strong> permet de lire (lecture seule) les paramètres d'entrée (méthode, corps, en-tête...)</p>
+      <p><strong>ServerResponse</strong> permet d'écrire la réponse (corps, en-tête, redirection...)</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Client Http</h1>
+    <ul class="steps">
+      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_clientrequest"><strong>ClientRequest</strong></a> fourni un client Http basique<pre><code class="javascript">http.request({
+  host:'fr.wikipedia.org',
+  method: 'GET',
+  path: '/w/index.html?search=Node.js'
+}, function(resp) {
+  console.log(resp.statusCode);
+  res.on('data', function(chunk) {
+    console.log(chunk);
+  });
+}).end();</code></pre></li>
+      <li><pre class="inline"><code class="javascript">http.request()</code></pre> renvoie un objet pour customiser les en-têtes et le contenu (<strong>POST</strong>, <strong>PUT</strong>) de la requête</li>
+      <li>La réponse arrive par paquets de manière différée</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>L'objet renvoyé est donc bien une instance de <strong>ClientRequest</strong></p>
+      <p>La requête n'est effectivement envoyée que lorsqu'un appelle la fonction <code>end()</code></p>
+      <p>Pour les <strong>GET</strong>, une méthode <code>http.get(options, callback)</code> évite l'usage du <code>end()</code></p>
+      <p>La gestion d'erreur est forcément asynchrone : il faut écouter l'évènement <strong>error</strong> de l'objet <strong>ClientRequest</strong></p>
+      <p>C'est un client très basique: pas de gestion du proxy, des redirections... On utilisera plutôt le package <a href="https://www.npmjs.com/package/request">request</a> à la place</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Http, autres</h1>
+    <ul class="steps">
+      <li>Le module <strong>url</strong> expose  <code>url.parse(str)</code>, <code>format(obj)</code> et <code>resolve(from, to)</code></li>
+      <li>Le module <strong>https</strong> propose une classe <strong>Server</strong> et une méthode <pre class="inline"><code class="javascript">createServer(options)</code></pre> ayant les même méthodes et évènements que la version du module <strong>http</strong></li>
+      <li>Il propose une méthode <pre class="inline"><code class="javascript">request(options)</code></pre> renvoyant une instance de <strong>ClientRequest</strong> paramétrée avec des certificats</li>
+      <li>Utilisation des classes <strong>net.Server</strong> et <strong>net.Socket</strong></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>parse()</code> renvoi un objet détaillant l'hôte, le port, le protocole, le chemin, les paramètres de requêtes, l'authentification...</p>
+      <p><code>format()</code> prend un objet respectant le format de <code>parse()</code> et le transforme en chaîne de caractères</p>
+      <p>La classe <strong>https.Server</strong> n'hérite pas de <strong>http.Server</strong>, mais propose la même interface</p>
+      <p>Elles héritent toutes les deux de <strong>net.Server</strong></p>
+      <p>La classe <strong>Socket</strong> est utilisée par tous les <strong>Server</strong>s et <strong>ClientRequest</strong> pour réaliser les opérations réseaux</p>
+      <p>Les classes du module <strong>net</strong> sont utilisées pour tous serveur ou client de protocole autre que http</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <div class="timing" data-pause>120</div>
+    <h1>Premier serveur, premier client</h1>
+    <ol class="steps hands-on">
+      <li>Créez un serveur de fichiers <strong>static</strong> qui lit et renvoie les fichiers du répertoire d'exécution. Ne gérez pas les <strong>MIME-type</strong> et en cas d'erreur, renvoyez une <strong>404</strong></li>
+      <li>Lancez ce serveur, et utiliser votre navigateur pour afficher ces fichiers</li>
+      <li>Réaliser un module <strong>wget</strong> qui fait une requête http <strong>GET</strong> sur l'url passé en paramètre et qui sauvegarde le fichier dans le dossier d'exécution</li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Pour le client, on transformera les donnée avec l'encodage <strong>utf8</strong>, sans savoir pour autant si c'est le bon. Dans l'idéal, il faut utiliser les entêtes de réponse.</p>
+      <p><a href="http://runnable.com/VK_VnQU_2sVNnv8o/rocktheweb-server">Correction du server</a></p>
+      <p><a href="http://runnable.com/VK_fuXRrc5VeW4FQ/rocktheweb-wget">Correction du client</a></p>
+    </details>
+    <div class="timing" data-duration>50</div>
+  </section>
+
+  <section class="title">
+    <img class="bg" src="images/child-process.jpg">
+    <h1>Child process & Cluster</h1>
+  </section>
+
+  <section>
+    <h1>Pères et fils</h1>
+    <ul class="steps">
+      <li>V8 est une VM mono-thread : pas de concurrence</li>
+      <li>NodeJS permet donc de lancer plusieurs processus : des instances V8 <strong>indépendantes</strong></li>
+      <li>L'instance en cours d'exécution est le <strong>père</strong> : les instances créées ensuite sont des <strong>fils</strong></li>
+      <li>Le module <strong>child_process</strong> exporte la classe <strong>ChildProcess</strong></li>
+      <li>Il exporte aussi <code>spawn()</code>, <code>exec()</code>, <code>execFile()</code> et <code>fork()</code> pour créer des processus fils</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Le modèle mono-threadé peut sembler contraignant et inefficace (un seul CPU utilisé), mais offre une simplicité inédites au développeur</p>
+      <p>Il est normal de vouloir exploiter les autres CPUs de la machine hôte, et de dédier une partie de l'application à des traitement long et/ou intensifs</p>
+      <p>Il s'agit bien de processus au sens Unix : code, mémoire, CPU (pile d'exécution) dédiés</p>
+      <p>Il ne s'agit pas de threads ! Pas de mémoire partagée</p>
+      <p>On peut déclencher n'importe quelle commande présente sur le système.</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>3 ways to be born</h1>
+    <ul>
+      <li class="step"><code>exec()</code> éxécute la commande et renvoi le résultat<pre><code class="javascript">exec('ls -la', function (error, stdout, stderr) {
+  console.log(''+ stdout);
+  console.log('end');
+});</code></pre></li>
+      <li class="step"><code>spawn()</code> éxécute et renvoi le process fils<pre><code class="javascript">var child = spawn('ls', ['-la']);
+child.stdout.pipe(process.stdout);
+child.on('exit', function() {
+  console.log('end');
+});</code></pre></li>
+      <li class="step"><code>fork()</code> est un <code>spawn()</code> d'un fichier NodeJS, et établi un canal de communication <span class="hints"><span class="step">WebWorkers</span></span></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><strong>Attention !</strong> l'exécution de ces exemples ne fonctionne pas complètement dans la console NodeJS ! C'est lié au mode REPL (Read Evaluate Print Loop) qui temporise entre chaque commende, et transforme un code synchrone en une succession de commandes temporisées</p>
+      <p>Dans le cas de <code>exec()</code> et <code>execFile()</code>, nous n'avons pas accès au processus fils : il faut attendre la fin de son exécution pour avoir un résultat</p>
+      <p>Dans le cas de <code>spawn()</code>, on a immédiatement accès au processus fils (synchronisme), et on reçoit le résultat au fur et à mesure</p>
+      <p>Quelque soit la commande utilisée, on peut toujours customiser l'environnement (variables) et le répertoire d'exécution</p>
+      <p>Comme nous allons le voir, <code>fork()</code> n'est qu'un <code>spawn()</code> particulier pour lancer une instance de NodeJS (V8) sur une fichier donné, et avec un canal de communication spécifique</p>
+      <p>Un processus NodeJS créé avec <code>fork()</code> est une instance V8 qui à besoin de 30ms et 10Mb de RAM pour démarrer (dépend du code au démarrage)</p>
+      <p><code>exec()</code> est déconseillé : il est susceptible d'être une source d'injection, en plus d'être monolithique</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Classe <i>ChildProcess</i></h1>
+    <ul>
+      <li class="step">C'est un <strong>EventEmitter</strong> qui émet <strong>'error'</strong>, <strong>'close'</strong>, <strong>'exit'</strong></li>
+      <li class="step">Il publie les flux <code>stdin</code> (Writable depuis le père), <code>stdout</code> et <code>stderr</code> (Readable depuis le père)</li>
+      <li class="step">Il peut recevoir un signal <code>kill(signal)</code></li>
+      <li class="step">S'il à été créé avec IO <strong>IPC</strong>, il peut recevoir du JSON avec <code>send(data)</code> (depuis le père) et renvoyer du JSON avec l'évènement <strong>'message'</strong> (appels <strong>synchrones</strong>) <span class="hints"><span class="step">WebWorkers</span></span></li>
+      <li class="step">Il peut être détaché : il continuera à s'exécuter même si le père se termine</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><strong>'error'</strong> si l'on ne peut créer le process (ENOENT : Error NO ENtry lorsque la commande n'existe pas par exemple), s'il ne peut être tué ou si un message ne peut lui être délivré</p>
+      <p><strong>'exit'</strong> est le signal de terminaison normal du fils, avec son code de fin et le signal qui lui a donné éventuellement fin</p>
+      <p><strong>'close'</strong> est le signal de terminaison des flux standards du fils, distinct de <strong>'exit'</strong> car il peut être partagés</p>
+      <p><code>kill()</code> n'a pas pour effet de terminer le processus fils : utilisé sans arguments, il envoi <strong>'SIGTERM'</strong> qui le terminera</p>
+      <p>Lorsqu'on crée un processus fils avec <code>spawn()</code>, on peut paramétrer ses IO. C'est ce que fait <code>fork()</code></p>
+      <p>Si la commande exécutée par le processus fils est un programme NodeJS, celui-ci peut recevoir les messages du père avec <code>process.on('message')</code> et lui renvoyer des résultats avec <code>process.send(...)</code></p>
+      <p><strong>Attention !</strong> les messages échangés entre père et fils sont sérializés de manière synchrone : donc pas de structures cycliques (échec), ni trop volumineuse (ralentissement)</p>
+      <p>Un seul cas particulier pour <code>send()</code> et <strong>'message'</strong> : on peut transférer une instance de <strong>Server</strong> ou <strong>Socket</strong> entre processus. C'est le fondement du module <strong>cluster</strong></p>
+      <p>Il est possible que le parent et ses fils partagent leurs flux d'IO, de spécifier un file descriptor quelconque (fichier, socket, pipe...), ou même de ne pas avoir du tout de flux standards</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Processus</h1>
+    <ol class="steps hands-on">
+      <li>Créez un module <strong>edit</strong> qui ouvre notepad avec le fichier passé en paramètre du la ligne de commande : <code>node edit edit.js</code>. Affichez le code de retour de edit lorsque l'édition se termine, et gérer les éventuelles erreurs</li>
+      <li>Créez un module <strong>primes</strong> qui délègue à <strong>compute</strong> le calcul du plus grand nombre premier en dessous d'un nombre N passé en argument<pre><code>candidate = 2
+primes = [candidate]
+while candidate < n
+  candidate += 1
+  divisible = no
+  for prime in primes
+    divisible = candidatae % prime == 0
+    if divisible
+      break
+  if not dividible
+    results ++ prime</code></pre></li>
+      <li>Pendant le calcul, affichez un point pour chaque seconde qui s'écoule, et le nombre lorsque celui-ci est un multiple de 5</li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Le lancement de notepad est très simple sous windows, il prend en paramètre le chemin du fichier édité. Sous Unix vous pouvez utiliser vim</p>
+      <p>Pour <strong>primes</strong>, il est nécessaire d'utiliser <code>fork</code> et les fonctions de communication entre processus</p>
+      <p>L'idée est bien de monopoliser un CPU pendant que l'autre continue d'être disponible</p>
+      <p>N'hésitez pas à utiliser le gestionnaire de tâches de votre OS pour visualiser les deux processus</p>
+      <p>Pour afficher dans <strong>stdout</strong> sans revenir à la ligne, utilisez <pre class="inline"><code class="javascript">process.stdout.write('.');</code></pre></p>
+      <p><a href="http://runnable.com/VLQcYBMAG0U0QLOh/rocktheweb-edit">Correction</a></p>
+    </details>
+    <div class="timing" data-duration>60</div>
+  </section>
+
+  <section>
+    <div class="timing" data-pause>15</div>
+    <h1>Le module <i>cluster</i></h1>
+    <ul class="steps">
+      <li>Permet de créez plusieurs processus NodeJS identiques pour répondre à des requêtes HTTP</li>
+      <li>Le <strong>Master</strong> (processus père) reçoit les connexion HTTP (1 port d'écoute) et les distribue</li>
+      <li>Les <strong>Workers</strong> (processus fils) traitent chacun une requête à la fois</li>
+      <li>Tous les processus sont sur la même machine : on cré un worker par CPU disponible</li>
+      <li>Entièrement outillé pour gérer un pool de workers</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>A la base un module externe, incorporé depuis la version 0.8 (0.6?) au language</p>
+      <p>Dédié à la réalisation de serveur Web qui exploite toute la puissante disponible</p>
+      <p>Les workers ont le même code, mais peuvent être paramétrés différement</p>
+      <p>le module <strong>cluster</strong> exporte un objet singleton qui est un <strong>EventEmitter</strong> : <strong>'online'</strong>, <strong>'listening'</strong>, <strong>'disconnect'</strong>, <strong>'exit'</strong> permettent de monitorer le cycle de vie des workers</p>
+      <p>L'API est néanmoins encore en chantier : il est probable qu'il y aie des changements </p>
+      <p><a href="http://strongloop.com/strongblog/whats-new-in-node-js-v0-12-cluster-round-robin-load-balancing/">En cours de refonte pour la prochaine version</a> par rapport à la gestion du load balancing par l'OS</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Anatomie du cluster</h1>
+    <ul class="steps">
+      <li>Généralement, le même code pour tous<pre><code class="javascript">var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+  // code du master : cré autant de workers que de CPUs
+  for (var i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+} else {
+  // code d'un worker : crée un serveur et traite les requêtes
+  http.createServer(function(req, res) {
+    res.end("hello world\n");
+  }).listen(8000);
+}</code></pre></li>
+      <li>Le serveur est créé par le <strong>master</strong> et partagé</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>cluster.fork()</code> appèle <code>child_process.fork()</code> sur le fichier courant, il est possible de changer ce comportement avec <code>cluster.setupMaster()</code></p>
+      <p>A l'intérieur d'un <strong>worker</strong> (<code>cluster.isWorker</code>), toute création d'un serveur Http (<code>server.listen()</code>) délègue en réalité la création dudit serveur par le <strong>master</strong>. Si le serveur à déjà été créé, il est alors partagé</p>
+      <p>C'est l'OS (jusqu'en NodeJS 0.10) qui gère la logique d'équilibrage entre différents processus qui écoute sur le même port</p>
+      <p>Au sein du cluster, le <strong>master</strong> peut "tuer" les <strong>workers</strong>, où il peuvent se "suicider"</p>
+      <p>Comme avec <strong>child_process</strong> les <strong>workers</strong> peuvent communiquer avec le <strong>master</strong> grâce à <code>process.send()</code>, car les workers sont des instances de <strong>ChildProcess</strong></p>
+      <p>Les <a href="http://nodejs.org/api/cluster.html#cluster_class_worker">workers</a> possèdent en plus des propriétés liée au foctionnement du cluster</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Pour quels usages ?</h1>
+    <ul class="steps">
+      <li><strong>child_process</strong> permet à votre application : <ul>
+        <li>d'utiliser les commandes du système</li>
+        <li>de piloter des processus système</li>
+        <li>de déléguer de l'exécution JS à d'autres processus</li>
+      </ul></li>
+      <li>En dehors des flux standards, rien n'est partagé</li>
+      <li>Fonctionne sur la machine locale uniquement</li>
+      <li><strong>cluster</strong> propose un pattern spécifique aux serveur Web, avec les mêmes limitations</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Pour communiquer des volumes importants entre processus, ou de manière asynchrone, il est nécessaire d'utiliser un système tier (messaging queue, base de donnée, fichier...)</p>
+      <p>Pour constituer un réseau de processus sur machine distinctes, il est aussi nécessaire d'utiliser un système tier (ou un package dédié)</p>
+      <p>Les architectures où des processus sur des machines distinctes communiquent sont... des micro-services, ou de la SOA :)</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Processus</h1>
+    <ol class="steps hands-on">
+      <li>Transformez votre serveur de fichier mono-thread en un serveur exploitant tous les coeurs de votre machine</li>
+      <li>Pour chaque requête traité, remontez le fichier lu au niveau du master pour affichage sur la console</li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Le retour de <code>cluster.fork()</code> est une instance de <strong>Worker</strong> sur laquelle on peut brancher l'auditeur <strong>'message'</strong></p>
+      <p>Pas de <code>console.log()</code> dans les <strong>workers</strong>, mais seulement dans le <strong>master</strong>. Utilisez <code>worker.id</code> pour savoir quel fils à gérer la requête</p>
+      <p>C'est le même code que dans l'exercice sur le serveur Http, la gestion d'erreur du démarrage diffère dans le <strong>worker</strong></p>
+      <p>On observe que c'est toujours le même <strong>worker</strong> qui traite les requêtes : c'est dû à l'OS qui ne considère pas le worker comme chargé. Il faudrait simuler un véritable charge pour observer la balance automatique</p>
+      <p><a href="http://runnable.com/VK_VnQU_2sVNnv8o/rocktheweb-server-cluster">Correction</a></p>
+    </details>
+    <div class="timing" data-duration>30</div>
+  </section>
+
+  <section id="npm" class="title">
+    <div class="bg">
+      <img src="images/npm.png">
+    </div>
+    <h1>The Node Package Manager</h1>
+  </section>
+
+  <section>
+    <h1>Packager son projet</h1>
+    <ul class="steps">
+      <li>Dans l'écosystème NodeJS* on utilise une foule de librairies spécialisées</li>
+      <li>Une librairie répond généralement à une problématique simple</li>
+      <li>Votre application utilisera des librairies, et en sera peut-être elle même une</li>
+      <li><code>package = modules + dépendances + tests</code></li>
+      <li>NPM vous aide à packager et distribuer votre projet</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>(*) dans l'ecosystème JavaScript en général</p>
+      <p><strong>moment</strong> = manipulation de dates, <strong>underscore</strong>/<strong>lodash</strong> = manipulation des tableaux/collections, <strong>mongodb-native</strong> = driver MongoDB, <strong>js-yaml</strong> = parser YAML...</p>
+      <p>Dans une société, il est courant de réaliser des librairies pour des briques logicielles internes (connexion au DAS...), ou pour mutualiser un savoir faire métier</p>
+      <p>Même votre application n'est pas destinée à être réutilisée, la packager est une nécessité</p>
+      <p>NPM apporte des conventions (package.json) et des outils pour la distribution (registry central + client de packaging)</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Exemples de structure</h1>
+    <ul class="steps">
+      <li>Librairie ou executable en ligne de commandes : <pre><code class="python">lib/            # votre code (aussi libs)
+node_modules/   # les dépendances gérées par NPM
+test/           # le code de vos tests
+.npmignore      # les exclusions du package
+README.md
+package.json
+</code></pre></li>
+      <li>Application Web serveur & client : <pre><code class="python">app/            # code serveur uniquement
+  tests/
+assets/         # Les assets coté serveur
+config/         # les fichiers de configuration (aussi conf)
+node_modules/   # les dépendances serveur gérées par NPM
+public/         # code client
+  dist/         # le client minifié
+  test/
+  vendor/       # dépendances client, gérées par bower/grunt/gulp (aussi libs)
+package.json
+</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>2 points communs: <code>package.json</code> et <code>node_modules</code> sont toujours à la racine</p>
+      <p>Il est courant de mettre le code du client et du serveur dans le même package : en NodeJS, le serveur static et le même que le serveur d'API/pages web dynamiques</p>
+      <p>NPM gère les dépendances coté serveur, d'autres outils permettent de gérer les dépendances coté client (<a href="http://bower.io/">bower</a>, <a href="http://browserify.org/">browserify</a>, <a href="http://gulpjs.com/">gulp</a> et <a href="http://gruntjs.com/">grunt</a> dans une certaine mesure)</p>
+      <p>Le versionning, avec git par exemple, sera aussi à la racine</p>
+      <p><strong>Attention !</strong> En l'absence d'un <code>.npmignore</code>, NPM utilisera le <code>.gitignore</code> éventuel</p>
+      <p>Ce ne sont que des exemples : il n'y a pas de dogme, et on trouve ne nombreuses variantes, souvient liée aux outils de build ou au serveur</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Le fichier <code>package.json</code></h1>
+    <ul class="steps">
+      <li>Descripteur du projet<pre><code class="json">{
+  "name": "nom-du-projet",
+  "version": "0.3.1",
+  "description": "Elle sera publiée",,
+  "author": "You <you@yopmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/you/nom-du-projet.git",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "main": "./lib/entry_point.js",
+  "bin": {
+    "start-project": "./bin/start"
+  },
+  "scripts": {
+    "test": "lab test"
+  },
+  "engines": {"node": ">=0.10.3"}
+}
+</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>name</code> et <code>version</code> sont les deux seuls champs obligatoires les plus importants de votre descripteur</p>
+      <p><code>name</code> doit être en minuscule, sans lettres exotiques, raisonnablement court et descriptif. Il sera dans des <code>require()</code> et fera partie d'une url !</p>
+      <p><code>version</code> doit respecter le format <a href="http://semver.org/">semver</a></p>
+      <p><code>description</code>, <code>keywords</code> permettront aux développeurs qui cherche des librairies sur le registry NPM de trouver la vôtre</p>
+      <p><code>author</code>, <code>constributors</code>, <code>licence</code> relètent l'état de la communauté autour de votre projet</p>
+      <p><code>repository</code>, <code>homepage</code>, <code>bugs</code> sont des url affiché sur le site du registry NPM pour simplifier l'accès à votre code</p>
+      <p><code>dependencies</code>, <code>devDependencies</code>, <code>peerDependencies</code>, <code>bundledDependencies</code> et <code>optionalDependencies</code> décrivent les dépendances de votre projet. Nous y reviendrons juste après</p>
+      <p>Dans le cas d'une librairie, <code>main</code> indique quel est le module qui sera chargé lors d'un <code>require('nom-du-projet');</code></p>
+      <p><code>bin</code> déclare les éventuel exécutables, indispensable pour un projet de type CLI</p>
+      <p><code>scripts</code> permet de customiser les phases de packaging et d'ajouter ses propres phases</p>
+      <p><code>engines</code>, <code>engineStrict</code>, <code>cpu</code>, <code>os</code> permette de déclarer des restrictions de portabilité</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Publier sur le registry</h1>
+    <ul class="steps">
+      <li>NPM est un dépôt en ligne, avec un <a href="https://www.npmjs.com/">site de recherche</a></li>
+      <li>Peut héberger vos propres packages (<strong>publish</strong>)</li>
+      <li>Le <a href="https://www.npmjs.com/package/lodash">site affiche</a> le <strong>README.md</strong>, les mot-clés, les stats de téléchargement, les dépendances...</li>
+      <li>Le dépôt contient toutes les versions publiés</li>
+      <li>Il est utilisé par défaut par le client CLI</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><a href="https://docs.npmjs.com/getting-started/what-is-npm">Cette vidéo</a> explique bien le fonctionnement</p>
+      <p>Contrairement à l'écosystème Java, il n'y a qu'un seul dépôt central pour les packages NodeJS</p>
+      <p>Il est possible de créer des dépôts privés (<a href="https://docs.npmjs.com/enterprise/requirements">NPM Entreprise</a>), ou de payer un espace privé sur npmjs.com (<a href="https://www.npmjs.com/private-npm">a venir</a>)</p>
+      <p><strong>Attention !</strong> vous ne devez (pouvez) pas republiez une version déjà existante !</p>
+      <p>D'autres clients (bower...) utilisent aussi ce dépôt</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Le client NPM</h1>
+    <ul class="steps">
+      <li>NPM installe sur votre poste un client CLI</li>
+      <li>Il lit le descripteur lors de certaines commandes :<ul>
+        <li><code>npm install</code> : récupération & compilation des dépendances, création des exécutables</li>
+        <li><code>npm test</code> : lance l'exécution des tests présents</li>
+        <li><code>npm start/restart/stop</code> : lance et arrête le projet</li>
+        <li><code>npm publish</code> : publie le projet sur le registry central</li>
+      </ul></li>
+      <li><strong>NPM !== <i>build-system</i></strong>, NPM === gestion de dépendances</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>La récupération d'une dépendance revient à télécharger le code, et réaliser un <code>npm install</code> dans le dossier de manière transitive</p>
+      <p>Les commandes <code>npm test/start/restart/stop</code> exécutent les scripts <strong>preX</strong>, <strong>X</strong> et <strong>postX</strong> lorsqu'ils existent</p>
+      <p>La commande <code>npm run-script X</code> exécute les scripts <strong>preX</strong>, <strong>X</strong> et <strong>postX</strong> de la même manière</p>
+      <p>Certaines phases (<strong>postinstall</strong>, <strong>prepublish</strong>...) peuvent être customisées avec les <code>scripts</code> du descripteur</p>
+      <p>Il n'y a pas cycle de vie ni de phases ordonnancée</p>
+      <p>Les scripts sont dépendants de la plateforme</p>
+      <p>Il peut y avoir une <a href="https://github.com/TooTallNate/node-gyp">compilation de code C/C++</a> lors de l'installation d'une dépendance</p>
+      <p>A la fin de l'installation du package si celui-ci contient des executables (<code>package.jon/bin</code>), ils sont enregistrés en global au niveau système</p>
+      <p>NPM n'est pas un <i>build-system</i> : il ne permet pas de déclarer et d'ordonnancer des tâches de mettre en oeuvre des configuration par environnement, et d'être un outil de compilation/packaging portable. Il propose des mécanismes minimalistes pour le packaging, dans l'unique optique de la publication</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Déclarer ses dépendances</h1>
+    <ul class="steps">
+      <li>Dépendance = nom du package + containte de version</li>
+      <li><code>x.y.z</code> : exactement la version</li>
+      <li><code>^x.y.z</code> : la version x la plus haute (y.z au minimum)</li>
+      <li>l'<strong>url</strong> d'un dépôt git : <code>git://github.com/user/project.git#commit</code></li>
+      <li>l'<strong>url</strong> d'un tarball : <code>http://bitbucket.org/user/repo?format=tar.gz</code></li>
+      <li class="convention">Pour rester portable, n'utilisez que ces syntaxes</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Il existe des des opérateurs <code><</code>, <code><=</code>, <code>></code>, <code>>=</code>, NPM prendra la version la plus haute disponible</p>
+      <p>Il y a aussi des jokers <code>*</code>, <code>x</code></p>
+      <p>Enfin l'opérateur chapeau <code>~x.y.z</code> : la version x.y la plus haute (z au minimum)</p>
+      <p><a href="https://nodesource.com/blog/semver-tilde-and-caret">Un article détaillé</a> sur le comportement de <code>~</code> et <code>^</code></p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section id="end" class="title">
+    <img src="images/day2-end.jpg">
+    <h1>worked too hard, need some rest...</h1>
+  </section>
+
+  <!-- Credits -->
+
+  <section>
+    <h1>Crédits photos</h1>
+    <ul>
+      <li>Slide 1 - Ricardo Fujii/Grudaemmim</li>
+      <li>Slide 2 - Jonathan Goldsmith</li>
+      <li>Slide 7 - Amy</li>
+      <li>Slide 14 - Gigabyte Brix Gaming GB-BXi5G3-760</li>
+      <li>Slide 20- Solid Brix Studios</li>
+      <li>Slide 29 - Npm inc.</li>
+      <li>Slide 36 - Johanne Stetka</li>
+    </ul>
+  </section>
+
+  <script src="components/jquery/jquery.min.js"></script>
+  <script src="components/keymaster/keymaster.js"></script>
+  <script src="components/hammerjs/hammer.min.js"></script>
+  <script src="components/highlightjs/highlight.pack.js"></script>
+  <script src="js/ruban.min.js"></script>
+  <script src="js/rock-the-web.min.js"></script>
+  <script>
+    var ruban = new Ruban({
+      pagination: true,
+      ratio: 16/9,
+      bindMouseWheel: true,
+      fontRatio: 0.35
+    });
+
+    startTimer(540); // start at 9:00 AM
+  </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+@import 'rock-the-web';
+
+// specific slides
+#is-it-serious {
+
+  h1 > img {
+    display: inline-block;
+    height: 1.5em;
+    padding-top: 0.2em;
+    vertical-align: -0.3em;
+  }
+
+  .myth-buster img {
+    display: inline-block;
+    margin-top: -8em;
+    height: 8em;
+  }
+}
+
+#what-is-nodejs li {
+  // transition for stroked text
+  transition: all .5s;
+
+  .formula {
+    height: 3em;
+    vertical-align: middle;
+  }
+}
+
+
+#javascript-fu  h1 {
+  margin-top: -50%;
+}
+
+#custom-classes, #class-inheritance {
+  // positionning screenshot from object inspector
+
+  li.side {
+    &:before {
+      display: none;
+    }
+
+    img {
+      position: absolute;
+      width: 300px;
+      right: 5%;
+      bottom: 10%;
+    }
+  }
+}
+
+#awful-scopes .hints.line {
+  margin-left: -50px;
+  margin-top: -.1em;
+}
+
+#export .hints.line {
+  margin-top: -.5em;
+}
+
+#import li > ol {
+  font-size: 70%;
+}
+
+#process-module h1 {
+  margin-bottom: -50%;
+}
+
+#end {
+  .bg {
+    opacity: 1;
+  }
+
+  img {
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #FFF;
+  }
+}

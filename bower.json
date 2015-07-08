@@ -1,0 +1,14 @@
+{
+  "name": "rock-the-web-with-nodejs",
+  "author": "Damien Simonin Feugas <damien.feugas@gmail.com>",
+  "version": "2.0.0",
+  "description": "A node.js introduction training to rock your daily developper life !",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "ruban": "https://github.com/feugy/ruban.git#presenter"
+  }
+}

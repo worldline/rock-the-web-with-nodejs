@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rock the Web with NodeJS - jour 3</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="components/normalize-css/normalize.css" />
+  <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="components/highlightjs/styles/tomorrow.css" />
+  <link rel="stylesheet" href="css/ruban.min.css" />
+  <link rel="stylesheet" href="css/ruban-print.min.css" media="print" />
+  <link rel="stylesheet" href="css/day3.min.css" />
+</head>
+
+<body>
+  <div class="time"></div>
+
+  <section class="title main">
+    <img class="bg" src="images/rock-blur.jpg">
+    <h1>Rock The Web with Node.js</h1>
+  </section>
+
+  <section id="mocha" class="title">
+    <img class="bg" src="images/mocha.jpg">
+    <h1>Behaviour Driven Development !</h1>
+  </section>
+
+  <section>
+    <h1><a href="http://mochajs.org">Mocha</a> : le test runner</h1>
+    <ul class="steps">
+      <li>Dans un fichier test/my-lib.js<pre><code class="javascript">var assert = require('assert')
+// describe est un fonction qui définit un "groupe" de tests
+describe('Array#indexOf', function() {
+  // it est une fonction qui définit un test (pas d'inclusin)
+  it('should return -1 when the value is not present', function(){
+    // contenu du test : si le test lance une exception, il échoue
+    assert.equal(-1, [1,2,3].indexOf(5));
+    assert.equal(-1, [1,2,3].indexOf(0));
+  })
+
+  it('should return index when the value is present', function(){
+    assert.equal(2, [1,2,3].indexOf(3));
+    assert.equal(0, [1,2,3].indexOf(1));
+    // s'il arrive à la fin, il réussit
+  })
+})</code></pre></li>
+      <li>En ligne de commande : <code>mocha test</code></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>describe()</code> et <code>it()</code> sont des fonctions globales, définies par <strong>mocha</strong>. Il en existe d'autre que nous verrons plus loins</p>
+      <p><strong>Mocha</strong> propose l'interface BDD (par défaut), celle de l'exemple. Il propose aussi l'interface TDD, où <code>describe()</code> = <code>suite()</code> et <code>it()</code> = <code>test()</code></p>
+      <p>Nous verrons plus loin en quoi l'interface TDD est moins intéressante</p>
+      <p>Mocha fonctionne en 2 phases : la détection des tests : <ol>
+        <li>il exécute tous les contenus de <code>describe</code> pour avoir la liste des <code>it()</code></li>
+        <li>il exécute les <code>it()</code> un à un</li></ol></p>
+      <p><code>assert</code> est un module NodeJS que nous n'utiliseront à cause de ses faibles capacités de reporting</p>
+      <p><strong>Mocha</strong> est totallement décoréllé de NodeJS, et s'utilise très bien dans un navigateur</p>
+      <p>Il existe différents reporters, essayer le reporter <a href="https://www.youtube.com/watch?v=QH2-TGUlwu4">nyan !</a></p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1><a href="http://chaijs.com/">Chai</a> : les assertions</h1>
+    <ul class="steps">
+      <li>A l'intérieur des <code>it()</code><pre><code class="javascript">// notez l'inclusion de chai
+var expect = require('chai').expect;
+
+describe('Array#indexOf', function() {
+  it('should return -1 when the value is not present', function(){
+    var array = [1, 2, 3];
+    // permet de faire la même chose...
+    expect(array.indexOf(5)).to.equal(-1);
+    //...et des assertions bien plus puissantes !
+    expect(array).to.be.an.instanceof(Array).and.to.have.a.lengthOf(3);
+    expect(array).to.include(2);
+    expect(array).not.to.contain(4);
+  })
+})</code></pre></li>
+      <li class="guideline">3 styles d'assertions, mais c'est <strong>expect</strong> qui offre le meilleur compromis portabilité/lisibilité</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>La combinaison <strong>Mocha mode BDD</strong> + <strong>Chai mode expect</strong> donne suffisament de lisibilité au code pour qu'il reflète des spécifications fonctionnelles ! Vous n'aurrez plus besoin de documenter vos assertion et vos cas de tests, car il doivent être suffisament parlant</p>
+      <p>Tout comme <strong>Mocha</strong>, <strong>Chai</strong> est totallement décoréllé de NodeJS, et s'utilise très bien dans un navigateur</p>
+      <p>Le style d'assertion <strong>should</strong> est mal supporté sur IE car il instrumente les objets testés</p>
+      <p>Le style d'assertion <strong>assert</strong> est vraiment trop has-been :)</p>
+      <p>Une assertion <strong>Chai</strong> est une chaine de mot dont certains sont sans effets (to, be, been, is, that, and, has, have, with, at, of, same), et d'autre déclenche un test (instanceof(), lengthOf(), include(), contain()), qui s'il échoue lève une exception</p>
+      <p>Le message d'exception reprends le les mots précédents pour être suffisament parlant : <code>expected [ 1, 2, 3 ] to have a length of 4 but got 3</code></p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Mocha : <i>hooks</i></h1>
+    <ul class="steps">
+      <li>A l'intérieur d'un <code>describe()</code> : <pre><code class="javascript">describe('Array', function() {
+
+  var array = []
+
+  beforeEach(function() {
+    array = [1, 2, 3];
+  });
+
+  it('should splice() remove elements', function(){
+    expect(array.splice(1, 1)).not.to.include(2);
+  })
+})</code></pre></li>
+      <li>Au choix : <code>before()</code>, <code>after()</code>, <code>afterEach()</code></li>
+      <li>Exécutés avec les <code>it()</code> peu importe leur résultat</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Ces "hooks" sont lié au <code>describe()</code> englobant. Ils révèle le principal intérêt des <code>describe()</code> : grouper les pré-requis et nettoyage de plusieurs tests</p>
+      <p>Il peut y avoir plusieurs fois le même "hook" dans un même <code>describe()</code> : il seront exécutés dans l'ordre de déclaration</p>
+      <p><strong>Attention</strong> : ces "hooks" sont exécuté dans la 2ème phase, en même temps que les <code>it()</code>!</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Mocha : asynchronisme</h1>
+    <pre class="step"><code class="javascript">describe('Database access', function() {
+
+  beforeEach(function(done) {
+    writeInDB({name: 'jean'}, done)
+  });
+
+  it('should readFromDB() retrieve models per name', function(done){
+    this.timeout(3e3);
+    readFromDB({name: 'jean'}, function(err, model) {
+      expect(err).not.to.exist; // ou if(err) return done(err);
+      expect(model).to.have.property('name').that.equal('jean');
+      done();
+    })
+  })
+})</code></pre>
+    <ul>
+      <li class="step">Appellez <code>done()</code> à la fin des assertions</li>
+      <li class="step">L'argument de <code>done()</code> déclenche une erreur</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Au bout de 2 secondes sans <code>done()</code>, le test est échoué. Ce timeout est paramètrable avec <code>this.timeout(X)</code> au niveau d'un <code>it()</code> ou d'un <code>describe()</code></p>
+      <p>Tous les "hooks" peuvent être asynchrones</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Mocha : exclusions</h1>
+    <pre class="step"><code class="javascript">describe('Bunch of test', function() {
+
+  it.skip('should check my db', function(done) {
+    done('to be implemented');
+  })
+
+  it.only('should create my db', function(done) {
+    done('to be implemented');
+  })
+
+  it('should delete my db', function(done) {
+    done('to be implemented');
+  })
+})</code></pre>
+    <ul>
+      <li class="step">Instrumentation des <code>describe()</code></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><strong>skip</strong> et <strong>only</strong> sont des getter qui controle les tests et groupes de tests exécutés</p>
+      <p>Seul le premier <strong>only</strong> sera éxécuté, même s'il y en a plusieurs</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Les assertions disponibles</h1>
+    <ul class="steps">
+      <li>égalité <pre class="inline"><code class="javascript">expect(x)/*not.*/.to./*deep.*/equals(y)</code></pre></li>
+      <li>existance <pre class="inline"><code class="javascript">expect(x).to.be.null</code></pre> <pre class="inline"><code class="javascript">expect(x).to.exist</code></pre></li>
+      <li>taille des tableaux <pre class="inline"><code class="javascript">expect(x).to.be.empty</code></pre> <pre class="inline"><code class="javascript">expect(x).to.have.length(y)</code></pre></li>
+      <li>objets <pre class="inline"><code class="javascript">expect(x).to.have./*deep.*/property('model.name').that.equals(z)</code></pre></li>
+      <li>contenu <pre class="inline"><code class="javascript">expect(x).to.contain/*.keys*/(y)</code></pre></li>
+      <li>nombres <pre class="inline"><code class="javascript">expect(x).to.be.at.least(y).and.at.most(z)</code></pre>
+      <li>fourre-tout <pre class="inline"><code class="javascript">expect(1).to.satisfy(function(num) {return num > 0;})</code></pre></li>
+      <li>exception <pre class="inline"><code class="javascript">expect(function(){}).to.throw(/message/)</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Liste complète disponible sur <a href="http://chaijs.com/api/bdd/">la documentation officielle</a></p>
+      <p>Question de syntaxe, vous pouvez préférer <pre class="inline"><code class="javascript">expect(x).to.be.equal(y)</code></pre></p>
+      <p>Quelque soit l'assertion suivante, <strong>not</strong> aura pour effet d'attendre son contraire</p>
+      <p>Dans les tests d'égalité, on trouve aussi <pre class="inline"><code class="javascript">expect(x).to.be.true</code></pre></p>
+      <p>Si le chemin vers la propriété contient des '.' ou des '[]', il faut utiliser <strong>deep</strong></p>
+      <p><pre class="inline"><code class="javascript">expect(x).to.have.property(name, value)</code></pre> permet de tester l'existance et la valeur. On évitera cette forme, car si value est <code>undefined</code>, impossible d'être certains que la propriété existe bel et bien</p>
+      <p><strong>contain</strong> et <strong>include</strong> sont strictement synonymes</p>
+      <p>Les tests sur les exception portent sur l'exécution d'une fonction !</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Tests en actions</h1>
+    <ol class="steps hands-on">
+      <li>Dans le dossier <strong>http</strong> des exercices sur le serveur http, rajoutez un dossier test, et un fichier <strong>server.js</strong> à l'intérieur</li>
+      <li>Dans ce fichier <strong>server.js</strong>, ajoutez un test qui vérifie que le serveur renvoie bien la page demandée</li>
+    </ol>
+    <details open>
+      <summary/>
+    </details>
+    <div class="timing" data-duration>20</div>
+  </section>
+
+  <section id="async" class="title">
+    <div class="timing" data-pause>15</div>
+    <div class="bg">
+      <img src="images/async.jpg">
+    </div>
+    <h1>Dodge callback hell with async</h1>
+  </section>
+
+  <section>
+    <h1>"Pyramid of Doom" ??</h1>
+    <pre class="step"><code class="javascript">fs.readdir(source, function(err, files) {
+  if (err) {
+    console.log('Error finding files: ' + err)
+  } else {
+    files.forEach(function(filename, fileIndex) {
+      console.log(filename)
+      gm(source + filename).size(function(err, values) {
+        if (err) {
+          console.log('Error identifying file size: ' + err)
+        } else {
+          console.log(filename + ' : ' + values)
+          aspect = (values.width / values.height)
+          widths.forEach(function(width, widthIndex) {
+            height = Math.round(width / aspect)
+            console.log('resizing '+filename+'to '+height+'x'+height)
+            this.resize(width, height).write(destination+'w'+width+'_'+filename,
+              function(err) {
+                if (err) console.log('Error writing file: ' + err)
+              })
+          }.bind(this))
+        }
+      })
+    })
+  }
+})</code></pre>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Exemple proposé par <a href="http://callbackhell.com/">callbackhell.com</a></p>
+      <p><a href="http://djebbz.github.io/async-paris-js/#/async-map">Présentation</a> de async</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Asynchronisme et tableaux</h1>
+    <ul>
+      <li class="step">Appliquer un traitement asynchrone à un tableau<pre><code class="javascript">async.map(['file1','file2','file3'], function(file, next) {
+  // appliqué de manière asynchrone sur tous les éléments du tableau
+  // la signature de next est next(err, result)
+  fs.readFile(file, next);
+}, function(err, results){
+  // err est la première erreur renvoyée
+  // results est le tableau (ordonné) des resultats intermédiaires
+});</code></pre></li>
+      <li class="step">Tous les traitement sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
+      <li class="step">Le callback de fin est déclenché... à la fin</li>
+      <li class="step">Le premièr échec déclenche le callback de fin, et ignore les résultats en cours</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>mapLimit(arr, n, ...)</code> lancer les N première tâches et attends d'en avoir terminé avant d'en relancer d'autres</p>
+      <p><code>mapSeries()</code> lancer les tâche les unes à la suite des autres, dans l'ordre. C'est équivalent à <code>mapLimit(arr, 1, ...)</code></p>
+      <p>Les autres fonctions : <ul>
+        <li><code>each()</code>, <code>eachLimit()</code>, <code>eachSeries()</code> qui invoque une fonction asynchrone sur chaque élément</li>
+        <li><code>filter()</code>, <code>filterSeries()</code> qui ne conserve que les élements passant le test asynchrone</li>
+        <li><code>reject()</code>, <code>rejectSeries()</code> qui conserve les élements ne passant pas le test asynchrone</li>
+        <li><code>reduce()</code>, <code>reduceRight()</code> identique à <strong>Array.reduce()</strong> en mode asynchrone</li>
+        <li><code>sortBy()</code> qui extrait de manière asynchrone une valeur servant pour le tri qui intervient dans un 2ème temps</li>
+        <li><code>detect()</code>, <code>detectSeries()</code> renvoie le premier élément passant le test asynchrone (attention, non ordonné !)</li>
+        <li><code>some()</code> renvoie true si au moins un élément passe le test asynchrone (attention, non ordonné !)</li>
+        <li><code>every()</code> renvoie true si tous les éléments passe le test asynchrone</li>
+        <li><code>concat()</code>, <code>concatSeries()</code> renvoi la concaténation des résultats de la function asynchrone appliquée à chaque élément</li>
+      </ul></p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Asynchronisme et functions</h1>
+    <ul>
+      <li class="step">Gérer un flow de fonctions asynchrones<pre><code class="javascript">async.parallel([
+  function(done) {
+    // la signature de done est done(err, result) 
+    fs.readFile('in.txt', done);
+  }, function(done){
+    fs.writeFile('out.txt', 'finished !', done);
+  }
+], function(err, results) {
+    // err est la première erreur renvoyée
+    // results est le tableau (ordonné) des resultats intermédiaires
+});</code></pre></li>
+      <li class="step">Tous les traitement sont déclenchés en parallèle<span class="hints line"><span class="step">parallelLimit</span><span class="step">series</span></span></li>
+      <li class="step">Le callback de fin est déclenché à la fin, <br/>ou suite au premier échec</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>il est aussi possible de spécifier un objet et pas un tableau : <pre><code class="javascript">async.parallel({
+  one: function(done) {
+    // la signature de done est done(err, result) 
+    fs.readFile('in.txt', done);
+  }, two: function(done){
+    fs.writeFile('out.txt', 'finished !', done);
+  }
+], function(err, results) {
+    // err est la première erreur renvoyée
+    // results reprends les clé de l'objet initial: {one: '', two: ''}
+});</code></pre> Attention néanmoins, il n'y a pas d'ordre garanti...</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section id="async-functions">
+    <h1>Asynchronisme et functions</h1>
+    <ul class="steps">
+      <li><code>whilst()</code>, <code>doWhilst()</code>: executer une function asynchrone tant que le test synchrone est vrai</li>
+      <li><code>until()</code>, <code>doUntil()</code>: executer une function asynchrone jusqu'a ce que le test synchrone soit vrai</li>
+      <li><code>seq()</code>, <code>compose()</code>, <code>waterfall()</code>: passe les résultats de l'étape N à l'étape N+1</li>
+      <li><code>queue()</code>, <code>cargo()</code>: pool d'exécution asynchrone<br/><img src="https://camo.githubusercontent.com/6bbd36f4cf5b35a0f11a96dcd2e97711ffc2fb37/68747470733a2f2f662e636c6f75642e6769746875622e636f6d2f6173736574732f313637363837312f36383130382f62626330636662302d356632392d313165322d393734662d3333393763363464633835382e676966"/></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>queue()</code>, <code>priorityQueue()</code> permette d'exécuter des tâches en parallèle jusqu'à une limite de concurrence donnée</p>
+      <p>Ces poll d'exécution tourne en tâche de fond jusqu'à ce qu'on les stoppe</p>
+      <p>Encore plein d'autres pattern proposés plus ou moins complexes</p>
+    </details>
+    <div class="timing" data-duration>5</div>
+  </section>
+
+  <section>
+    <h1>Utiliser <i>async</i></h1>
+    <ol class="steps hands-on">
+      <li>Dans le dossier <strong>fs</strong> des exercices sur le système de fichier, rajoutez un dossier test, et un fichier <strong>fs_utils.js</strong> à l'intérieur</li>
+      <li>Ajoutez un test sur <strong>statDir</strong> pour le cas nominal (attention aux prérequis !)</li>
+      <li>Ajoutez un test pour le cas "fichier"</li>
+      <li>Ajoutez un test pour le cas "dossier inexistant"</li>
+      <li>Refactorisez votre implémentation en utilisant <strong>async</strong></li>
+    </ol>
+    <details open>
+      <summary/>
+    </details>
+    <div class="timing" data-duration>20</div>
+  </section>
+
+  <section id="promise" class="title">
+    <div class="bg">
+      <img src="images/promises.jpg">
+    </div>
+    <h1>Dodge callback hell with promises</h1>
+  </section>
+
+  <section>
+    <h1>Promise = wrapper</h1>
+    <ul class="steps">
+      <li>Une opération asynchrone renvoie un objet <strong>Promise</strong><pre><code class="javascript">var readFilePromise = function(file) {
+  // renvoi synchrone d'une promesse
+  return new Promise(function(resolve, reject) {
+    // contenu de la promesse : le traitement asynchrone
+    fs.readFile(file, function(err, content) {
+      // rejet de la promesse en cas d'erreur
+      if (err) return reject(err);
+      // acceptation de la promesse en cas de succès (résultat)
+      resolve(content);
+    })
+  });
+};</code></pre></li>
+      <li>Maintient un état : <strong>pending</strong> > <strong>fullfilled</strong> ou <strong>rejected</strong></li>
+      <li>Permet un chainage avec d'autres objets <strong>Promise</strong>s</li>
+      <li>Gère les erreurs déclarées <strong>ET les exceptions</strong> levées</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Les fonctions <code>resolve()</code> et <code>reject()</code> sont déclarée dans le constructeur de promise</p>
+      <p>Le contenu de la promesse peut aussi être synchrone ! <pre><code class="javascript">var readFilePromise = function(file) {
+  return new Promise(function(resolve, reject) {
+    // contenu de la promesse synchrone
+    return fs.readFileSync(file);
+    // ou encore
+    // resolve(fs.readFileSync(file));
+  });
+};</code></pre></p>
+      <p>Le résultat d'une promesse (et sont état) sont maintenu tant que l'objet existe pour une utilisation ultérieure (avantage sur les évènements)</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Chaine de promesses</h1>
+    <ul class="steps">
+      <li>L'objet <strong>Promise</strong> possède deux "continuation" possibles :<pre><code class="javascript">readFilePromise('file.txt').then(function(content) {
+  // ce qui à été remonté par resolve()
+  console.log(content);
+}).catch(function(err) {
+  // ce qui à été remonté par reject()
+  console.error(err);
+});</code></pre></li>
+      <li>Et il sont chainables :<pre><code class="javascript">readFilePromise('file.txt')
+  .then(tokenize)
+  .then(writeTo('out.txt')
+  .catch(reportError);</code></pre></li>
+      <li><code>Promise.all([])</code> équivaut à <code>async.map([])</code></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Les promesses seront enchainée de manière séquentielle, en passant les résultat de l'un en entré de l'autre</p>
+      <p><code>catch()</code> est invoquée autant pour une error déclarée avec <code>resolve()</code> que pour une exception (joue le rôle d'un <strong>try-catch</strong>)</p>
+      <p>La position de <code>catch()</code> est signifiactive: <pre><code class="javascript">readFilePromise('file.txt')
+  .then(tokenize)
+  .catch(reportError);
+  .then(writeTo('out.txt')
+  .catch(reportError);</code></pre><br/>le premier <code>catch()</code> récupèrera les erreur de <code>readFilePromise()</code> et <code>tokenize</code>, le second seulement les erreur de <code>writeTo()</code></p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Promesses éléctorales ?</h1>
+    <ul class="steps">
+      <li>Il existe de nombreuses librairies de <strong>Promise</strong> aux APIs différentes, qui incluent plus ou moins de patterns</li>
+      <li>La spécification <a href="https://promisesaplus.com/">Promise/A+</a> propose une interface vraiment trop minimaliste</li>
+      <li>EcmaScript6 inclue une implémentation des Promises, déjà implémentée par V8</li>
+      <li class="warning">Utilisable nativement en NodeJS, elle est cependant très lente</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><a href="https://github.com/petkaantonov/bluebird">Bluebird</a>, <a href="https://github.com/kriskowal/q">Q</a>, <a href="https://github.com/cujojs/when">when</a>, <a href="https://github.com/tildeio/rsvp.js">RSVP</a>, <a href="https://github.com/jakearchibald/es6-promise">ES6-Promise</a>...</p>
+      <p>Des <a href="http://jsperf.com/bluebird-vs-rsvp/62">benchmarks</a> indiquent que l'implémentation native des Promise chrome est 46x plus lente que celle de bluebird</p>
+      <p><a href="http://www.html5rocks.com/fr/tutorials/es6/promises">Un bon article</a> en français sur les promesses</p>
+    </details>
+    <div class="timing" data-duration>10</div>
+  </section>
+
+  <section>
+    <h1>Utiliser les <i>promises</i></h1>
+    <ol class="hands-on">
+      <li>TODO</li>
+    </ol>
+    <details open>
+      <summary/>
+    </details>
+    <div class="timing" data-duration>20</div>
+  </section>
+
+  <!-- Credits -->
+
+  <section>
+    <h1>Crédits photos</h1>
+    <ul>
+      <li>Slide 1 - Ricardo Fujii/Grudaemmim</li>
+      <li>Slide X - Bark</li>
+      <li>Slide X - Inception</li>
+      <li>Slide X - Circle of friends</li>
+    </ul>
+  </section>
+
+  <script src="components/jquery/jquery.min.js"></script>
+  <script src="components/keymaster/keymaster.js"></script>
+  <script src="components/hammerjs/hammer.min.js"></script>
+  <script src="components/highlightjs/highlight.pack.js"></script>
+  <script src="js/ruban.min.js"></script>
+  <script src="js/rock-the-web.min.js"></script>
+  <script>
+    var ruban = new Ruban({
+      pagination: true,
+      ratio: 16/9,
+      bindMouseWheel: true,
+      fontRatio: 0.35
+    });
+
+    startTimer(540); // start at 9:00 AM
+  </script>
+</body>
+</html>

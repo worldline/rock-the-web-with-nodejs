@@ -1,0 +1,376 @@
+@import url(http://fonts.googleapis.com/css?family=Comfortaa:400,700,300|Fredericka+the+Great&subset=latin,latin-ext);
+
+@color: #333;
+@headerColor: #000;
+@emphasisColor: #5A8400;
+@emphasisColor2: #FFF;
+@emphasisColor3: #80BD01;
+@emphasisColor4: #B82E7F;
+@mainBg: radial-gradient(circle farthest-corner at center center , #FFF 0%, #BBB 100%) repeat scroll 0% 0% #BBB;
+@titleBg: #000;
+@secondaryBg: #303030;
+@sectionMargin: 75px;
+@headerFont: 'Fredericka the Great';
+@font: Comfortaa;
+
+// positionning
+
+section {
+  position: relative;
+  display: block;
+  z-index: 0;
+  background: @mainBg;
+  border-left: @sectionMargin solid @secondaryBg;
+  border-right: @sectionMargin solid @secondaryBg;
+
+  > ul,
+  > ol {
+    margin-top: 15px;
+  }
+}
+
+section.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: @titleBg;
+
+  > * {
+    display: block;
+  }
+
+  h1 {
+    color: @emphasisColor2;
+    border-color: @emphasisColor2;
+    text-shadow: 5px 5px 1px @emphasisColor;
+  }
+}
+
+ul > li:not(:last-child), ol > li:not(:last-child) {
+  padding-bottom: .5em;
+}
+
+.bg {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+}
+
+img.bg {
+  height: auto;
+}
+
+div.bg {
+  text-align: center;
+
+  img {
+    height: 100%;
+    width: auto;
+  }
+}
+
+.title.main .bg {
+  opacity: 1;
+}
+
+details {
+  p {
+    margin: 0 0 .5em 0;
+  }
+
+  &.opened {
+    z-index: 1;
+  }
+}
+
+// typography
+
+html, body {
+  font-family: @font, sans-serif;
+  color: @color;
+}
+
+h1, h2, h3, h4, h5 {
+  text-shadow: 5px 5px 1px @emphasisColor;
+  border-top: 2px solid @emphasisColor;
+  font-family: @headerFont, sans-serif;
+  color: @color;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+a {
+  text-shadow:0 0 3px @emphasisColor;
+
+  &:after {
+    content: "\f08e";
+    font-family: FontAwesome;
+    display: inline-block;
+    margin-left: 0.3em;
+    font-size: 50%;
+  }
+}
+
+.stroked {
+  text-decoration: line-through;
+  color: red;
+}
+
+footer, .time {
+  color: @emphasisColor3;
+}
+
+.timing {
+  display: none;
+}
+
+.hints {
+  position: absolute;
+  z-index: 1;
+  right: 0px;
+  margin-top: -2em;
+
+
+  > * {
+    display: inline-block;
+    transform: rotate(-15deg);
+    padding: 0.2em 0.5em;
+    border-radius: 3px;
+    margin-left: -30px;
+    font-size: 75%; 
+    color: @emphasisColor2;
+    border: 1px solid @emphasisColor2;
+    background: none repeat scroll 0% 0% @emphasisColor;
+    box-shadow: 0px 0px 0px 3px @emphasisColor;
+  }
+}
+
+.hints.line {
+  margin-top: .5em;
+  right: auto;
+}
+
+.video-container, .image-container {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > img {
+    max-height: 95%;
+  }
+}
+
+// list rendering
+
+section > ol {
+  padding-left: 0;
+}
+
+ol {
+  counter-reset: ordered;
+
+  > li {
+    list-style-type: none;
+    counter-increment: ordered;
+  }
+
+  > li:before {
+    content: counter(ordered); 
+    display: inline-block;
+    text-align: center;
+    color: white;
+    background: lighten(@emphasisColor, 5%);
+    font-size: 50%;
+    width: 2em;
+    border-radius: 1em;
+    margin-right: 0.8em;
+    vertical-align: .3em;
+  }
+}
+
+ul > li:before {
+  content: "\f1b2";
+  color: @emphasisColor;
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-right: 0.8em;
+  vertical-align: .5em;
+  font-size: 40%;
+}
+
+li > ol,
+li > ul {
+  font-size: 90%;
+  margin-bottom: 1em;
+}
+
+li.guideline:before,
+li.warning:before,
+li.convention:before,
+li.cliche:before,
+li.bonus:before {
+  font-size: 100%;
+  vertical-align: 0;
+  font-family: FontAwesome;
+}
+
+li.guideline:before {
+  content: "\f087";
+}
+
+li.cliche:before {
+  content: "\f0e5";
+}
+
+li.warning:before {
+  content: "\f071";
+}
+
+li.convention:before {
+  content: "\f0c0";
+}
+
+li.bonus:before {
+  content: "\f0fc";
+}
+
+li.centered {
+  text-align: center;
+
+  &:before {
+    display: none;
+  }
+}
+
+// code rendering
+
+code {
+  font-size: 80%;
+  display: inline-block;
+  background: #FFF;
+  padding: 0 .1em;
+  border-radius: .2em;
+  color: @emphasisColor4;
+  margin: .1em 0;
+}
+
+pre.inline {
+  display: inline-block;
+  vertical-align: -1.1em;
+}
+
+pre {
+  position: relative;
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin-bottom: 0;
+
+  code {
+    color: inherit;
+    border-radius: 5px;
+    font-size: 50%;
+    margin: 0;
+  }
+
+  &:before, &:after {
+    z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 15px;
+    left: 10px;
+    width: 50%;
+    top: 0;
+    max-width:300px;
+    box-shadow: 0 15px 10px #777;
+    transform: rotate(-3deg);
+  }
+
+  &:after {
+    transform: rotate(3deg);
+    right: 10px;
+    left: auto;
+  }
+}
+
+// Hands on !
+
+.hands-on {
+  font-size: 75%;
+
+  li:before {
+    background-color: @emphasisColor4;
+  }
+
+  &:after {
+    transition: all 1s;
+    position: absolute;
+    top: 1em;
+    left: -300px;
+    opacity: 0;
+    content: 'Hands on !';
+    font-size: 1em;
+    padding: 0.2em 0.5em;
+    border-radius: 3px;
+    display: inline-block;
+    margin-left: 30px;
+    color: @emphasisColor2;
+    border: 1px solid @emphasisColor2;
+    background: none repeat scroll 0% 0% @emphasisColor4;
+    box-shadow: 0px 0px 0px 3px @emphasisColor4;
+  }
+}
+
+.active .hands-on:after {
+  left: 0;
+  opacity: 1;
+}
+
+// steps
+
+.hands-on.steps > *:not(.step) {
+  opacity: .4;
+}
+
+// presenter mode
+
+body.presenter {
+  > aside {
+    font-style: normal;
+
+    p:not(:last-child),
+    div:not(:last-child) {
+      padding-bottom: 0.25em;
+      margin-bottom: 0.25em;
+      border-bottom: 1px solid @emphasisColor;
+    }
+  }
+}
+
+// printing
+
+@media print {
+  body {
+    font-size: 13pt !important;
+  }
+
+  .step,
+  .steps > * {
+    display: inherit !important;
+  }
+
+  details {
+    color: #CCC;
+  }
+}
