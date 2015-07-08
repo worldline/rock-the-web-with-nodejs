@@ -168,9 +168,7 @@
         <li>RegExp <pre class="inline"><code class="javascript">var textFiles = /\.(rdf|txt)$/;</code></pre></li>
         <li>Date <pre class="inline"><code class="javascript">var now = new Date(); // Date.now()</code></pre></li>
         <li>Error<pre class="inline"><code class="javascript">var err = new Error('U know Y');</code></pre></li>
-        <li>Function <pre class="inline"><code class="javascript">var sayHi = function() {
-  return 'Hi';
-};</code></pre></li>
+        <li>Function <pre class="inline"><code class="javascript">var sayHi = function() { return 'Hi'; };</code></pre></li>
       </ul></li>
       <li>Typées comme des <code>Object</code>, elles héritent des méthodes <code>toString</code>, <code>valueOf</code>, <code>hashCode</code>...</li>
     </ul>
@@ -640,7 +638,7 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
   <section>
     <h1>Modules NodeJS</h1>
     <ol class="steps hands-on">
-      <li>Sur votre poste, dans un dossier <strong>tps/modules</strong>, créez 4 fichiers:<ol>
+      <li>Sur votre poste, dans un dossier <strong>tps/modules</strong>, créez 4 modules (fichiers):<ol>
         <li>Un pour les <strong>stocks</strong>, contenant l'objet <strong>beers</strong></li>
         <li>Un pour les <strong>actions</strong>, contenant la fonction <strong>drink</strong></li>
         <li>Un pour le pattern <strong>command</strong>, contenant la fonction <strong>doMove</strong></li>
@@ -751,7 +749,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
   <section>
     <h1>File System</h1>
     <ol class="steps hands-on">
-      <li>Créez un module <strong>fs_utils</strong> qui exporte une fonction <strong>getDirContent()</strong>.</li>
+      <li>Créez un module <strong>tps/fs/fs_utils.js</strong> qui exporte une fonction <strong>getDirContent()</strong>.</li>
       <li><strong>getDirContent()</strong> accepte 2 paramètres : le chemin du dossier, et une fonction callback.</li>
       <li>Lorsque vous aurez lu le dossier, invoquez le callback avec 2 paramètres : une erreur et le tableau contenant les noms des fichiers/sous-dossiers.
       Si le chemin est un dossier valide, le paramètre erreur doit être <code>null</code>.</li>
@@ -844,7 +842,7 @@ console.log(__filename); // /Users/a127380/example.js</code></pre></p>
   <section>
     <h1>Environnement d'exécution</h1>
     <ol class="steps hands-on">
-      <li>Créez un module <strong>uncaught</strong> qui déclenche la même fonction toutes les secondes : cette fonction lance une exception.</li>
+      <li>Créez un module <strong>tps/process/uncaught.js</strong> qui déclenche la même fonction toutes les secondes : cette fonction lance une exception.</li>
       <li>Récupérez cette exception avec <pre class="inline"><code class="javascript">process.on('uncaughtException', function(err) { /*...*/})</code></pre> et au bout de 3 exceptions reçues, stoppez l'exécution avec un code 1.</li>
     </ol>
     <details open>

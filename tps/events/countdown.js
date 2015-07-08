@@ -4,8 +4,8 @@ var countdown = new EventEmitter();
 /**
  * The tick function is private to avoid external usage.
  * It decrement the duration, and emit 'tick' event, unless the countdown reach 0.
- * In this case, emit the 'stop' event 
- * @param duration [Number] remaining duration
+ * In this case, emit the 'stop' event
+ * @param {Number} duration - remaining duration
  */
 var tick = function(duration) {
   setTimeout(function() {
@@ -20,7 +20,7 @@ var tick = function(duration) {
 
 /**
  * Start will emit 'start' event and begin contdown.
- * @param n [Number] number of seconds this countdown will last.
+ * @param {Number} n - number of seconds this countdown will last.
  */
 countdown.start = function(n) {
   if(isNaN(+n)) {

@@ -5,7 +5,7 @@ var inherits = require('util').inherits;
  * The tick function is private to avoid external usage.
  * It decrement the countdown, and emit 'tick' event, unless the countdown reach 0.
  * In this case, stop is invoked.
- * @param countdown [Countdown] the concerned countdown.
+ * @param {Countdown} countdown - The concerned countdown.
  */
 function tick(countdown) {
   countdown.timer = setTimeout(function() {
@@ -20,6 +20,15 @@ function tick(countdown) {
 
 /**
  * Creates a simple class the extends EventEmitter.
+ *
+ * @event Countdown#start - When countdown begins with the remaining seconds
+ * @type {Number}
+ *
+ * @event Countdown#tick - During countdown with the remaining seconds
+ * @type {Number}
+ *
+ * @event Countdown#stop - When countdown reaches its end of if manually stopped, with the remaining seconds
+ * @type {Number}
  */
 var Countdown = function() {
   this.remains = 0;
@@ -30,8 +39,11 @@ inherits(Countdown, EventEmitter);
 //Countdown.prototype.constructor = Countdown;
 
 /**
- * Start will emit 'start' event and begin contdown.
- * @param n [number] number of seconds this countdown will last.
+ * Begins the contdown.
+ * @param {Number} n - Number of seconds this countdown will last.
+ *
+ * @fires Countdown#start
+ * @fires Countdown#tick
  */
 Countdown.prototype.start = function start(n) {
   if(isNaN(+n)) {
@@ -44,7 +56,8 @@ Countdown.prototype.start = function start(n) {
 };
 
 /**
- * Stops will emit 'stop' event and reset inner state.
+ * Stop countdown and reset inner state.
+ * @fires Countdown#stop
  */
 Countdown.prototype.stop = function start() {
   clearTimeout(this.timer);
