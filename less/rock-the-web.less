@@ -74,8 +74,10 @@ div.bg {
   }
 }
 
-.title.main .bg {
-  opacity: 1;
+.title.main, .title.pause {
+  .bg {
+    opacity: 1;
+  }
 }
 
 details {
@@ -121,12 +123,8 @@ a {
   color: red;
 }
 
-footer, .time {
+footer, .time, .time-left {
   color: @emphasisColor3;
-}
-
-.timing {
-  display: none;
 }
 
 .hints {
@@ -170,6 +168,11 @@ footer, .time {
   > img {
     max-height: 95%;
   }
+}
+
+#sumup i {
+  color: @emphasisColor;
+  padding-right: 1em;
 }
 
 // list rendering
@@ -248,10 +251,11 @@ li.bonus:before {
 
 .centered {
   text-align: center;
+}
 
-  &:before {
-    display: none;
-  }
+.centered:before,
+.no-bullet:before {
+  display: none;
 }
 
 // code rendering
@@ -346,6 +350,7 @@ pre {
 // presenter mode
 
 body.presenter {
+
   > aside {
     font-style: normal;
 

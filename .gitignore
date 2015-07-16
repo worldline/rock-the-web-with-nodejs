@@ -3,3 +3,4 @@ components/
 js/
 css/
 *.zip
+coverage.html

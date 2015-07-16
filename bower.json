@@ -9,6 +9,7 @@
     "components"
   ],
   "dependencies": {
-    "ruban": "https://github.com/feugy/ruban.git#presenter"
+    "ruban": "https://github.com/feugy/ruban.git#presenter",
+    "font-awesome": "~4.3.0"
   }
 }

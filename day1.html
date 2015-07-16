@@ -12,14 +12,12 @@
 </head>
 
 <body>
-  <div class="time"></div>
-
-  <section class="title main">
+  <section class="title main" data-timing="15">
     <img class="bg" src="images/rock-blur.jpg">
     <h1>Rock The Web with Node.js</h1>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1>Souvenir, souvenirs</h1>
     <ul class="steps">
       <li>1995 : LiveScript, puis JavaScript</li>
@@ -43,10 +41,9 @@
       <p>2011 : Verte.X est un framework evénementiel sur la JVM inspiré de NodeJS, utilisable en JS, Java, Coffee, Python, Groovy, Clojure, Scala</p>
       <p>2011 : LinkedIn (16 Juillet 2011) pour son appli mobile, Walmart (Janvier 2012) pour son appli mobile & son site, eBay (17 mai 2011), Paypal (30 mai 2013), Groupon (7 Octobre 2013) ont refondus leurs SI pour utiliser NodeJS</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="is-it-serious">
+  <section id="is-it-serious" data-timing="10">
     <h1><img src="images/seriously.png"> Sérieusement ? Du JS ?</h1>
     <ul class="steps">
       <li class="cliche">C'est lent car c'est interprété</li>
@@ -68,10 +65,9 @@
       <p><a href="http://www.indeed.com/salary?q1=nodejs&l1=United+States" target="_blank">Evolution du salaire moyen pour NodeJS aux USA</a></p>
       <p>Fullstack: une équipe capable de développer avec la même technologie les interfaces et les services métier</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="what-is-nodejs">
+  <section id="what-is-nodejs" data-timing="10">
     <h1>Ce qu'est Node.js</h1>
     <ul>
       <li class="step">Un langage</li>
@@ -91,7 +87,6 @@
       <p>Pas un framework : pas de cadre de programmation imposé, pas de finalité spécifique</p>
       <p><a href="http://fr.wikipedia.org/wiki/Framework" target="_blank">Un environnement d'exécution</a> : a l'instar des navigateur, NodeJS exécute du JavaScript, mais dans un Système d'exploitation</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
   <section class="title" id="javascript-fu">
@@ -104,7 +99,7 @@
     </details>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Vos outils</h1>
     <ul class="steps">
       <li>Ce matin : <a href="http://jsbin.com/?js,console" target="_blank">JSBin</a></li>
@@ -117,10 +112,9 @@
       <p>Une fois Node.js installé, pensez a configurer les variables d'environnement HTTP_PROXY et HTTPS_PROXY</p>
       <p>La console de votre navigateur, ou le REPL node sont aussi utilisables, mais beaucoup moins pratique pour l'édition.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Types & variables</h1>
     <ul class="steps">
       <li>Dynamique et faiblement typé : une variable = un pointeur</li>
@@ -140,10 +134,9 @@
       <p>Les <strong>Object</strong> peuvent avoir autant de propriétés que vous voulez, à l'instar des <strong>dictionnaires</strong> (Python), <strong>hashs</strong> (Perl, Ruby), <strong>hash tables</strong> (C/C++), <strong>hash maps</strong> (Java), <strong>tableaux associatifs</strong> (Php)...</p>
       <p>Ils sont très largement utilisés comme structures de données.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="15">
     <h1>Types & variables</h1>
     <ol class="steps hands-on">
       <li>Dans un JSBin, créez une variable Jack contenant la chaîne <strong>'Hello I'm Jack'</strong>. Affichez le contenu de la variable dans la <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console.log" target="_blank">console</a>.</li>
@@ -157,10 +150,18 @@
       <p>L'utilisation des constructeur (<code>Number</code>, <code>Boolean</code>, <code>String</code>) est déconseillée par rapport à l'utilisation des litéraux. La comparaison de deux instances ayant la même valeur sera toujours fausse : <code>new Number(15) != new Number(15)</code></p>
       <p><a href="http://jsbin.com/dunozeyica/edit?js,console" target="_blank">Correction</a></p>
     </details>
-    <div class="timing" data-duration>15</div>
   </section>
 
-  <section>
+  <section class="title pause" data-timing="15">
+    <div class="bg">
+      <img src="images/pause-1.png">
+    </div>
+    <details open>
+      <summary>Pause</summary>
+    </details>
+  </section>
+
+  <section data-timing="5">
     <h1>Types & variables</h1>
     <ul class="steps">
       <li>Le langage propose des "classes" héritant de <strong>Object</strong>, avec des syntaxes litérales :<ul>
@@ -181,10 +182,9 @@
       <p>Et oui, les fonction sont des objets (<i>Functions are first-class citizen</i>) ! Elles ont des attributs (<code>arguments</code>, <code>length</code>...) et des méthodes (<code>apply</code>, <code>bind</code>...)</p>
       <div>4 syntaxes possibles pour les fonctions : <pre class="inline"><code class="javascript">var sayHi = function() {...}</code></pre> (expression), <pre class="inline"><code class="javascript">function sayHi() {...}</code></pre> (declaration), <pre class="inline"><code class="javascript">var sayHi = function sayHi() {...}</code></pre> (expression vers une closure nommée), <pre class="inline"><code class="javascript">var sayHi = new Function('')</code></pre> (création dynamique). <a href="http://www.unicodegirl.com/function-statement-versus-function-expression.html" target="_blank">On préfèrera la première solution</a>.</div>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="30">
     <h1>Types & variables</h1>
     <ol class="steps hands-on">
       <li>Créez un tableau <strong>days</strong> contenant les jours de la semaine, et faites un extrait des jours ouvrés dans une variable <strong>workingDays</strong></li>
@@ -201,10 +201,9 @@
       <p>Les fonctions étant des objets, elles peuvent être passées en paramètres d'autres fonctions. Cela permet d'implémenter facilement le <i>design pattern</i> de délégation, ou pour "rappeler" le code appelant après une opération asynchrone.</p>
       <p><a href="http://jsbin.com/tayepi/edit?js,console" target="_blank">Correction</a></p>
     </details>
-    <div class="timing" data-duration>40</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Structures itératives</h1>
     <ul class="steps">
       <li><strong>for</strong> classique pour les tableaux
@@ -233,10 +232,9 @@ for (var attr in people) {
       <p>L'utilisation du <strong>forEach</strong> est de plus en plus populaire, notamment grâce à underscore et lodash, surtout qu'il est de <a href="http://jsperf.com/for-vs-foreach/66" target="_blank">plus en plus performants.</a></p>
       <p>A l'intérieur d'une boucle for, les instructions <code>break</code> et <code>continue</code> permettent de contrôller l'éxécution de la boucle</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Struct. conditionnelles</h1>
     <ul class="steps">
       <li><pre class="inline"><code class="javascript">if (...) {...} else if (...) {...} else {...}</code></pre></li>
@@ -257,14 +255,13 @@ for (var attr in people) {
       <p>Attention à ne pas oublier le <code>break</code> au niveau d'un switch</li>
       <p>L'opérateur ternaire est utilisable dans une expression, ce qui le différentie du <strong>if else</strong> qui est une instruction.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1>Fonctions</h1>
     <ul class="steps">
       <li>Nombre d'arguments dynamique
-<pre><code class="javascript">var minus = function(a, b) { 
+<pre><code class="javascript">var minus = function(a, b) {
   return arguments.length === 1 ? -a : a-b;
 };
 console.log(minus(10), minus(10, 3), minus.length); //-10, 7, 2</code></pre></li>
@@ -286,10 +283,9 @@ console.log(permute([4, 6]), tmp, permutted); // [6, 4], 10, true</code></pre></
       <p>Pas de portée bloc en JavaScript, une portée fonction.</p>
       <p>Dans une fonction, toutes les variables sont initializée avant la première instruction (<strong>hoisting</strong>)</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1><a href="https://fr.wikipedia.org/wiki/Fermeture_%28informatique%29" target="_blank">Closures</a></h1>
     <ul class="steps">
       <li>Fonction utilisant les variables <strong>d'un autre scope</strong>
@@ -299,7 +295,7 @@ console.log(permute([4, 6]), tmp, permutted); // [6, 4], 10, true</code></pre></
   return function(units) {return stock += units;};
 }
 var stock = makeStock();
-console.log(stock(4), stock(2)); // 4, 6</code></pre></li></li> 
+console.log(stock(4), stock(2)); // 4, 6</code></pre></li></li>
       <li>Attention en situation asynchrone !
 <pre><code class="javascript">var callLater = function(done) {
   setTimeout(done, 1); // invoke la fonction done dans 1ms
@@ -327,16 +323,14 @@ for (var i = 0; i < 3; i++) {
 }</code></pre>
       </div>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="30">
     <h1>Structures & Fonctions</h1>
     <ol class="steps hands-on">
       <li>Créez une fonction <strong>concat()</strong> qui concatène tous les arguments qui lui sont passé et les renvoie</li>
       <li>Améliorez cette fonction en utilisant la méthode <strong>reduce()</strong> des tableaux (<a href="http://davidwalsh.name/arguments-array" taret="_blank">Castez</a> <strong>arguments</strong> au préalable)</li>
-      <li>Créez une fonction <strong>getAttr()</strong> qui prend en paramètre un objet et un chemin (string) et renvoie l'attribut pointé par le chemin.
-Les étapes du chemin sont séparés par des '.' (entre dans les sous-objets). Si le chemin est invalide (étape inexistante), lancez une erreur avec <strong>throw</strong>.</li>
+      <li class="bonus">Créez une fonction <strong>getAttr()</strong> qui prend en paramètre un objet et un chemin (string) et renvoie l'attribut pointé par le chemin. Les étapes du chemin sont séparés par des '.' (entre dans les sous-objets). Si le chemin est invalide (étape inexistante), lancez une erreur avec <strong>throw</strong>.</li>
     </ol>
     <details open>
       <summary/>
@@ -346,11 +340,18 @@ Les étapes du chemin sont séparés par des '.' (entre dans les sous-objets). S
       <p><strong>getAttr()</strong> peut être réalisée récursivement ou itérativement.</p>
       <p><a href="http://jsbin.com/jumora/edit?js,console" target="_blank">Correction</a></li>
     </details>
-    <div class="timing" data-duration>40</div>
   </section>
 
-  <section id="custom-classes">
-    <div class="timing" data-pause>120</div>
+  <section class="title pause" data-timing="120">
+    <div class="bg">
+      <img src="images/pause-2.jpg">
+    </div>
+    <details open>
+      <summary>Pause</summary>
+    </details>
+  </section>
+
+  <section id="custom-classes" data-timing="10">
     <h1>Classes personnalisés</h1>
     <ul class="steps">
       <li>Pas de classes en JS, mais un prototype : ses propriétés seront "héritées" par toutes les "instances"</li>
@@ -379,10 +380,9 @@ new Person('joe').say('hi'); // joe said: hi</code></pre></li>
       <p>Tout ce qui est dans le prototype est donc partagé entre toutes les instances, mais ne peut servir a faire des variable à échelle de classe.</p>
       <p>Attention : le mot clé <code>this</code> n'est jamais facultatif, comme en Java, C#.</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="class-inheritance">
+  <section id="class-inheritance" data-timing="10">
     <h1>Héritage de classes</h1>
     <ul class="steps">
       <li>Héritage simple par extension du prototype
@@ -415,10 +415,9 @@ console.log(jake.toString()); // jake (B-)</code></pre></li>
       <p>Pas d'encapsulation avec des notions de visibilité (private, protected...), mais faisable à base de closures.</p>
       <p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript" target="_blank">Un article détaillé</a> sur le sujet</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="awful-scopes">
+  <section id="awful-scopes" data-timing="5">
     <h1>Awful parts: scopes</h1>
     <ul class="manual">
       <li class="step">Les variables globales <pre class="inline"><code class="javascript">counter = 0;</code></pre><span class="hints line">
@@ -448,10 +447,9 @@ var f1 = function(cond) {
       <p>La <code>ReferenceError</code> signale une variable utilisé dans un scope où elle n'est pas définie.</p>
       <p>Pour éviter le <strong>hosting</strong>, le mieux est d'être en ES6. Sinon, on peut se forcer à déclarer les variable en début de fonction (les linters peuvent aider).</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Awful parts: scopes</h1>
     <ul class="manual">
       <li class="step">Hoisting des variables et des fonctions
@@ -477,10 +475,9 @@ var f1 = function(cond) {
       <p>Lorsqu'une méthode est exécutée suite à un évènement asynchrone (timer, évènement navigateur, appel ajax, accès disque/réseau), l'objet courant n'est plus celui au moment de l'appel.</p>
       <p>Il est courant d'utiliser une closure pour conserver le this (le célèbre <pre class="inline"><code class="javascript">var self = this;</code></pre>.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Awful parts: tableaux</h1>
     <ul>
       <li class="step">Les tableaux ne sont pas contigües
@@ -503,10 +500,9 @@ basket['apples'] = 2;</code></pre><span class="hints"><span class="step">Utilise
       <p>Le <strong>for in</strong> ne garanti pas l'ordre de passage des clés, et parcours tous les élements <strong>enummérables</strong> du prototype.</p>
       <p>La longueur du tableau ne tient pas compte des indices (des attributs) non numériques. Cette utilisation est destabilisante pour les lecteurs.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Awful parts: autres...</h1>
     <ul>
       <li class="step">Egalité vs Identité<pre><code class="javascript">var a = 10, b = Number(10);
@@ -524,7 +520,6 @@ dynamic(5); // 15</code></pre><span class="hints"><span class="step">Design</spa
       <p>TODO règles des <code>;</code> implicites</p>
       <p><a href="http://bonsaiden.github.io/JavaScript-Garden/#core.eval" target="_blank">Pourquoi il faut se passer d'<code>eval</code></a></p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
   <!--section>
@@ -563,7 +558,7 @@ console.log(rental[1].model.manufacturer);
     <h1>Modularité et I/O asynchrones</h1>
   </section>
 
-  <section id="export">
+  <section id="export" data-timing="10">
     <h1>Modules NodeJS : export</h1>
     <ul>
       <li class="step">En JS, comment indiquer que le fichier A utilise une function du fichier B ?<span class="hints line"><span class="step">Impossible !</span><span class="step">RequireJS</span><span class="step">CommonJS</span><span class="step">Es6</span></span></li>
@@ -585,10 +580,9 @@ exports.circumference = function (r) {
       <p>NodeJS implémente uniquement cette partie de la spec CommonJS.</p>
       <p>En NodeJS il y a néanmoins un scope global, accessible depuis un module avec la variable <code>global</code></p> 
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="import">
+  <section id="import" data-timing="5">
     <h1>Modules NodeJS : import</h1>
     <ul class="steps">
       <li>Un module peut importer d'autres modules<pre><code class="javascript">var common = require('../utils/common'); // relatif
@@ -610,10 +604,9 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
       <p>L'extension de fichier '.js', '.json' et '.node' sont facultatives: <code>../utils/common</code> équivaut <code>../utils/common.js</code></p>
       <p>Un import commençant par <code>/</code> est un import absolu. C'est une syntaxe déconseillée.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Modules NodeJS : a faire</h1>
     <ul class="steps">
       <li class="guideline">Dépendances internes au projet : syntaxe relative</li>
@@ -632,10 +625,9 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
       <p>les exports d'un module sont mis en cache (mémoire) par NodeJS, pour accélerer les futurs imports.</p>
       <p>Il est possible d'avoir des <a href="http://nodejs.org/api/modules.html#modules_cycles" target="_blank">dépendances cycliques</a>, mais c'est compliquer a gérer.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="30">
     <h1>Modules NodeJS</h1>
     <ol class="steps hands-on">
       <li>Sur votre poste, dans un dossier <strong>tps/modules</strong>, créez 4 modules (fichiers):<ol>
@@ -659,11 +651,9 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
       </ol></p>
       <p><a href="http://code.runnable.com/VK1CqwAm0UNZAf_p/rocktheweb-modules" target="_blank">Correction</a></p>
     </details>
-    <div class="timing" data-duration>30</div>
   </section>
 
-  <section>
-    <div class="timing" data-pause>15</div>
+  <section data-timing="10">
     <h1>Les opérations asynchrones</h1>
     <ul class="steps">
       <li>V8 est mono-thread : 1 instruction en parallèle</li>
@@ -682,10 +672,9 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p>Il existe des version synchrone de certaines fonctionnalités sur les fichiers, mais jamais sur les sockets.</p>
       <p></p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="15">
     <h1>The Event Loop</h1>
     <ul>
       <li class="step">NodeJS utilise des threads parallèles pour ses I/O: sinon il ne pourrait traiter qu'une requête à la fois !</li>
@@ -707,10 +696,18 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p>Une exception levée dans un callback ne peut être catché par un <code>try</code> autour de la fonction asynchrone</p>
       <p>La gestion des erreur devient alors explicite et locale au callback</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section class="title pause" data-timing="15">
+    <div class="bg">
+      <img src="images/pause-3.jpg">
+    </div>
+    <details open>
+      <summary>Pause</summary>
+    </details>
+  </section>
+
+  <section data-timing="5">
     <h1>Le module <i>fs</i></h1>
     <ul class="steps">
       <li>Le module <strong>fs</strong> regroupe les I/O sur le file-system</li>
@@ -726,10 +723,9 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p>L'usage des fonctions en mode synchrone est a réserver à des cas très spécifique, comme le chargement de configuration car il est alors normal que l'I/O soit bloquant au démarrage de l'application.</p>
       <p>Les versions synchrones ne prennent pas de callback en paramètre, et leur retour est les paramètres du callback.</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Le module <i>path</i></h1>
     <ul class="steps">
       <li>Le module <strong>path</strong> regroupe les fonctions de manipulations de chemin</li>
@@ -743,10 +739,9 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p><code>sep</code> est le séparateur de fichier (<code>/</code> sur Unix, <code>\</code> sur Windows)</p>
       <p><code>delimiter</code> est le séparateur de chemins (<code>:</code> sur Unix, <code>;</code> sur Windows)</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="40">
     <h1>File System</h1>
     <ol class="steps hands-on">
       <li>Créez un module <strong>tps/fs/fs_utils.js</strong> qui exporte une fonction <strong>getDirContent()</strong>.</li>
@@ -763,7 +758,6 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p>La grande difficulté de <code>getDirStat</code> est dans l'utilisation d'une fonction asynchrone (<pre class="inline"><code class="javascript">fs.stat()</code></pre>)à l'intérieur d'une boucle. Diverses solutions existes, que nous verrons par la suite.</p>
       <p><a href="http://code.runnable.com/VK2BdV2fEac7Q4Hf/rocktheweb-fs" target="_blank">Correction</a></p>
     </details>
-    <div class="timing" data-duration>60</div>
   </section>
 
   <section class="title" id="process-module">
@@ -773,7 +767,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     <h1>L'environnement d'exécution</h1>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1>La variable globale <i>process</i></h1>
     <ul class="steps">
       <li>Modélise le process et ses arguments <code>argv</code></li>
@@ -793,14 +787,13 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p><strong>uncaughtException</strong> est le <code>try-catch</code> de plus haut niveau : il ne doit pas être utilisé pour récupérer des exceptions "normales"</p>
       <p>Il est généralement reconnu qu'il faille stopper le programme lorsqu'on reçoit une <strong>uncaughtException</strong>, et ce mécanisme existe à titre informatif</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Le module <i>os</i></h1>
     <ul class="steps">
       <li>Identification : <code>type()</code>, <code>release()</code></li>
-      <li>Aaccès aux réglages : <code>tmpdir()</code>, <code>hostname()</code></li>
+      <li>Accès aux réglages : <code>tmpdir()</code>, <code>hostname()</code></li>
       <li>A sa capacité : <code>cpus()</code>, <code>freemem()</code>, <code>totalmem()</code>, <code>loadavg()</code></li>
       <li>Et ses interfaces réseau <code>networkInterfaces()</code></li>
       <li class="convention">Pour utiliser les spécificités de l'OS (drivers, devices...), il est nécessaire d'écrier des <a href="http://nodejs.org/api/addons.html" target="_blank">addons en C/C++</a></li>
@@ -811,10 +804,9 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p><code>loadavg()</code> est toujours nul sous Windows</p>
       <p>Une partie des API de NodeJS sont écrites en C/C++, l'autre repose sur celle-ci</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>Et quelques bonus</h1>
     <ul class="steps">
       <li>La <strong>console</strong> globale : <code>log()</code>, <code>info()</code>, <code>warn()</code>, <code>error()</code>, <code>dir()</code>, <code>time()</code> + <code>timeEnd()</code>, <code>trace()</code></li>
@@ -836,10 +828,9 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
 console.log(__dirname); // /Users/a127380
 console.log(__filename); // /Users/a127380/example.js</code></pre></p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="20">
     <h1>Environnement d'exécution</h1>
     <ol class="steps hands-on">
       <li>Créez un module <strong>tps/process/uncaught.js</strong> qui déclenche la même fonction toutes les secondes : cette fonction lance une exception.</li>
@@ -854,13 +845,25 @@ console.log(__filename); // /Users/a127380/example.js</code></pre></p>
       <p>L'explication de l'inscription d'un auditeur d'évènement sera détaillée dans la prochaine partie de la formation</p>
       <p><a href="http://code.runnable.com/VLKZV68-T6hv1KOl/rocktheweb-process" target="_blank">Correction</a></p>
     </details>
-    <div class="timing" data-duration>20</div>
   </section>
 
   <section class="title" id="end">
     <div class="bg">
       <img src="images/day1-end.jpg">
     </div>
+  </section>
+
+  <section id="sumup" data-timing="10">
+    <h1>Récap du premier jour</h1>
+    <ul class="steps">
+      <li class="no-bullet"><i class="fa fa-fw fa-server"></i>NodeJS, un environnement d'exécution JS coté serveur</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-graduation-cap"></i>JavaScript Crash-course et pièges communs</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-cubes"></i>Les modules NodeJS</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-refresh"></i>L'event loop</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-file-o"></i>L'accès asynchrone aux fichiers</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-birthday-cake"></i>Quelques friandises : <code>os</code>, <code>process</code>, <code>console</code>...</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-child"></i>... A demain !</li>
+    </ul>
   </section>
 
   <!-- Credits -->
@@ -870,8 +873,8 @@ console.log(__filename); // /Users/a127380/example.js</code></pre></p>
     <ul>
       <li>Slide 1 - Ricardo Fujii/Grudaemmim</li>
       <li>Slide 5 - Rene Zuleta</li>
-      <li>Slide 22 - Reuters</li>
-      <li>Slide 32 - Pascal - Killbot Assembly Line</li>
+      <li>Slide 24 - Reuters</li>
+      <li>Slide 35 - Pascal - Killbot Assembly Line</li>
     </ul>
   </section>
 

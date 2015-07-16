@@ -1,0 +1,14 @@
+{
+  "name": "hapi-server",
+  "version": "1.0.0",
+  "dependencies": {
+    "boom": "^2.8.0",
+    "handlebars": "^3.0.3",
+    "hapi": "^8.8.0",
+    "joi": "^6.5.0"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "lab": "^5.13.0"
+  }
+}

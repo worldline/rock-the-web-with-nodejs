@@ -6,17 +6,180 @@
   <link rel="stylesheet" href="components/normalize-css/normalize.css" />
   <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css" />
   <link rel="stylesheet" href="components/highlightjs/styles/tomorrow.css" />
-  <link rel="stylesheet" href="css/ruban.min.css" />
-  <link rel="stylesheet" href="css/ruban-print.min.css" media="print" />
+  <link rel="stylesheet" href="components/ruban/css/ruban.min.css" />
+  <link rel="stylesheet" href="components/ruban/css/ruban-print.min.css" media="print" />
   <link rel="stylesheet" href="css/day3.min.css" />
 </head>
 
 <body>
   <div class="time"></div>
 
-  <section class="title main">
+  <section class="title main" data-timing="10">
     <img class="bg" src="images/rock-blur.jpg">
     <h1>Rock The Web with Node.js</h1>
+  </section>
+
+  <section id="npm" class="title">
+    <div class="bg">
+      <img src="images/npm.png">
+    </div>
+    <h1>The Node Package Manager</h1>
+  </section>
+
+  <section data-timing="5">
+    <h1>Packager son projet</h1>
+    <ul class="steps">
+      <li>Dans l'écosystème NodeJS* on utilise une foule de librairies spécialisées</li>
+      <li>Une librairie répond généralement à une problématique simple</li>
+      <li>Votre application utilisera des librairies, et en sera peut-être une elle même</li>
+      <li><code>package = modules + dépendances + tests</code></li>
+      <li>NPM vous aide à packager et distribuer votre projet</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>(*) dans l'ecosystème JavaScript en général</p>
+      <p><strong>moment</strong> = manipulation de dates, <strong>underscore</strong>/<strong>lodash</strong> = manipulation des tableaux/collections, <strong>mongodb-native</strong> = driver MongoDB, <strong>js-yaml</strong> = parser YAML...</p>
+      <p>Dans une société, il est courant de réaliser des librairies pour des briques logicielles internes (connexion au DAS...), ou pour mutualiser un savoir faire métier</p>
+      <p>Même votre application n'est pas destinée à être réutilisée, la packager est une nécessité</p>
+      <p>NPM apporte des conventions (package.json) et des outils pour la distribution (registry central + client de packaging)</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Exemples de structure</h1>
+    <ul class="steps">
+      <li>Librairie ou executable en ligne de commandes : <pre><code class="python">lib/            # votre code (aussi libs)
+node_modules/   # les dépendances gérées par NPM
+test/           # le code de vos tests
+.npmignore      # les exclusions du package
+README.md
+package.json
+</code></pre></li>
+      <li>Application Web serveur & client : <pre><code class="python">app/            # code serveur uniquement
+  tests/
+assets/         # Les assets coté serveur
+config/         # les fichiers de configuration (aussi conf)
+node_modules/   # les dépendances serveur gérées par NPM
+public/         # code client
+  dist/         # le client minifié
+  test/
+  vendor/       # dépendances client, gérées par bower/webpack... (aussi libs)
+package.json
+</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>2 points communs: <code>package.json</code> et <code>node_modules</code> sont toujours à la racine</p>
+      <p>Il est courant de mettre le code du client et du serveur dans le même package : en NodeJS, le serveur static et le même que le serveur d'API/pages web dynamiques</p>
+      <p>NPM gère les dépendances coté serveur, d'autres outils permettent de gérer les dépendances coté client (<a href="http://bower.io/" target="_blank">bower</a>, <a href="http://browserify.org/" target="_blank">browserify</a>, <a href="http://webpack.github.io/" target="_blank">webpack</a> et d'autres encore...)</p>
+      <p>Le versionning, avec git par exemple, sera aussi à la racine</p>
+      <p><strong>Attention !</strong> En l'absence d'un <code>.npmignore</code>, NPM utilisera le <code>.gitignore</code> éventuel</p>
+      <p>Ce ne sont que des exemples : il n'y a pas de dogme, et on trouve ne nombreuses variantes, souvient liée aux outils de build ou au serveur</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Le fichier <code>package.json</code></h1>
+    <ul class="steps">
+      <li>Descripteur du projet<pre><code class="json">{
+  "name": "nom-du-projet",
+  "version": "0.3.1",
+  "description": "Elle sera publiée",,
+  "author": "You <you@yopmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/you/nom-du-projet.git",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "main": "./lib/entry_point.js",
+  "bin": {
+    "start-project": "./bin/start"
+  },
+  "scripts": {
+    "test": "lab test"
+  },
+  "engines": {"node": ">=0.10.3"}
+}
+</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><code>name</code> et <code>version</code> sont les deux seuls champs obligatoires les plus importants de votre descripteur</p>
+      <p><code>name</code> doit être en minuscule, sans lettres exotiques, raisonnablement court et descriptif. Il sera dans des <code>require()</code> et fera partie d'une url !</p>
+      <p><code>version</code> doit respecter le format <a href="http://semver.org/" target="_blank">semver</a></p>
+      <p><code>description</code>, <code>keywords</code> permettront aux développeurs qui cherche des librairies sur le registry NPM de trouver la vôtre</p>
+      <p><code>author</code>, <code>constributors</code>, <code>licence</code> relètent l'état de la communauté autour de votre projet</p>
+      <p><code>repository</code>, <code>homepage</code>, <code>bugs</code> sont des url affiché sur le site du registry NPM pour simplifier l'accès à votre code</p>
+      <p><code>dependencies</code>, <code>devDependencies</code>, <code>peerDependencies</code>, <code>bundledDependencies</code> et <code>optionalDependencies</code> décrivent les dépendances de votre projet. Nous y reviendrons juste après</p>
+      <p>Dans le cas d'une librairie, <code>main</code> indique quel est le module qui sera chargé lors d'un <code>require('nom-du-projet');</code></p>
+      <p><code>bin</code> déclare les éventuel exécutables, indispensable pour un projet de type CLI</p>
+      <p><code>scripts</code> permet de customiser les phases de packaging et d'ajouter ses propres phases</p>
+      <p><code>engines</code>, <code>engineStrict</code>, <code>cpu</code>, <code>os</code> permette de déclarer des restrictions de portabilité</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Déclarer ses dépendances</h1>
+    <ul class="steps">
+      <li>Dépendance = nom du package + containte de version</li>
+      <li><code>x.y.z</code> : exactement la version</li>
+      <li><code>^x.y.z</code> : la version x la plus haute (y.z au minimum)</li>
+      <li>l'<strong>url</strong> d'un dépôt git : <code>git://github.com/user/project.git#commit</code></li>
+      <li>l'<strong>url</strong> d'un tarball : <code>http://bitbucket.org/user/repo?format=tar.gz</code></li>
+      <li class="convention">Pour rester portable, n'utilisez que ces syntaxes</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Il existe des des opérateurs <code><</code>, <code><=</code>, <code>></code>, <code>>=</code>, NPM prendra la version la plus haute disponible</p>
+      <p>Il y a aussi des jokers <code>*</code>, <code>x</code></p>
+      <p>Enfin l'opérateur chapeau <code>~x.y.z</code> : la version x.y la plus haute (z au minimum)</p>
+      <p><a href="https://nodesource.com/blog/semver-tilde-and-caret" target="_blank">Un article détaillé</a> sur le comportement de <code>~</code> et <code>^</code></p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Publier sur le registry</h1>
+    <ul class="steps">
+      <li>NPM est un dépôt en ligne, avec un <a href="https://www.npmjs.com/" target="_blank">site de recherche</a></li>
+      <li>Peut héberger vos propres packages (<strong>publish</strong>)</li>
+      <li>Le <a href="https://www.npmjs.com/package/lodash" target="_blank">site affiche</a> le <strong>README.md</strong>, les mot-clés, les stats de téléchargement, les dépendances...</li>
+      <li>Le dépôt contient toutes les versions publiés</li>
+      <li>Il est utilisé par défaut par le CLI (<strong>install</strong>, <strong>publish</strong>)</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><a href="https://docs.npmjs.com/getting-started/what-is-npm" target="_blank">Cette vidéo</a> explique bien le fonctionnement</p>
+      <p>Contrairement à l'écosystème Java, il n'y a qu'un seul dépôt central pour les packages NodeJS</p>
+      <p>Il est possible de créer des dépôts privés (<a href="https://docs.npmjs.com/enterprise/requirements" target="_blank">NPM Entreprise</a>), ou de payer un espace privé sur npmjs.com (<a href="https://www.npmjs.com/private-npm" target="_blank">a venir</a>)</p>
+      <p><strong>Attention !</strong> vous ne devez (pouvez) pas republiez une version déjà existante !</p>
+      <p>D'autres clients (bower...) utilisent aussi ce dépôt</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Le client NPM</h1>
+    <ul class="steps">
+      <li>NPM vient avec une interface en ligne de commande</li>
+      <li>Il lit le descripteur lors de certaines commandes :<ul>
+        <li><code>npm install</code> : récupération & compilation des dépendances, création des exécutables</li>
+        <li><code>npm test</code> : lance l'exécution des tests présents</li>
+        <li><code>npm start/restart/stop</code> : lance et arrête le projet</li>
+        <li><code>npm publish</code> : publie le projet sur le registry central</li>
+      </ul></li>
+      <li><strong>NPM !== <i>build-system</i></strong>, NPM === gestion de dépendances</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>La récupération d'une dépendance revient à télécharger le code, et réaliser un <code>npm install</code> dans le dossier de manière transitive</p>
+      <p>Les commandes <code>npm test/start/restart/stop</code> exécutent les scripts <strong>preX</strong>, <strong>X</strong> et <strong>postX</strong> lorsqu'ils existent</p>
+      <p>La commande <code>npm run-script X</code> exécute les scripts <strong>preX</strong>, <strong>X</strong> et <strong>postX</strong> de la même manière</p>
+      <p>Certaines phases (<strong>postinstall</strong>, <strong>prepublish</strong>...) peuvent être customisées avec les <code>scripts</code> du descripteur</p>
+      <p>Il n'y a pas cycle de vie ni de phases ordonnancée</p>
+      <p>Les scripts sont dépendants de la plateforme</p>
+      <p>Il peut y avoir une <a href="https://github.com/TooTallNate/node-gyp" target="_blank">compilation de code C/C++</a> lors de l'installation d'une dépendance</p>
+      <p>A la fin de l'installation du package si celui-ci contient des executables (<code>package.jon/bin</code>), ils sont enregistrés en global au niveau système</p>
+      <p>NPM n'est pas un <i>build-system</i> : il ne permet pas de déclarer et d'ordonnancer des tâches de mettre en oeuvre des configuration par environnement, et d'être un outil de compilation/packaging portable. Il propose des mécanismes minimalistes pour le packaging, dans l'unique optique de la publication</p>
+    </details>
   </section>
 
   <section id="mocha" class="title">
@@ -24,157 +187,101 @@
     <h1>Behaviour Driven Development !</h1>
   </section>
 
-  <section>
-    <h1><a href="http://mochajs.org">Mocha</a> : le test runner</h1>
+  <section data-timing="10">
+    <h1><a href="https://github.com/hapijs/lab" target="_blank">Lab</a> : le test runner</h1>
     <ul class="steps">
-      <li>Dans un fichier test/my-lib.js<pre><code class="javascript">var assert = require('assert')
+      <li class="no-bullet"><pre><code class="javascript">var assert = require('assert');
+var lab = exports.lab = require('lab').script();
 // describe est un fonction qui définit un "groupe" de tests
-describe('Array#indexOf', function() {
-  // it est une fonction qui définit un test (pas d'inclusin)
-  it('should return -1 when the value is not present', function(){
-    // contenu du test : si le test lance une exception, il échoue
+lab.describe('Array#indexOf', function() {
+
+  // it est une fonction qui définit un test
+  lab.it('should return -1 when the value is not present', function(done){
     assert.equal(-1, [1,2,3].indexOf(5));
     assert.equal(-1, [1,2,3].indexOf(0));
-  })
+    done(); // si une exception est levée avant done(), le test échoue
+  });
 
-  it('should return index when the value is present', function(){
+  lab.it('should return index when the value is present', function(done){
     assert.equal(2, [1,2,3].indexOf(3));
     assert.equal(0, [1,2,3].indexOf(1));
-    // s'il arrive à la fin, il réussit
-  })
-})</code></pre></li>
-      <li>En ligne de commande : <code>mocha test</code></li>
+    done(); // si done() est invoquée (sans erreur), le test est réussit
+  });
+});</code></pre></li>
+      <li>En ligne de commande : <code>lab test/array.js -v</code></li>
     </ul>
     <details open>
       <summary/>
-      <p><code>describe()</code> et <code>it()</code> sont des fonctions globales, définies par <strong>mocha</strong>. Il en existe d'autre que nous verrons plus loins</p>
-      <p><strong>Mocha</strong> propose l'interface BDD (par défaut), celle de l'exemple. Il propose aussi l'interface TDD, où <code>describe()</code> = <code>suite()</code> et <code>it()</code> = <code>test()</code></p>
-      <p>Nous verrons plus loin en quoi l'interface TDD est moins intéressante</p>
-      <p>Mocha fonctionne en 2 phases : la détection des tests : <ol>
-        <li>il exécute tous les contenus de <code>describe</code> pour avoir la liste des <code>it()</code></li>
-        <li>il exécute les <code>it()</code> un à un</li></ol></p>
+      <p>Il est fréquent de définir des variable pour <code>describe()</code> et <code>it()</code> pour éviter le préfix <code>lab.</code></p>
+      <p><strong>Lab</strong> propose l'interface BDD (par défaut), celle de l'exemple. Il propose aussi l'interface TDD, où <code>describe()</code> = <code>experiment()</code> et <code>it()</code> = <code>test()</code></p>
+      <div>Il y a 2 phases lors de l'exécution des tests :
+      <ol>
+        <li>invocation des fonctions des <code>describe</code> pour avoir la liste des <code>it()</code> (déclaration des tests)</li>
+        <li>invocation séquentielle des fonctions des <code>it()</code> (réalisation des tests)</li>
+      </ol></div>
       <p><code>assert</code> est un module NodeJS que nous n'utiliseront à cause de ses faibles capacités de reporting</p>
-      <p><strong>Mocha</strong> est totallement décoréllé de NodeJS, et s'utilise très bien dans un navigateur</p>
-      <p>Il existe différents reporters, essayer le reporter <a href="https://www.youtube.com/watch?v=QH2-TGUlwu4">nyan !</a></p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
-    <h1><a href="http://chaijs.com/">Chai</a> : les assertions</h1>
+  <section data-timing="5">
+    <h1>Lab ou <a href="http://mochajs.org/" target="_blank">Mocha</a> ?</h1>
     <ul class="steps">
-      <li>A l'intérieur des <code>it()</code><pre><code class="javascript">// notez l'inclusion de chai
+      <li>Fonctionnement général et fonctions similaires</li>
+      <li>Mocha à pour principaux avantages :<ol>
+        <li>De fonctionner sur un navigateur</li>
+        <li>D'être plus synthétique</li>
+        <li>D'avoir plein de jolis reporters</li>
+      </ol></li>
+      <li>Lab à pour principaux avantages :<ol>
+        <li>D'exécuter un linter et une couverture de test</li>
+        <li>D'utiliser les domaines pour récupérer les erreurs</li>
+        <li>De pouvoir lancer les tests en parallèle</li>
+      </ol></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Mocha utilise des variable globale pour <code>describe()</code>, <code>it()</code>..., une syntaxe raccourcie pour <strong>skip</strong> et <strong>only</strong>, et le callback <strong>done</strong> est facultatif.</p>
+      <p><a href="https://github.com/gotwarlost/istanbul" target="_blank">Istanbul</a> est un bon outil de couverture de code utilisable avec Mocha.</p>
+      <p>Si votre projet requiert du code JS coté server et client, mocha est un bon choix pour harmoniser les tests des deux cotés.</p>
+      <p>Si votre projet utilise <a href="http://hapijs.com/" target="_blank">Hapi</a>, Lab est plus approprié car il gère mieux les éventuelles erreurs.</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1><a href="http://chaijs.com/" target="_blank">Chai</a> : les assertions</h1>
+    <ul class="steps">
+      <li class="no-bullet"><pre><code class="javascript">var lab = exports.lab = require('lab').script();
+// notez l'inclusion de chai
 var expect = require('chai').expect;
 
-describe('Array#indexOf', function() {
-  it('should return -1 when the value is not present', function(){
+lab.describe('Array#indexOf', function() {
+  lab.it('should return -1 when the value is not present', function(done){
     var array = [1, 2, 3];
+
     // permet de faire la même chose...
     expect(array.indexOf(5)).to.equal(-1);
-    //...et des assertions bien plus puissantes !
+
+    //...et des assertions bien plus expressives !
     expect(array).to.be.an.instanceof(Array).and.to.have.a.lengthOf(3);
     expect(array).to.include(2);
     expect(array).not.to.contain(4);
-  })
-})</code></pre></li>
-      <li class="guideline">3 styles d'assertions, mais c'est <strong>expect</strong> qui offre le meilleur compromis portabilité/lisibilité</li>
+    done();
+  });
+});</code></pre></li>
+      <li class="guideline">3 styles possibles <strong>expect</strong> est le meilleur compromis</li>
     </ul>
     <details open>
       <summary/>
-      <p>La combinaison <strong>Mocha mode BDD</strong> + <strong>Chai mode expect</strong> donne suffisament de lisibilité au code pour qu'il reflète des spécifications fonctionnelles ! Vous n'aurrez plus besoin de documenter vos assertion et vos cas de tests, car il doivent être suffisament parlant</p>
+      <p>La combinaison <strong>Lab mode BDD</strong> + <strong>Chai mode expect</strong> donne suffisament de lisibilité au code pour qu'il reflète des spécifications fonctionnelles ! Vous n'aurrez plus besoin de documenter vos assertion et vos cas de tests, car il doivent être suffisament parlant</p>
       <p>Tout comme <strong>Mocha</strong>, <strong>Chai</strong> est totallement décoréllé de NodeJS, et s'utilise très bien dans un navigateur</p>
       <p>Le style d'assertion <strong>should</strong> est mal supporté sur IE car il instrumente les objets testés</p>
       <p>Le style d'assertion <strong>assert</strong> est vraiment trop has-been :)</p>
-      <p>Une assertion <strong>Chai</strong> est une chaine de mot dont certains sont sans effets (to, be, been, is, that, and, has, have, with, at, of, same), et d'autre déclenche un test (instanceof(), lengthOf(), include(), contain()), qui s'il échoue lève une exception</p>
+      <p>Une assertion <strong>Chai</strong> est une chaine de mot dont certains sont sans effets (<strong>to, be, been, is, that, and, has, have, with, at, of, same</strong>), et d'autre déclenche une validation (<strong>instanceof(), lengthOf(), include()...</strong>), qui s'elle échoue lèvera une exception</p>
       <p>Le message d'exception reprends le les mots précédents pour être suffisament parlant : <code>expected [ 1, 2, 3 ] to have a length of 4 but got 3</code></p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
-    <h1>Mocha : <i>hooks</i></h1>
-    <ul class="steps">
-      <li>A l'intérieur d'un <code>describe()</code> : <pre><code class="javascript">describe('Array', function() {
-
-  var array = []
-
-  beforeEach(function() {
-    array = [1, 2, 3];
-  });
-
-  it('should splice() remove elements', function(){
-    expect(array.splice(1, 1)).not.to.include(2);
-  })
-})</code></pre></li>
-      <li>Au choix : <code>before()</code>, <code>after()</code>, <code>afterEach()</code></li>
-      <li>Exécutés avec les <code>it()</code> peu importe leur résultat</li>
-    </ul>
-    <details open>
-      <summary/>
-      <p>Ces "hooks" sont lié au <code>describe()</code> englobant. Ils révèle le principal intérêt des <code>describe()</code> : grouper les pré-requis et nettoyage de plusieurs tests</p>
-      <p>Il peut y avoir plusieurs fois le même "hook" dans un même <code>describe()</code> : il seront exécutés dans l'ordre de déclaration</p>
-      <p><strong>Attention</strong> : ces "hooks" sont exécuté dans la 2ème phase, en même temps que les <code>it()</code>!</p>
-    </details>
-    <div class="timing" data-duration>5</div>
-  </section>
-
-  <section>
-    <h1>Mocha : asynchronisme</h1>
-    <pre class="step"><code class="javascript">describe('Database access', function() {
-
-  beforeEach(function(done) {
-    writeInDB({name: 'jean'}, done)
-  });
-
-  it('should readFromDB() retrieve models per name', function(done){
-    this.timeout(3e3);
-    readFromDB({name: 'jean'}, function(err, model) {
-      expect(err).not.to.exist; // ou if(err) return done(err);
-      expect(model).to.have.property('name').that.equal('jean');
-      done();
-    })
-  })
-})</code></pre>
-    <ul>
-      <li class="step">Appellez <code>done()</code> à la fin des assertions</li>
-      <li class="step">L'argument de <code>done()</code> déclenche une erreur</li>
-    </ul>
-    <details open>
-      <summary/>
-      <p>Au bout de 2 secondes sans <code>done()</code>, le test est échoué. Ce timeout est paramètrable avec <code>this.timeout(X)</code> au niveau d'un <code>it()</code> ou d'un <code>describe()</code></p>
-      <p>Tous les "hooks" peuvent être asynchrones</p>
-    </details>
-    <div class="timing" data-duration>5</div>
-  </section>
-
-  <section>
-    <h1>Mocha : exclusions</h1>
-    <pre class="step"><code class="javascript">describe('Bunch of test', function() {
-
-  it.skip('should check my db', function(done) {
-    done('to be implemented');
-  })
-
-  it.only('should create my db', function(done) {
-    done('to be implemented');
-  })
-
-  it('should delete my db', function(done) {
-    done('to be implemented');
-  })
-})</code></pre>
-    <ul>
-      <li class="step">Instrumentation des <code>describe()</code></li>
-    </ul>
-    <details open>
-      <summary/>
-      <p><strong>skip</strong> et <strong>only</strong> sont des getter qui controle les tests et groupes de tests exécutés</p>
-      <p>Seul le premier <strong>only</strong> sera éxécuté, même s'il y en a plusieurs</p>
-    </details>
-    <div class="timing" data-duration>5</div>
-  </section>
-
-  <section>
+  <section data-timing="10">
     <h1>Les assertions disponibles</h1>
     <ul class="steps">
       <li>égalité <pre class="inline"><code class="javascript">expect(x)/*not.*/.to./*deep.*/equals(y)</code></pre></li>
@@ -188,39 +295,327 @@ describe('Array#indexOf', function() {
     </ul>
     <details open>
       <summary/>
-      <p>Liste complète disponible sur <a href="http://chaijs.com/api/bdd/">la documentation officielle</a></p>
-      <p>Question de syntaxe, vous pouvez préférer <pre class="inline"><code class="javascript">expect(x).to.be.equal(y)</code></pre></p>
+      <p>Liste complète disponible sur <a href="http://chaijs.com/api/bdd/" target="_blank">la documentation officielle</a></p>
+      <div>Question de syntaxe, vous pouvez préférer <pre class="inline"><code class="javascript">expect(x).to.be.equal(y)</code></pre><div>
       <p>Quelque soit l'assertion suivante, <strong>not</strong> aura pour effet d'attendre son contraire</p>
-      <p>Dans les tests d'égalité, on trouve aussi <pre class="inline"><code class="javascript">expect(x).to.be.true</code></pre></p>
+      <div>Dans les tests d'égalité, on trouve aussi <pre class="inline"><code class="javascript">expect(x).to.be.true</code></pre></div>
       <p>Si le chemin vers la propriété contient des '.' ou des '[]', il faut utiliser <strong>deep</strong></p>
-      <p><pre class="inline"><code class="javascript">expect(x).to.have.property(name, value)</code></pre> permet de tester l'existance et la valeur. On évitera cette forme, car si value est <code>undefined</code>, impossible d'être certains que la propriété existe bel et bien</p>
+      <div><pre class="inline"><code class="javascript">expect(x).to.have.property(name, value)</code></pre> permet de tester l'existance et la valeur. On évitera cette forme, car si value est <code>undefined</code>, impossible d'être certains que la propriété existe bel et bien</div>
       <p><strong>contain</strong> et <strong>include</strong> sont strictement synonymes</p>
       <p>Les tests sur les exception portent sur l'exécution d'une fonction !</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="5">
+    <h1><i>hooks</i> et exclusions</h1>
+    <ul class="steps">
+      <li>A l'intérieur d'un <code>describe()</code> : <pre><code class="javascript">lab.describe('Array', function() {
+  var array = []
+
+  lab.beforeEach(function(done) { // before(), after(), afterEach()
+    array = [1, 2, 3];
+    done();
+  });
+
+  lab.it('should splice() remove elements', {skip: true}, function(done){
+    expect(array.splice(1, 1)).to.deep.equals([1, 3]);
+    done();
+  })
+})</code></pre></li>
+      <li>Exécutés quelque soit le résultat des <code>it()</code></li>
+      <li><code>only</code> positionne <code>skip</code> sur les autres <code>it</code> du <code>describe()</code></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Ces "hooks" sont lié au <code>describe()</code> englobant. Ils révèle le principal intérêt des <code>describe()</code> : grouper les pré-requis et nettoyage de plusieurs tests</p>
+      <p>Il peut y avoir plusieurs fois le même "hook" dans un même <code>describe()</code> : il seront exécutés dans l'ordre de déclaration</p>
+      <p><strong>Attention</strong> : ces "hooks" sont exécuté dans la 2ème phase, en même temps que les <code>it()</code>!</p>
+    </details>
+  </section>
+
+  <section class="title pause" data-timing="15">
+    <div class="bg">
+      <img src="images/pause-7.jpg">
+    </div>
+    <details open>
+      <summary>Pause</summary>
+    </details>
+  </section>
+
+  <section data-timing="40">
     <h1>Tests en actions</h1>
     <ol class="steps hands-on">
-      <li>Dans le dossier <strong>http</strong> des exercices sur le serveur http, rajoutez un dossier test, et un fichier <strong>server.js</strong> à l'intérieur</li>
-      <li>Dans ce fichier <strong>server.js</strong>, ajoutez un test qui vérifie que le serveur renvoie bien la page demandée</li>
+      <li>Vous allez tester le module <strong>tp/fs/fs_utils.js</strong>. Dans <strong>tp/fs</strong> utilisez <code>npm init</code> pour générer un descripteur <strong>package.json</strong></li>
+      <li>Toujours dans <strong>tp/fs</strong>, installez <strong>lab</strong> et <strong>chai</strong>: <code>npm install --save-dev lab chai</code></li>
+      <li>Dans un module <strong>tp/fs/test/fs_utils.js</strong> réalisez les tests suivants :<ol>
+        <li>FS utils getDirContent should return current folder content with absolute paths</li>
+        <li>FS utils getDirContent should fail when reading an unknown folder</li>
+        <li>FS utils getDirStat should return alphabetically ordered current folder</li>
+        <li>FS utils getDirStat should fail when reading an unknown folder</li>
+      </ol>avec une couverture de test de plus de 90%</li>
+      <li>Lancement avec <code>lab -r html -o coverage.html</code> pour voir la couverture</li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Il est plus pratique d'installer <strong>lab</strong> de manière globale avec <code>npm install -g lab</code></p>
+    </details>
+  </section>
+
+  <section class="title">
+    <div class="bg">
+      <img src="images/request.jpg">
+    </div>
+    <h1>Client Http Request</h1>
+  </section>
+
+  <section data-timing="5">
+    <h1><a href="https://github.com/request/request" target="_blank">Request </a></h1>
+    <ul class="steps">
+      <li>Fonctionne le plus simplement possible :<pre><code class="javascript">var request = require('request');
+request('http://www.google.com', function (err, response, body) {
+  if (!err && response.statusCode === 200) {
+    console.log(body);
+  }
+})</code></pre></li>
+      <li>Http ET Https</li>
+      <li>Gère les proxy et les redirections</li>
+      <li>Permet d'envoyer des formulaires</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Ce module est l'un des plus ancien (mai 2010) et utilisé package de la communauté NodeJS, car il pallie la faible utilisabilité du client Http par défaut.</p>
+      <p>Le body est soit une chaîne de caractère, soit du JSON, soit un buffer (binaire) en fonction des différentes options passée lors de la requête.</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1><a href="https://github.com/request/request#requestoptions-callback" target="_blank">Configuration</a> des requêtes</h1>
+    <ul class="steps">
+      <li>1er paramètre : une chaîne ou un <i>object literal</i>: <pre><code class="javascript">request({
+  url: 'http://www.google.com/search',
+  method: 'GET',
+  qs: {
+    q: 'request'
+  },
+  proxy: 'http://proxy-internet.localnet:3128'
+}, function (err, response, body) {
+  // ...
+})</code></pre></li>
+      <li>Méthode spécifiable avec <code>request.get()</code>, <code>post()</code> etc...</li>
+      <li class="warning">Lit les variables d'envir. <strong>HTTP(S)/NO_PROXY</strong></li>
+      <li>Permet d'envoyer du json et des formulaires</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Les options possible dépendent du verbe utilisé : l'option <code>body</code> n'a pas de sens pour un <strong>GET</strong>.</p>
+      <p>L'option <code>json</code> permet d'ajouter les en-têtes <strong>content: application/json</strong> et <strong>accept: application/json</strong>, réalise la sérialization du corps éventuel de la requête et la désérialization du corps de la réponse.</p>
+      <p>Pour indiquer que la requête ne DOIT PAS utiliser de proxy, malgré la présence de variable d'environnement, il faut spécifier <code>null</code> ou <code>false</code> dans l'option <code>proxy</code>.</p>
+      <p>D'une manière générale, il est plus prudent de toujours spécifier l'option proxy, et de mettre vous même la valeur dans un fichier de configuration.</p>
+    </details>
+  </section>
+
+  <section data-timing="10">
+    <h1>Streaming et forumulaires</h1>
+    <ul class="steps">
+      <li><code>request</code>/<code>request.get</code> renvoient un <strong>ReadableStream</strong>: <pre><code class="javascript">request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'));</code></pre></li>
+      <li>Pour <code>request.post</code>/<code>request.put</code>, un <strong>WritableSteam</strong>: <pre><code class="javascript">fs.createReadStream('file.json').pipe(request.put('http://mysite.com/obj.json'));</code></pre></li>
+      <li>Envoi d'un formulaire <strong>multipart/urlencoded</strong>: <pre><code class="javascript">request.post('http://service.com/upload').form({key:'value'});</code></pre></li>
+      <li>Pour le <strong>multipart/form-data</strong>: <pre><code class="javascript">request.post({url:'http://service.com/upload',
+formData: {
+  field1: 'my_value',
+  field3: fs.createReadStream('unicycle.jpg')
+}});</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Dans ces exemples, on ne gère pas les cas d'erreurs.</p>
+      <p>Les stream en lecture ont un évènement spécial <strong>response</strong> lorsque les entête de la réponse sont disponible. L'évènement <strong>error</strong> doit être écouté pour gérer les erreurs de réception.</p>
+      <p>Lorsqu'on envoi un formulaire, le bon <strong>content-type</strong> est positionné.</p>
+      <p>L'objet <strong>FormData</strong> qui modélise le formulaire est accessible en retour de la méthode <code>request.post(...).form();</code>. Rappelez vous que l'envoi est asynchrone : le formulaire peut être modifié immédiatement après l'appel à <code>post()</code>.</p>
+      <p>On peut aussi envoyer un formulaire <strong>multipart/related</strong> avec l'option <code>multipart</code> de <code>request.post()</code>.</p>
+    </details>
+  </section>
+
+  <section data-timing="30">
+    <h1>TODO mise en oeuvre request</h1>
+    <ol class="steps hands-on">
     </ol>
     <details open>
       <summary/>
     </details>
-    <div class="timing" data-duration>20</div>
+  </section>
+
+  <section class="title pause" data-timing="120">
+    <div class="bg">
+      <img src="images/pause-8.jpg">
+    </div>
+    <details open>
+      <summary>Pause</summary>
+    </details>
+  </section>
+
+  <section id="hapi" class="title">
+    <div class="bg">
+      <img src="images/happy.jpg">
+    </div>
+    <h1>Le framework Web Hapi</h1>
+  </section>
+
+  <section id="hapi-intro" data-timing="10">
+    <h1><a href="http://hapijs.com" target="_blank"><img src="images/hapi-logo.png"><img src="images/hapi.png"></a></h1>
+    <ul>
+      <li class="step">Surcharge de http.Server avec les améliorations :
+      <ol>
+        <li class="step">Routage des url par chemin et verbe HTTP</li>
+        <li class="step">Validation de la requête et outillage de la réponse</li>
+        <li class="step">Templating HTML</li>
+        <li class="step">Mécanisme de plugins</li>
+      </ol>
+      </li>
+      <li class="step">Structure les développement du serveur</li>
+      <li class="step">Philosophie différente des middleware d'<a href="http://expressjs.com/" target="_blank">Express</a></li>
+      <li class="step">Porté par les équipes de Walmart</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Le <strong>router</strong> permet d'associer un traitement spécifique (une fonction) à une url et un verbe bien particulier.</p>
+      <p>La requête d'entrée est parsée (JSON, multi-part) et éventuellement validée avec <strong>Joi</strong>.</p>
+      <p>La constitution des réponses (entête, cache HTTP...) est facilitée, et des fonction existent pour le contenu statique (fichier, dossiers).</p>
+      <p>Le mécanisme des vues permet d'utiliser des templates handlebars (par exemple) pour constituer la réponse avec des placeholders.</p>
+      <p>Le mécanisme de plugin permet d'augmenter son serveur en lui ajouter des capacité particluières (authentification, logging, partage de session...)</p>
+      <p>Contrairement à <strong>Express</strong> qui se veut simple et maléable, <strong>Hapi</strong> propose une structure bien définie pour aider les équipes volumineuses à développer des serveurs applicatifs importants.</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Anatomie du serveur</h1>
+    <ul class="steps">
+      <li class="no-bullet"><pre><code class="javascript">var Hapi = require('hapi');
+var server = new Hapi.Server();
+server.connection({ port: 3000 });
+
+server.route({
+  method: 'GET',
+  path: '/hello/{user}',
+  handler: function (request, reply) {
+    reply('Hello ' + encodeURIComponent(request.params.user) + '!');
+  }
+});
+
+server.start();</code></pre></li>
+      <li>Les route peuvent contenir des paramètres</li>
+      <li><code>request</code> contient la requête parsée</li>
+      <li><code>reply()</code> est une factory pour constituer la réponse</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Les paramètres de chemins peuvent être facultatif (suffixé par <code>?</code>) ou en plusieurs parties (<code>{user*2}</code> matchera <code>john/doe</code>).</p>
+      <p><code>request</code> encapsule l'objet <a href="https://nodejs.org/api/http.html#http_http_incomingmessage" target="_blank"><code>IncomingMessage</code></a> de Node, et propose ses propres <a href="http://hapijs.com/api#request-object" target="_blank">propriétés</a> comme les paramètres de requêtes extraits (<code>query</code>), le corps de la requête parsé (<code>payload</code>)</p>
+      <p><code>reply()</code> renvoit un objet <a href="http://hapijs.com/api#response-object" target="_blank">réponse</a> permettant de modifier les entêtes de réponse (<code>header()</code>, <code>type()</code>, <code>etag()</code>, <code>charset()</code>, <code>encoding()</code>, <code>ttl()</code>), le code HTTP (<code>code()</code>), les cookies (<code>state()</code>), les redirections...</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Validation des paramètes</h1>
+    <ul class="steps">
+      <li>Se repose sur le module externe <a href="https://github.com/hapijs/joi" target="_blank">Joi</a>:<pre><code class="javascript">var Joi = require('joi');
+
+server.route({
+  method: 'GET',
+  path: '/hello/{user}',
+  handler: function (request, reply) {
+    reply('Hello ' + encodeURIComponent(request.params.user) + '!');
+  },
+  config: {
+    validate: { params: { user: Joi.string().min(3).max(10) } }
+  }
+});</code></pre></li>
+      <li>Contrôle les paramètres de chemin (<code>params</code>), ceux de requête (<code>query</code>), les entêtes (<code>headers</code>) et le corps (<code>payload</code>)</li>
+      <li>Réponse intelligibles avec un code de retour 400</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p><strong>Joi</strong> est un validateur puissant permettant de tester des chaînes, nombres, booléens, tableaux, objets... avec des validation très poussées.</p>
+      <p>Les utilitaires proposés par <a href="" target="_blank">Boom</a> sont également très utiles pour la génération de page d'erreurs intelligibles.</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Architecture de plugins</h1>
+    <ul class="steps">
+      <li>Les plugins permettent de déporter vos routes</li>
+      <li>Un plugin doit exporter une fonction <code>register</code> : <pre><code class="javascript">exports.register = function(server, options, next) {
+  // Manipulation du serveur: par exemple ajout de routes.
+  // Lorsque les manipulations sont terminées, appel de next()
+  next();
+};
+
+exports.register.attributes = {
+  name: 'plugin-name',
+  version: '1.0.0' // facultatif
+};</code></pre></li>
+      <li>Lors de son chargement, les routes d'un plugin pourront être préfixées</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>L'organisation en plugin est à la base de la structuration des applications avec Hapi.</p>
+      <p>Le plugin peut être un simple fichier, un dossier avec fichier <strong>index.js</strong> et <strong>package.json</strong>, un module externe complet.</p>
+      <p>Le premire paramètre de <code>register</code> est l'instance du serveur lui même, le second est un objet d'options totalement libre, le troisième est une fonction à invoquer lorsque le plugin est chargé, avec une éventuelle erreur en paramètre s'il y a eu un problème.</p>
+    </details>
+  </section>
+
+  <section data-timing="10">
+    <h1>Les principaux plugins</h1>
+    <ul class="steps">
+      <li>Les plugins se chargent dans le serveur:<pre><code class="javascript">server.register([{
+  register: require('myplugin'),
+  options: {}
+}], function (err) {
+  // plugins chargés
+});</code></pre></li>
+      <li>Logging des requêtes avec <a href="https://github.com/hapijs/good" target="_blank">Good</a></li>
+      <li>Websocket avec <a href="https://github.com/sibartlett/hapi-io" target="_blank">Hapi-io</a></li>
+      <li>Authentification externe avec <a href="https://github.com/hapijs/bell" target="_blank">Bell</a> et <a href="https://www.npmjs.com/package/hapi-oauth2orize" target="_blank">Hapi-oauth2orize</a></li>
+      <li>Documentation des API avec <a href="https://github.com/hapijs/lout" target="_blank">Lout</a> et <a href="https://github.com/z0mt3c/hapi-swaggered" target="_blank">Swaggered</a></li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Il y a plus de 75 plugins sur la <a href="http://hapijs.com/plugins" target="_blank">page officielle du site d'Hapi</a>, sans compter les nombreux autres disponibles directement sur NPM.</p>
+    </details>
+  </section>
+
+  <section data-timing="45">
+    <h1>Hapi server !</h1>
+    <ol class="hands-on">
+      <li class="step">Créez un serveur Hapi dans un module <strong>tps/hapi-server/server.js</strong>.</li>
+      <li class="step">Créez un module de test avec dans <strong>tps/hapi-server/test/server.js</strong>. Ce module doit importer le serveur du fichier éponyme et tester :<ol>
+      <li class="step"><strong>Hapi server should be started</strong> > vérifiez que le serveur démarre et renvoi une 404 sur n'importe quelle url</li>
+      <li class="step"><strong>Hapi server hello API should say hello John</strong> > le serveur renvoi le text 'Hi JohnX !' à l'url GET '/hello/JohnX' X étant un nombre aléatoire</li>
+      <li class="step"><strong>Hapi server hello API should fail on too short name</strong> > renvoi un code 400 avec une erreur intelligible si le nom n'a pas entre 3 et 10 caractères</li>
+      <li class="step"><strong>Hapi server hello view should render xml content</strong> > réponse <code>&lt;msg&gt;Hello JohnX&lt;/msg&gt;</code>  pour l'url si le header 'accept' contient 'xml'</li>
+      </ol></li>
+      <li class="bonus step">Transformez votre API en un plugin <strong>tps/hapi-server/routes/hello.js</strong></li>
+    </ol>
+    <details open>
+      <summary/>
+      <p>Pour créez rapidement son fichier <strong>package.json</strong> : <code>> npm init</code>.</p>
+      <p>Ajouter rapidement des modules externes : <code>> npm install --save(-dev) moduleA moduleB</code>.</p>
+      <p>Le fichier source doit exporter le serveur sans le démarrer : c'est le test qui appelera <code>start()</code> et <code>stop()</code>.</p>
+      <p>Pour invoquer une url du serveur depuis les tests, utilisez la méthode <a href="http://hapijs.com/api#serverinjectoptions-callback" target="_blank"><code>server.inject(path, function(resp) {...});</code></a>.</p>
+      <p>Pensez a tester les codes de retour HTTP, et les entêtes importants. La réponse parsée est disponible depuis le test avec <code>resp.result</code>.</p>
+      <p>Faites la validation avec Joi, et pour le fichier xml, utiliser un template <a href="http://handlebarsjs.com/" target="_blank">handlebars</a>.</p>
+      <p>Le principe d'adapter le format de réponse du serveur en fonction de ce que demande la requête client s'appelle <strong>la négociation de contenu (content negociation)</strong></p>
+    </details>
   </section>
 
   <section id="async" class="title">
-    <div class="timing" data-pause>15</div>
     <div class="bg">
       <img src="images/async.jpg">
     </div>
     <h1>Dodge callback hell with async</h1>
   </section>
 
-  <section>
+  <section data-timing="5">
     <h1>"Pyramid of Doom" ??</h1>
     <pre class="step"><code class="javascript">fs.readdir(source, function(err, files) {
   if (err) {
@@ -250,13 +645,12 @@ describe('Array#indexOf', function() {
     </ul>
     <details open>
       <summary/>
-      <p>Exemple proposé par <a href="http://callbackhell.com/">callbackhell.com</a></p>
-      <p><a href="http://djebbz.github.io/async-paris-js/#/async-map">Présentation</a> de async</p>
+      <p>Exemple proposé par <a href="http://callbackhell.com/" target="_blank">callbackhell.com</a></p>
+      <p><a href="http://djebbz.github.io/async-paris-js/#/async-map" target="_blank">Présentation</a> de async</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1>Asynchronisme et tableaux</h1>
     <ul>
       <li class="step">Appliquer un traitement asynchrone à un tableau<pre><code class="javascript">async.map(['file1','file2','file3'], function(file, next) {
@@ -287,15 +681,14 @@ describe('Array#indexOf', function() {
         <li><code>concat()</code>, <code>concatSeries()</code> renvoi la concaténation des résultats de la function asynchrone appliquée à chaque élément</li>
       </ul></p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
+  <section data-timing="10">
     <h1>Asynchronisme et functions</h1>
     <ul>
       <li class="step">Gérer un flow de fonctions asynchrones<pre><code class="javascript">async.parallel([
   function(done) {
-    // la signature de done est done(err, result) 
+    // la signature de done est done(err, result)
     fs.readFile('in.txt', done);
   }, function(done){
     fs.writeFile('out.txt', 'finished !', done);
@@ -311,7 +704,7 @@ describe('Array#indexOf', function() {
       <summary/>
       <p>il est aussi possible de spécifier un objet et pas un tableau : <pre><code class="javascript">async.parallel({
   one: function(done) {
-    // la signature de done est done(err, result) 
+    // la signature de done est done(err, result)
     fs.readFile('in.txt', done);
   }, two: function(done){
     fs.writeFile('out.txt', 'finished !', done);
@@ -321,10 +714,9 @@ describe('Array#indexOf', function() {
     // results reprends les clé de l'objet initial: {one: '', two: ''}
 });</code></pre> Attention néanmoins, il n'y a pas d'ordre garanti...</p>
     </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section id="async-functions">
+  <section id="async-functions" data-timing="5">
     <h1>Asynchronisme et functions</h1>
     <ul class="steps">
       <li><code>whilst()</code>, <code>doWhilst()</code>: executer une function asynchrone tant que le test synchrone est vrai</li>
@@ -338,121 +730,43 @@ describe('Array#indexOf', function() {
       <p>Ces poll d'exécution tourne en tâche de fond jusqu'à ce qu'on les stoppe</p>
       <p>Encore plein d'autres pattern proposés plus ou moins complexes</p>
     </details>
-    <div class="timing" data-duration>5</div>
   </section>
 
-  <section>
+  <section data-timing="40">
     <h1>Utiliser <i>async</i></h1>
     <ol class="steps hands-on">
-      <li>Dans le dossier <strong>fs</strong> des exercices sur le système de fichier, rajoutez un dossier test, et un fichier <strong>fs_utils.js</strong> à l'intérieur</li>
-      <li>Ajoutez un test sur <strong>statDir</strong> pour le cas nominal (attention aux prérequis !)</li>
-      <li>Ajoutez un test pour le cas "fichier"</li>
-      <li>Ajoutez un test pour le cas "dossier inexistant"</li>
-      <li>Refactorisez votre implémentation en utilisant <strong>async</strong></li>
+      <li>Maintenant que <strong>tps/fs/fs_utils.js</strong> est testé, nous allons le refactoriser</li>
+      <li>Refactorisez l'implémentation de <code>getDirStat</code> en utilisant <strong>async</strong></li>
+      <li>TODO test avec des fonctions, 20 minutes</li>
     </ol>
     <details open>
       <summary/>
     </details>
-    <div class="timing" data-duration>20</div>
   </section>
 
-  <section id="promise" class="title">
+  <section class="title pause" data-timing="15">
     <div class="bg">
-      <img src="images/promises.jpg">
+      <img src="images/pause-9.jpg">
     </div>
-    <h1>Dodge callback hell with promises</h1>
+    <details open>
+      <summary>Pause</summary>
+    </details>
   </section>
 
-  <section>
-    <h1>Promise = wrapper</h1>
+  <section id="sumup" data-timing="10">
+    <h1>Récap du troisième jour</h1>
     <ul class="steps">
-      <li>Une opération asynchrone renvoie un objet <strong>Promise</strong><pre><code class="javascript">var readFilePromise = function(file) {
-  // renvoi synchrone d'une promesse
-  return new Promise(function(resolve, reject) {
-    // contenu de la promesse : le traitement asynchrone
-    fs.readFile(file, function(err, content) {
-      // rejet de la promesse en cas d'erreur
-      if (err) return reject(err);
-      // acceptation de la promesse en cas de succès (résultat)
-      resolve(content);
-    })
-  });
-};</code></pre></li>
-      <li>Maintient un état : <strong>pending</strong> > <strong>fullfilled</strong> ou <strong>rejected</strong></li>
-      <li>Permet un chainage avec d'autres objets <strong>Promise</strong>s</li>
-      <li>Gère les erreurs déclarées <strong>ET les exceptions</strong> levées</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-archive"></i>Node Package Manager</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-recycle"></i>TDD avec Lab et Chai</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-fighter-jet"></i>Client évolué avec Request</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-space-shuttle"></i>Serveur évolué avec Hapi</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-phone"></i>Algorithmie asynchrone avec Async</li>
     </ul>
-    <details open>
-      <summary/>
-      <p>Les fonctions <code>resolve()</code> et <code>reject()</code> sont déclarée dans le constructeur de promise</p>
-      <p>Le contenu de la promesse peut aussi être synchrone ! <pre><code class="javascript">var readFilePromise = function(file) {
-  return new Promise(function(resolve, reject) {
-    // contenu de la promesse synchrone
-    return fs.readFileSync(file);
-    // ou encore
-    // resolve(fs.readFileSync(file));
-  });
-};</code></pre></p>
-      <p>Le résultat d'une promesse (et sont état) sont maintenu tant que l'objet existe pour une utilisation ultérieure (avantage sur les évènements)</p>
-    </details>
-    <div class="timing" data-duration>10</div>
   </section>
 
-  <section>
-    <h1>Chaine de promesses</h1>
-    <ul class="steps">
-      <li>L'objet <strong>Promise</strong> possède deux "continuation" possibles :<pre><code class="javascript">readFilePromise('file.txt').then(function(content) {
-  // ce qui à été remonté par resolve()
-  console.log(content);
-}).catch(function(err) {
-  // ce qui à été remonté par reject()
-  console.error(err);
-});</code></pre></li>
-      <li>Et il sont chainables :<pre><code class="javascript">readFilePromise('file.txt')
-  .then(tokenize)
-  .then(writeTo('out.txt')
-  .catch(reportError);</code></pre></li>
-      <li><code>Promise.all([])</code> équivaut à <code>async.map([])</code></li>
-    </ul>
-    <details open>
-      <summary/>
-      <p>Les promesses seront enchainée de manière séquentielle, en passant les résultat de l'un en entré de l'autre</p>
-      <p><code>catch()</code> est invoquée autant pour une error déclarée avec <code>resolve()</code> que pour une exception (joue le rôle d'un <strong>try-catch</strong>)</p>
-      <p>La position de <code>catch()</code> est signifiactive: <pre><code class="javascript">readFilePromise('file.txt')
-  .then(tokenize)
-  .catch(reportError);
-  .then(writeTo('out.txt')
-  .catch(reportError);</code></pre><br/>le premier <code>catch()</code> récupèrera les erreur de <code>readFilePromise()</code> et <code>tokenize</code>, le second seulement les erreur de <code>writeTo()</code></p>
-    </details>
-    <div class="timing" data-duration>10</div>
-  </section>
-
-  <section>
-    <h1>Promesses éléctorales ?</h1>
-    <ul class="steps">
-      <li>Il existe de nombreuses librairies de <strong>Promise</strong> aux APIs différentes, qui incluent plus ou moins de patterns</li>
-      <li>La spécification <a href="https://promisesaplus.com/">Promise/A+</a> propose une interface vraiment trop minimaliste</li>
-      <li>EcmaScript6 inclue une implémentation des Promises, déjà implémentée par V8</li>
-      <li class="warning">Utilisable nativement en NodeJS, elle est cependant très lente</li>
-    </ul>
-    <details open>
-      <summary/>
-      <p><a href="https://github.com/petkaantonov/bluebird">Bluebird</a>, <a href="https://github.com/kriskowal/q">Q</a>, <a href="https://github.com/cujojs/when">when</a>, <a href="https://github.com/tildeio/rsvp.js">RSVP</a>, <a href="https://github.com/jakearchibald/es6-promise">ES6-Promise</a>...</p>
-      <p>Des <a href="http://jsperf.com/bluebird-vs-rsvp/62">benchmarks</a> indiquent que l'implémentation native des Promise chrome est 46x plus lente que celle de bluebird</p>
-      <p><a href="http://www.html5rocks.com/fr/tutorials/es6/promises">Un bon article</a> en français sur les promesses</p>
-    </details>
-    <div class="timing" data-duration>10</div>
-  </section>
-
-  <section>
-    <h1>Utiliser les <i>promises</i></h1>
-    <ol class="hands-on">
-      <li>TODO</li>
-    </ol>
-    <details open>
-      <summary/>
-    </details>
-    <div class="timing" data-duration>20</div>
+  <section id="end" class="title">
+    <img src="images/day3-end.jpg">
+    <h1>And now, let's ROCK'N ROLL !</h1>
   </section>
 
   <!-- Credits -->
@@ -461,9 +775,12 @@ describe('Array#indexOf', function() {
     <h1>Crédits photos</h1>
     <ul>
       <li>Slide 1 - Ricardo Fujii/Grudaemmim</li>
-      <li>Slide X - Bark</li>
-      <li>Slide X - Inception</li>
-      <li>Slide X - Circle of friends</li>
+      <li>Slide 2 - Npm inc.</li>
+      <li>Slide 9 - Bark</li>
+      <li>Slide 17 - Antonio Santa-Pau Ramírez</li>
+      <li>Slide 23 - Pharell Wiliams</li>
+      <li>Slide 30 - Inception</li>
+      <li>Slide 38 - Ricardo Fujii/Grudaemmim</li>
     </ul>
   </section>
 
@@ -471,8 +788,8 @@ describe('Array#indexOf', function() {
   <script src="components/keymaster/keymaster.js"></script>
   <script src="components/hammerjs/hammer.min.js"></script>
   <script src="components/highlightjs/highlight.pack.js"></script>
-  <script src="js/ruban.min.js"></script>
-  <script src="js/rock-the-web.min.js"></script>
+  <script src="components/ruban/js/ruban.min.js"></script>
+  <script src="js/rock-the-web.js"></script>
   <script>
     var ruban = new Ruban({
       pagination: true,
@@ -480,8 +797,6 @@ describe('Array#indexOf', function() {
       bindMouseWheel: true,
       fontRatio: 0.35
     });
-
-    startTimer(540); // start at 9:00 AM
   </script>
 </body>
 </html>

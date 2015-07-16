@@ -8,5 +8,8 @@
   },
   "scripts": {
     "test": ".\\node_modules\\.bin\\mocha test"
+  },
+  "devDependencies": {
+    "lab": "^5.13.0"
   }
 }
