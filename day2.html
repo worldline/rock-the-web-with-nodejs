@@ -96,9 +96,9 @@ emitter.process();</code></pre>
     <ul class="steps">
       <li class="warning">Il est impératif de désinscrire les auditeurs !</li>
       <li class="guideline">Warning est émit pour chaque émetteur ayant plus de 10 auditeurs sur un évènement.<br/>Paramètrable avec <code>setMaxListeners(n)</code></li>
-      <li class="warning">L'évènement <code>error</code> est un cas particulier qui s'il est émis et qu'il n'est pas écouté déclenche une exception.</li>
+      <li class="warning">Si l'évènement <code>error</code> est émit et non écouté, il se transforme en exception</li>
       <li class="convention">Les noms des évènements sont en <strong>camel-case</strong></li>
-      <li>De nombreuses classes NodeJS héritent d'<strong>EventEmitter</strong>: <strong>Server</strong>, <strong>Socket</strong>, <strong>Stream</strong>, <strong>ChildProcess</strong>, <strong>Cluster</strong>...</li>
+      <li>De nombreuses classes NodeJS héritent d'<strong>EventEmitter</strong>: <strong>Server</strong>, <strong>Socket</strong>, <strong>Stream</strong>, <strong>ChildProcess</strong>...</li>
     </ul>
     <details open>
       <summary/>
@@ -503,10 +503,10 @@ while candidate < n
   <section data-timing="10">
     <h1>Le module <i>cluster</i></h1>
     <ul class="steps">
-      <li>Permet de créer plusieurs processus NodeJS identiques pour répondre à des requêtes sur des sockets</li>
+      <li>Cré plusieurs processus NodeJS identiques pour répondre à des requêtes sur des sockets</li>
       <li>Le <strong>Master</strong> (processus père) reçoit les connexions (1 port d'écoute) et les distribue (potentiellement)</li>
       <li>Les <strong>Workers</strong> (processus fils) traitent chacun une requête à la fois</li>
-      <li>Tous les processus sont sur la même machine : on crée de manière optimale un worker par CPU disponible</li>
+      <li>Tout sur la même machine : on crée de manière optimale un worker par CPU disponible</li>
       <li>Entièrement outillé pour gérer un pool de workers</li>
     </ul>
     <details open>
@@ -525,7 +525,6 @@ while candidate < n
       <li>Généralement, le même code pour tous<pre><code class="javascript">var cluster = require('cluster');
 var http = require('http');
 var numCPUs = require('os').cpus().length;
-
 if (cluster.isMaster) {
   // code du master : cré autant de workers que de CPUs
   for (var i = 0; i < numCPUs; i++) {
@@ -537,7 +536,7 @@ if (cluster.isMaster) {
     res.end("hello world\n");
   }).listen(8000);
 }</code></pre></li>
-      <li>Les <strong>workers</strong> délèguent la création de la socket serveur au <strong>master</strong> qui va la partager</li>
+      <li>Les <strong>workers</strong> délèguent la création et le partage de la socket au <strong>master</strong> qui va la partager</li>
     </ul>
     <details open>
       <summary/>
