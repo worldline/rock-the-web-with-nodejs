@@ -64,10 +64,11 @@ emitter.process();</code></pre>
     <details open>
       <summary/>
       <p>Le design pattern "Publish-subscribe" est très similaire, à ceci près qu'il n'y a pas de bus d'evènement entre les émétteurs et les auditeurs.</p>
-      <p>Les auditeurs seront notifiés uniquement lorsque l'évènement sera survenu, et s'il n'y a pas d'autres instructions en cours (mono-thread non intéruptible)</p>
-      <p>Génèralement, les auditeurs sont invoqués dans l'ordre d'inscription, mais il est périlleux de présumer de cet ordre</p>
+      <p>Les auditeurs seront notifiés uniquement lorsque l'évènement sera survenu, et s'il n'y a pas d'autres instructions en cours (mono-thread non interrompable)</p>
+      <p>Généralement, les auditeurs sont invoqués dans l'ordre d'inscription, mais il est périlleux de présumer de cet ordre</p>
       <p>Une fonction asynchrone est un cas spécifique d'émission d'évènement : il n'y a qu'un type d'évènement (la fin de l'opération), et qu'un seul auditeur possible (le code appelant)</p>
-      <p>La page Web est un cas ou chaque noeud DOM est un émetteur, avec différents évènements (click, mousemove...) et 0 ou N auditeurs (des fonctions JS). En NodeJS, il n'y a pas d'équivalenr des phases de <strong>bubble</strong>  (remonté de l'enfant vers son parent) et de <strong>capture</strong> (descente du parent vers les enfants) en moins.</p>
+      <p>La page Web est un cas ou chaque noeud DOM est un émetteur, avec différents évènements (click, mousemove...) et 0 ou N auditeurs (des fonctions JS). En NodeJS, il n'y a pas d'équivalent des phases de <strong>bubble</strong>  (remonté de l'enfant vers son parent) et de <strong>capture</strong> (descente du parent vers les enfants) en moins.</p>
+      <p>Les appels aux listeners ne sont pas protégés, attention donc aux exceptions synchrones, elles empêcheraient les appels aux listeners suivants !</p>
     </details>
   </section>
 
@@ -94,9 +95,10 @@ emitter.process();</code></pre>
     <h1>Le module <i>events</i></h1>
     <ul class="steps">
       <li class="warning">Il est impératif de désinscrire les auditeurs !</li>
-      <li class="guideline">Warning est émit pour chaque émetteur ayant plus de 10 auditeurs sur un évènement.<br/>Paramétrable avec <code>setMaxListeners(n)</code></li>
+      <li class="guideline">Warning est émit pour chaque émetteur ayant plus de 10 auditeurs sur un évènement.<br/>Paramètrable avec <code>setMaxListeners(n)</code></li>
+      <li class="warning">Si l'évènement <code>error</code> est émit et non écouté, il se transforme en exception</li>
       <li class="convention">Les noms des évènements sont en <strong>camel-case</strong></li>
-      <li>De nombreuses classes NodeJS hérite d'<strong>EventEmitter</strong>: <strong>Server</strong>, <strong>Socket</strong>, <strong>Stream</strong>, <strong>ChildProcess</strong>, <strong>Cluster</strong>...</li>
+      <li>De nombreuses classes NodeJS héritent d'<strong>EventEmitter</strong>: <strong>Server</strong>, <strong>Socket</strong>, <strong>Stream</strong>, <strong>ChildProcess</strong>...</li>
     </ul>
     <details open>
       <summary/>
@@ -154,9 +156,9 @@ emitter.process();</code></pre>
     <details open>
       <summary/>
       <p>Les streams en NodeJS sont l'équivalent du pipe Unix</p>
-      <p>Les buffers stocke les données sous format binaire et sont capable de les convertir dans un encodage spécifique (méthode <code>toString(encoding)</code>)</p>
+      <p>Les buffers stockent les données sous format binaire et sont capable de les convertir dans un encodage spécifique (méthode <code>toString(encoding)</code>)</p>
       <p>L'encoding <strong>'binary'</strong> est déprécié</p>
-      <p>Les buffers sont des tableau pré-alloués non dynamique qui pointe vers une zone mémoire</p>
+      <p>Les buffers sont des tableaux pré-alloués non dynamiques qui pointent vers une zone mémoire</p>
       <p>L'implémentation de nouveaux streams est assez rare, il existe de nombreux formats déjà supportés (<a href="https://www.npmjs.com/browse/keyword/stream" target="_blank">1344 package taggés avec le mot clé <strong>stream</strong> sur NPM</a>)</p>
     </details>
   </section>
@@ -166,26 +168,26 @@ emitter.process();</code></pre>
     <ul>
       <li class="step guideline">Pour économiser la mémoire : on traite les données par blocs</li>
       <li class="step guideline">Pour traiter les données au plus vite</li>
-      <li class="step guideline">Pour enchainer différentes opérations :<br/> lecture disque > compression > ecriture réseau</li>
-      <li class="step">A la base de nombreuses API NodeJS<span class="hints line"><span class="step">fs</span><span class="step">net</span><span class="step">zlib</span><span class="step">crypto</span></span></li>
-      <li class="step">Refondus avec la version 0.10</li>
+      <li class="step guideline">Pour enchainer différentes opérations :<br/> Lecture disque > Compression > Écriture réseau</li>
+      <li class="step">À la base de nombreuses API NodeJS<span class="hints line"><span class="step">fs</span><span class="step">net</span><span class="step">zlib</span><span class="step">crypto</span></span></li>
+      <li class="step">Refondus avec la version 0.10 puis simplifié en version 0.12</li>
     </ul>
     <details open>
       <summary/>
-      <p>Un <a href="https://github.com/substack/stream-handbook" target="_blank">guide pratique</a> pour utiliser et implémenter les stream</p>
-      <p>Un <a href="https://github.com/substack/stream-adventure" target="_blank">tutoriel interractif</a> pour expérimenter les streams (14 challenges)</p>
-      <p>L'annonce du changement de l'implémentation des stream en version <a href="http://blog.nodejs.org/2012/12/20/streams2/" target="_blank">0.10</a></p>
+      <p>Un <a href="https://github.com/substack/stream-handbook" target="_blank">guide pratique</a> pour utiliser et implémenter les streams</p>
+      <p>Un <a href="https://github.com/substack/stream-adventure" target="_blank">tutoriel interactif</a> pour expérimenter les streams (14 challenges)</p>
+      <p>L'annonce du changement de l'implémentation des streams en version <a href="http://blog.nodejs.org/2012/12/20/streams2/" target="_blank">0.10</a>, explication supplémentaire pour <a href="https://strongloop.com/strongblog/whats-new-io-js-beta-streams3/" target="_blank">streams3</a></p>
     </details>
   </section>
 
   <section data-timing="10">
     <h1>Stream en lecture</h1>
     <ul class="steps">
-      <li><strong>Flowing</strong> (push) : emet l'évènement <strong>data</strong> avec un bloc de données dès que possible, <strong>end</strong> à la fin</li>
+      <li><strong>Flowing</strong> (push) : émet l'évènement <strong>data</strong> avec un bloc de données dès que possible, <strong>end</strong> à la fin</li>
       <li class="centered">
         <img src="images/stream-read-push.png">
       </li>
-      <li><strong>Non-flowing</strong> (pull) : émet <strong>readable</strong> dès la donnée est prête, l'auditeur doit lire les données avec <code>read()</code></li>
+      <li><strong>Non-flowing</strong> (pull) : émet <strong>readable</strong> dès que la donnée est prête, l'auditeur doit lire les données avec <code>read()</code></li>
       <li class="centered">
         <img src="images/stream-read-pull.png">
       </li>
@@ -193,10 +195,10 @@ emitter.process();</code></pre>
     <details open>
       <summary/>
       <p>Dès qu'on enregistre un auditeur sur <strong>data</strong> le flowing mode est enclenché, pour des raison de rétro-compatibilité.</p>
-      <p>En non-flowing mode, il faut appeller <code>read()</code> jusqu'à ce qu'il renvoit <code>null</code>, et concaténer le tout.</p>
-      <p>L'évènement <strong>error</strong> ne signifie pas nécessairement que la lecture est stoppée, mais s'il n'est pas écouté, une exception sera levée.</p>
+      <p>En non-flowing mode, il faut appeller <code>read()</code> jusqu'à ce qu'il renvoit <code>null</code>, chaque appel renvoie un bout de donnée.</p>
+      <p>L'évènement <strong>error</strong> ne signifie pas nécessairement que la lecture est stoppée, mais s'il n'est pas écouté, une exception sera levée et les streams dépipés.</p>
       <p>L'évènement <strong>end</strong> vient signaler que la source est fermée ou coupée</p>
-      <p>Quelques flux <strong>Readable</strong> : réponse HTTP (ClientRequest), requête HTTP (Server), fichiers en lecture, socket tcp, stdout/stderr des processus enfant, stdin du processus courant</p> 
+      <p>Quelques flux <strong>Readable</strong> : réponse HTTP (ClientRequest), requête HTTP (Server), fichiers en lecture, socket tcp, stdout/stderr des processus enfants, stdin du processus courant</p>
     </details>
   </section>
 
@@ -212,7 +214,7 @@ emitter.process();</code></pre>
     </ul>
     <details open>
       <summary/>
-      <p><code>write()</code> prend en paramètre un callback, invoqué lorsque les données ont été flushé dans la destination, ce qui garantie qu'on puisse écrire à nouveau</p>
+      <p><code>write()</code> prend en paramètre un callback, invoqué lorsque les données ont été flushé dans la destination, et renvoie un booléen pour indiquer si le buffer d'émission est déjà plein</p>
       <p>Une fois que vous avez appelez <code>end()</code>, vous ne pouvez plus écrire</p>
       <p>Quelques flux <strong>Readable</strong> : requête HTTP (ClientRequest), réponse HTTP (Server), fichiers en écriture, socket tcp, stdin des processus enfant, stdout/stderr du processus courant</p>
     </details>
@@ -287,7 +289,7 @@ emitter.process();</code></pre>
       <summary/>
       <p>Pour créer un serveur, il suffit d'instancier la classe <strong>Server</strong>, ou d'utiliser la fonction <code>http.createServer()</code></p>
       <p>Il est possible d'ouvrir un serveur en écoute sur socket unix</p>
-      <p>D'autres évènement existe pour la gestion des protocoles (<strong>upgrade</strong>, <strong>checkContinue</strong>), ou la terminaison du server (<strong>close</strong>)</p>
+      <p>D'autres évènements existent pour la gestion des protocoles (<strong>upgrade</strong>, <strong>checkContinue</strong>), ou la terminaison du server (<strong>close</strong>)</p>
       <p>En cas d'échec du démarrage du serveur (port déjà utilisé), le serveur émet l'évènement <strong>error</strong></p>
     </details>
   </section>
@@ -314,7 +316,7 @@ server.listen(8080, function() {
     <details open>
       <summary/>
       <p><code>createServer()</code> accepte un paramètre qui est un auditeur enregistré sur l'évènement <strong>request</strong></p>
-      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extême : <pre><code class="javascript">var http = require('http');
+      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extrême : <pre><code class="javascript">var http = require('http');
 var port = 8080;
 
 http.createServer(function(req, resp) {
@@ -370,7 +372,7 @@ http.createServer(function(req, resp) {
       <p>La classe <strong>https.Server</strong> n'hérite pas de <strong>http.Server</strong>, mais propose la même interface</p>
       <p>Elles héritent toutes les deux de <strong>net.Server</strong></p>
       <p>La classe <strong>Socket</strong> est utilisée par tous les <strong>Server</strong>s et <strong>ClientRequest</strong> pour réaliser les opérations réseaux</p>
-      <p>Les classes du module <strong>net</strong> sont utilisées pour tous serveur ou client de protocole autre que http</p>
+      <p>Les classes du module <strong>net</strong> sont utilisées pour tout serveur ou client de protocole autre que http</p>
     </details>
   </section>
 
@@ -429,13 +431,13 @@ child.on('exit', function() {
     </ul>
     <details open>
       <summary/>
-      <p><strong>Attention !</strong> l'exécution de ces exemples ne fonctionne pas complètement dans la console NodeJS ! C'est lié au mode REPL (Read Evaluate Print Loop) qui temporise entre chaque commende, et transforme un code synchrone en une succession de commandes temporisées</p>
+      <p><strong>Attention !</strong> l'exécution de ces exemples ne fonctionne pas complètement dans la console NodeJS ! C'est lié au mode REPL (Read Evaluate Print Loop) qui temporise entre chaque commande, et transforme un code synchrone en une succession de commandes temporisées</p>
       <p>Dans le cas de <code>exec()</code> et <code>execFile()</code>, nous n'avons pas accès au processus fils : il faut attendre la fin de son exécution pour avoir un résultat</p>
       <p>Dans le cas de <code>spawn()</code>, on a immédiatement accès au processus fils (synchronisme), et on reçoit le résultat au fur et à mesure</p>
-      <p>Quelque soit la commande utilisée, on peut toujours customiser l'environnement (variables) et le répertoire d'exécution</p>
+      <p>Quelle que soit la commande utilisée, on peut toujours customiser l'environnement (variables) et le répertoire d'exécution</p>
       <p>Comme nous allons le voir, <code>fork()</code> n'est qu'un <code>spawn()</code> particulier pour lancer une instance de NodeJS (V8) sur une fichier donné, et avec un canal de communication spécifique</p>
-      <p>Un processus NodeJS créé avec <code>fork()</code> est une instance V8 qui à besoin au minimum de 30ms et 10Mb de RAM pour démarrer (dépend du code au démarrage)</p>
-      <p><code>exec()</code> est déconseillé : il est susceptible d'être une source d'injection, en plus d'être monolithique</p>
+      <p>Un processus NodeJS créé avec <code>fork()</code> est une instance V8 qui a besoin au minimum de 30ms et 10Mb de RAM pour démarrer (dépend du code au démarrage)</p>
+      <p><code>exec()</code> est déconseillé : il est susceptible d'être une source d'injection, en plus d'être monolithique, lui préférer <code>execFile()</code></p>
     </details>
   </section>
 
@@ -451,12 +453,12 @@ child.on('exit', function() {
       <summary/>
       <p><strong>'error'</strong> si l'on ne peut créer le process (ENOENT : Error NO ENtry lorsque la commande n'existe pas par exemple), s'il ne peut être tué ou si un message ne peut lui être délivré</p>
       <p><strong>'exit'</strong> est le signal de terminaison normal du fils, avec son code de fin et le signal qui lui a donné éventuellement fin</p>
-      <p><strong>'close'</strong> est le signal de terminaison des flux standards du fils, distinct de <strong>'exit'</strong> car il peut être partagés</p>
+      <p><strong>'close'</strong> est le signal de terminaison des flux standards du fils, distinct de <strong>'exit'</strong> car il peut être partagé</p>
       <p><code>kill()</code> n'a pas pour effet de terminer le processus fils : utilisé sans arguments, il envoi <strong>'SIGTERM'</strong> qui le terminera</p>
       <p>Lorsqu'on crée un processus fils avec <code>spawn()</code>, on peut paramétrer ses IO. C'est ce que fait <code>fork()</code></p>
       <p>Si la commande exécutée par le processus fils est un programme NodeJS, celui-ci peut recevoir les messages du père avec <code>process.on('message')</code> et lui renvoyer des résultats avec <code>process.send(...)</code></p>
-      <p><strong>Attention !</strong> les messages échangés entre père et fils sont sérializés de manière synchrone : donc pas de structures cycliques (échec), ni trop volumineuse (ralentissement)</p>
-      <p>Un seul cas particulier pour <code>send()</code> et <strong>'message'</strong> : on peut transférer une instance de <strong>Server</strong> ou <strong>Socket</strong> entre processus. C'est le fondement du module <strong>cluster</strong></p>
+      <p><strong>Attention !</strong> les messages échangés entre père et fils sont sérialisés de manière synchrone : donc pas de structures cycliques (échec), ni trop volumineuse (ralentissement)</p>
+      <p><code>send()</code> peut prendre en 2è argument un handle : on peut transférer une instance de <strong>Server</strong> ou <strong>Socket</strong> entre processus. C'est le fondement du module <strong>cluster</strong></p>
       <p>Il est possible que le parent et ses fils partagent leurs flux d'IO, de spécifier un file descriptor quelconque (fichier, socket, pipe...), ou même de ne pas avoir du tout de flux standards</p>
     </details>
   </section>
@@ -501,17 +503,17 @@ while candidate < n
   <section data-timing="10">
     <h1>Le module <i>cluster</i></h1>
     <ul class="steps">
-      <li>Permet de créez plusieurs processus NodeJS identiques pour répondre à des requêtes HTTP</li>
-      <li>Le <strong>Master</strong> (processus père) reçoit les connexion HTTP (1 port d'écoute) et les distribue</li>
+      <li>Cré plusieurs processus NodeJS identiques pour répondre à des requêtes sur des sockets</li>
+      <li>Le <strong>Master</strong> (processus père) reçoit les connexions (1 port d'écoute) et les distribue (potentiellement)</li>
       <li>Les <strong>Workers</strong> (processus fils) traitent chacun une requête à la fois</li>
-      <li>Tous les processus sont sur la même machine : on cré un worker par CPU disponible</li>
+      <li>Tout sur la même machine : on crée de manière optimale un worker par CPU disponible</li>
       <li>Entièrement outillé pour gérer un pool de workers</li>
     </ul>
     <details open>
       <summary/>
-      <p>A la base un module externe, incorporé depuis la version 0.8 (0.6?) au language</p>
-      <p>Dédié à la réalisation de serveur Web qui exploite toute la puissante disponible</p>
-      <p>Les workers ont le même code, mais peuvent être paramétrés différement</p>
+      <p>À la base un module externe, incorporé depuis la version 0.8 (0.6?) au language</p>
+      <p>Dédié à la réalisation de serveurs Web qui exploitent toute la puissance disponible</p>
+      <p>Les workers ont le même code, mais peuvent être paramétrés différemment</p>
       <p>le module <strong>cluster</strong> exporte un objet singleton qui est un <strong>EventEmitter</strong> : <strong>'online'</strong>, <strong>'listening'</strong>, <strong>'disconnect'</strong>, <strong>'exit'</strong> permettent de monitorer le cycle de vie des workers</p>
       <p>A partir de <a href="http://strongloop.com/strongblog/whats-new-in-node-js-v0-12-cluster-round-robin-load-balancing/" target="_blank">NodeJS 0.12</a> le load balancing est géré par l'OS ou par le master.</p>
     </details>
@@ -523,7 +525,6 @@ while candidate < n
       <li>Généralement, le même code pour tous<pre><code class="javascript">var cluster = require('cluster');
 var http = require('http');
 var numCPUs = require('os').cpus().length;
-
 if (cluster.isMaster) {
   // code du master : cré autant de workers que de CPUs
   for (var i = 0; i < numCPUs; i++) {
@@ -535,16 +536,16 @@ if (cluster.isMaster) {
     res.end("hello world\n");
   }).listen(8000);
 }</code></pre></li>
-      <li>Le serveur est créé par le <strong>master</strong> et partagé</li>
+      <li>Les <strong>workers</strong> délèguent la création et le partage de la socket au <strong>master</strong> qui va la partager</li>
     </ul>
     <details open>
       <summary/>
-      <p><code>cluster.fork()</code> appèle <code>child_process.fork()</code> sur le fichier courant, il est possible de changer ce comportement avec <code>cluster.setupMaster()</code></p>
+      <p><code>cluster.fork()</code> appelle <code>child_process.fork()</code> sur le fichier courant, il est possible de changer ce comportement avec <code>cluster.setupMaster()</code></p>
       <p>A l'intérieur d'un <strong>worker</strong> (<code>cluster.isWorker</code>), toute création d'un serveur Http (<code>server.listen()</code>) délègue en réalité la création dudit serveur par le <strong>master</strong>. Si le serveur à déjà été créé, il est alors partagé</p>
-      <p>C'est l'OS (jusqu'en NodeJS 0.10) qui gère la logique d'équilibrage entre différents processus qui écoute sur le même port</p>
+      <p>C'est l'OS (jusqu'en NodeJS 0.10) qui gère la logique d'équilibrage entre différents processus qui écoutent sur le même port</p>
       <p>Au sein du cluster, le <strong>master</strong> peut "tuer" les <strong>workers</strong>, où il peuvent se "suicider"</p>
       <p>Comme avec <strong>child_process</strong> les <strong>workers</strong> peuvent communiquer avec le <strong>master</strong> grâce à <code>process.send()</code>, car les workers sont des instances de <strong>ChildProcess</strong></p>
-      <p>Les <a href="http://nodejs.org/api/cluster.html#cluster_class_worker" target="_blank">workers</a> possèdent en plus des propriétés liée au foctionnement du cluster</p>
+      <p>Les <a href="http://nodejs.org/api/cluster.html#cluster_class_worker" target="_blank">workers</a> possèdent en plus des propriétés liée au fonctionnement du cluster</p>
     </details>
   </section>
 
@@ -562,8 +563,8 @@ if (cluster.isMaster) {
     </ul>
     <details open>
       <summary/>
-      <p>Pour communiquer des volumes importants entre processus, ou de manière asynchrone, il est nécessaire d'utiliser un système tier (messaging queue, base de donnée, fichier...)</p>
-      <p>Pour constituer un réseau de processus sur machine distinctes, il est aussi nécessaire d'utiliser un système tier (ou un package dédié)</p>
+      <p>Pour communiquer des volumes importants entre processus, ou de manière asynchrone, il est nécessaire d'utiliser un système tiers (messaging queue, base de donnée, fichier...) ou de passer par des spawns qui vont communiquer par leur streams d'E/S standards</p>
+      <p>Pour constituer un réseau de processus sur machine distinctes, il est aussi nécessaire d'utiliser un système tiers (ou un package dédié)</p>
       <p>Les architectures où des processus sur des machines distinctes communiquent sont... des micro-services, ou de la SOA :)</p>
     </details>
   </section>
@@ -577,7 +578,7 @@ if (cluster.isMaster) {
     <details open>
       <summary/>
       <p>Le retour de <code>cluster.fork()</code> est une instance de <strong>Worker</strong> sur laquelle on peut brancher l'auditeur <strong>'message'</strong></p>
-      <p>Pas de <code>console.log()</code> dans les <strong>workers</strong>, mais seulement dans le <strong>master</strong>. Utilisez <code>worker.id</code> pour savoir quel fils a géré la requête</p>
+      <p>Par défaut pas de <code>console.log()</code> dans les <strong>workers</strong>, mais seulement dans le <strong>master</strong>. Utilisez <code>worker.id</code> pour savoir quel fils a géré la requête</p>
       <p>Le code des <strong>workers</strong> est quasiement le même que dans l'exercice sur le serveur Http</p>
       <p>On observe que c'est toujours le même <strong>worker</strong> qui traite les requêtes : c'est dû à l'OS qui ne considère pas le worker comme chargé. Il faudrait simuler un véritable charge pour observer la balance automatique</p>
       <p><a href="http://code.runnable.com/VK_VnQU_2sVNnv8o/rocktheweb-server-cluster" target="_blank">Correction</a></p>

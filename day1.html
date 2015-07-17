@@ -36,10 +36,11 @@
       <p>2000 : Plusieurs implémentations (et VMs): JScript (Microsoft), ActionScript (Adobe), JavaScript (Gecko et SpiderMonkey)</p>
       <p>2005 : Jesse James Garret écrit un papier sur l'Ajax, et décrit ce qui deviendra les RIA. C'est le point de départ de Dojo, Prototype, JQuery, MooTools</p>
       <p>2008 : V8 (Dannois) est embarqué dans Chrome (et Chromium). JS 1.7 : let, yield</p>
-      <p>2009 : Ryan Dahl cré NodeJS, bientôt sponsorisé par Joyent and Microsoft, à partir de V8</p>
+      <p>2009 : Ryan Dahl crée NodeJS basé sur V8, bientôt embauché par Joyent, puis soutient de Microsoft pour la compatibilité Windows</p>
       <p>2010 : JavaScript 1.8.5 (ES5)</p>
-      <p>2011 : Verte.X est un framework evénementiel sur la JVM inspiré de NodeJS, utilisable en JS, Java, Coffee, Python, Groovy, Clojure, Scala</p>
-      <p>2011 : LinkedIn (16 Juillet 2011) pour son appli mobile, Walmart (Janvier 2012) pour son appli mobile & son site, eBay (17 mai 2011), Paypal (30 mai 2013), Groupon (7 Octobre 2013) ont refondus leurs SI pour utiliser NodeJS</p>
+      <p>2011 : Vert.X est un framework évènementiel sur la JVM inspiré de NodeJS, utilisable en JS, Java, Coffee, Python, Groovy, Clojure, Scala</p>
+      <p>2011 : LinkedIn (16 Juillet 2011) pour son appli mobile, Walmart (Janvier 2012) pour son appli mobile & son site, eBay (17 mai 2011), Paypal (30 mai 2013), Groupon (7 Octobre 2013) ont intégré dans leurs SI du NodeJS</p>
+      <p>2015 : EcmaScript 2015 (ES6) approuvé le 17 juin</p>
     </details>
   </section>
 
@@ -49,7 +50,7 @@
       <li class="cliche">C'est lent car c'est interprété</li>
       <li class="cliche">C'est sale car c'est dynamique</li>
       <li class="cliche">Ce n'est pas un langage orienté objet</li>
-      <li class="cliche">Ca ne sert qu'a alourdir less page web</li>
+      <li class="cliche">Ca ne sert qu'à alourdir les pages web</li>
       <li class="myth-buster centered"><img src="images/mythbuster.jpg"></li>
       <li class="bonus"><a class="source" href="https://msgooroo.com/GoorooTHINK/Article/16191/Which-language-wins-in-terms-of-salarydemand-July-2014/14105#.VI6efHs3JkX" target="_blank">Beaucoup d'embauches en JS</a></li>
       <li class="bonus">La quête de l'équipe "fullstack"</li>
@@ -85,7 +86,7 @@
       <summary/>
       <p>Pas un langage : on fait bien du JavaScript (pas de nouveaux mot clés)</p>
       <p>Pas un framework : pas de cadre de programmation imposé, pas de finalité spécifique</p>
-      <p><a href="http://fr.wikipedia.org/wiki/Framework" target="_blank">Un environnement d'exécution</a> : a l'instar des navigateur, NodeJS exécute du JavaScript, mais dans un Système d'exploitation</p>
+      <p><a href="http://fr.wikipedia.org/wiki/Framework" target="_blank">Un environnement d'exécution</a> : à l'instar des navigateurs, NodeJS exécute du JavaScript, mais dans un Système d'exploitation</p>
     </details>
   </section>
 
@@ -130,7 +131,7 @@
     <details open>
       <summary/>
       <p>Les string peuvent être délimitées avec des quotes simples ou doubles. Choisissez un délimiteur et tenez vous-y.</p>
-      <div>Utilisation des constructeurs possible mais <a href="https://jslinterrors.com/do-not-use-a-as-a-constructor" target="_blank">déconseillée</a> : <pre class="inline"><code class="javascript">var isSimple = new Boolean(true);</code></pre> à cause des égalité : <pre class="inline"><code class="javascript">true !== new Boolean(true);</code></pre></div>
+      <div>Utilisation des constructeurs possible mais <a href="https://jslinterrors.com/do-not-use-a-as-a-constructor" target="_blank">déconseillée</a> : <pre class="inline"><code class="javascript">var isSimple = new Boolean(true);</code></pre> à cause des égalité : <pre class="inline"><code class="javascript">true !== new Boolean(true);</code> et d'optimisations rendues difficiles</pre></div>
       <p>Les <strong>Object</strong> peuvent avoir autant de propriétés que vous voulez, à l'instar des <strong>dictionnaires</strong> (Python), <strong>hashs</strong> (Perl, Ruby), <strong>hash tables</strong> (C/C++), <strong>hash maps</strong> (Java), <strong>tableaux associatifs</strong> (Php)...</p>
       <p>Ils sont très largement utilisés comme structures de données.</p>
     </details>
@@ -146,7 +147,7 @@
     </ol>
     <details open>
       <summary/>
-      <p>Les opérateurs de comparaison compare bien les valeurs. <code>==</code> réalise un cast implicite des valeurs pointés, <code>===</code> n'en fait pas. C'est pourquoi il est recommandé de l'utiliser.</p>
+      <p>Les opérateurs de comparaison comparent bien les valeurs. <code>==</code> réalise un cast implicite des valeurs pointés, <code>===</code> n'en fait pas. C'est pourquoi il est recommandé de l'utiliser.</p>
       <p>L'utilisation des constructeur (<code>Number</code>, <code>Boolean</code>, <code>String</code>) est déconseillée par rapport à l'utilisation des litéraux. La comparaison de deux instances ayant la même valeur sera toujours fausse : <code>new Number(15) != new Number(15)</code></p>
       <p><a href="http://jsbin.com/dunozeyica/edit?js,console" target="_blank">Correction</a></p>
     </details>
@@ -196,7 +197,7 @@
     <details open>
       <summary/>
       <p>Les tableaux sont des objets, ils ont des méthodes comme <code>slice()</code>.</p>
-      <p>Les <strong>object literals</strong> sont pratique pour encapsuler des données dans une structure cohérente.</p>
+      <p>Les <strong>object literals</strong> sont pratiques pour encapsuler des données dans une structure cohérente.</p>
       <p>L'opérateur <code>+</code> permet de concaténer une chaînes de caractères avec une variable quelconque.</p>
       <p>Les fonctions étant des objets, elles peuvent être passées en paramètres d'autres fonctions. Cela permet d'implémenter facilement le <i>design pattern</i> de délégation, ou pour "rappeler" le code appelant après une opération asynchrone.</p>
       <p><a href="http://jsbin.com/tayepi/edit?js,console" target="_blank">Correction</a></p>
@@ -223,13 +224,13 @@ for (var attr in people) {
     <details open>
       <summary/>
       <p><strong>while</strong> et <strong>do while</strong> existent mais sont peu utilisées.</p>
-      <p>Si le tableau n'est pas modifié, il est courant de stocker sa longeur dans une variable pour accélerer le traitement (pratique discutable).</p>
-      <p>Le <strong>for in</strong> parcours toutes les propriétés (attributs et méthodes) du prototype, y compris celles héritées. Pour les différentier, il est classique d'utiliser <code>hasOwnProperty()</code></p>
+      <p>Si le tableau n'est pas modifié, il est courant de stocker sa longeur dans une variable pour accélerer le traitement (pratique discutable, surtout utile pour de vieux moteurs incapables d'optimiser).</p>
+      <p>Le <strong>for in</strong> parcours toutes les propriétés (attributs et méthodes) du prototype, y compris celles héritées. Pour les différencier, il est classique d'utiliser <code>hasOwnProperty()</code></p>
       <p>L'utilisation du <strong>for in</strong> est à proscrire sur le tableaux : les méthodes et les attributs du tableau seront également procéssés !</p>
       <div>On peut même conseiller de ne pas utiliser <strong>for in</strong> pour les objets: <pre><code class="javascript">Object.keys(obj).forEach(function(value, attr) {
   /*...*/
 });</code></pre></div>
-      <p>L'utilisation du <strong>forEach</strong> est de plus en plus populaire, notamment grâce à underscore et lodash, surtout qu'il est de <a href="http://jsperf.com/for-vs-foreach/66" target="_blank">plus en plus performants.</a></p>
+      <p>L'utilisation du <strong>forEach</strong> est de plus en plus populaire, notamment grâce à underscore et lodash, surtout qu'il est de <a href="http://jsperf.com/for-vs-foreach/66" target="_blank">plus en plus performants (mais toujours moins que le simple for).</a></p>
       <p>A l'intérieur d'une boucle for, les instructions <code>break</code> et <code>continue</code> permettent de contrôller l'éxécution de la boucle</p>
     </details>
   </section>
@@ -252,7 +253,8 @@ for (var attr in people) {
     <details open>
       <summary/>
       <p>Comme beaucoup de langage inspirés du C, Javascript utiliser le <strong>short-circuit evaluation</strong> pour les conditions</p>
-      <p>Attention à ne pas oublier le <code>break</code> au niveau d'un switch</li>
+      <p>Attention à ne pas oublier le <code>break</code> au niveau d'un switch</p>
+      <p>Le <code>switch</code> utilise une égalité stricte, attention lors de switches sur des types non int, bool, string</p>
       <p>L'opérateur ternaire est utilisable dans une expression, ce qui le différentie du <strong>if else</strong> qui est une instruction.</p>
     </details>
   </section>
@@ -280,8 +282,9 @@ console.log(permute([4, 6]), tmp, permutted); // [6, 4], 10, true</code></pre></
       <summary/>
       <p>En Javascript, les fonctions n'ont qu'un prototype, il y a une différence entre les paramètres déclarés et les paramètres effectifs à l'éxécution.</p>
       <p><code>arguments</code> est un <i>pseudo-tableau</i> contenant les paramètes effectifs au moment de l'appel.</p>
+      <p>Attention dans les fonctions critiques à la désoptimisation liée à <code>arguments</code></p>
       <p>Pas de portée bloc en JavaScript, une portée fonction.</p>
-      <p>Dans une fonction, toutes les variables sont initializée avant la première instruction (<strong>hoisting</strong>)</p>
+      <p>Dans une fonction, toutes les variables sont initialisées avant la première instruction (<strong>hoisting</strong>)</p>
     </details>
   </section>
 
@@ -376,8 +379,8 @@ new Person('joe').say('hi'); // joe said: hi</code></pre></li>
       <p>L'opérateur <code>new</code> a pour effet de créer un nouvel objet qui sera référencé par <code>this</code>.</p>
       <p>Il n'y a pas de propriété <strong>say</strong> dans l'objet <strong>dookie</strong>. Mais comme il y en à une dans son prototype, elle est utilisée.</p>
       <p>Lorsqu'on utilise les opérateurs <code>.</code> ou <code>[]</code>, le pointeur <code>this</code> référencie l'objet à gauche de l'opérateur.</p>
-      <p>A l'intérieur du constructeur, il aurait été possible d'affecter <strong>say</strong> dans <code>this</code>, plutôt que de le mettre dans le prototype. Cela accélère de manière insensible l'exécution, mais augmente la taille des instances (puisque la méthode est dupliquée dans chaque instance).</p>
-      <p>Tout ce qui est dans le prototype est donc partagé entre toutes les instances, mais ne peut servir a faire des variable à échelle de classe.</p>
+      <p>A l'intérieur du constructeur, il aurait été possible d'affecter <strong>say</strong> dans <code>this</code>, plutôt que de le mettre dans le prototype. Cela accélère de manière sensible l'exécution, mais augmente la taille des instances (puisque la méthode est dupliquée dans chaque instance).</p>
+      <p>Tout ce qui est dans le prototype est donc partagé entre toutes les instances, mais ne peut servir à faire des variables à échelle de classe.</p>
       <p>Attention : le mot clé <code>this</code> n'est jamais facultatif, comme en Java, C#.</p>
     </details>
   </section>
@@ -473,7 +476,7 @@ var f1 = function(cond) {
       <p>Les règle de hoisting sont différente pour les variables et les définition de fonction. Pour obtenir un fonctionnement cohérent, on conseillera les assignation de fonctions</p>
       <p>Le mot clé <code>this</code> pointe sur l'objet courant <strong>au moment de l'exécution</strong>, pas au moment de l'appel.</p>
       <p>Lorsqu'une méthode est exécutée suite à un évènement asynchrone (timer, évènement navigateur, appel ajax, accès disque/réseau), l'objet courant n'est plus celui au moment de l'appel.</p>
-      <p>Il est courant d'utiliser une closure pour conserver le this (le célèbre <pre class="inline"><code class="javascript">var self = this;</code></pre>.</p>
+      <p>Il est courant d'utiliser une closure pour conserver le this (le célèbre <pre class="inline"><code class="javascript">var self = this;</code></pre>).</p>
     </details>
   </section>
 
@@ -497,7 +500,7 @@ basket['apples'] = 2;</code></pre><span class="hints"><span class="step">Utilise
     <details open>
       <summary/>
       <p><code>length</code> renvoi l'indice le plus grand (la taille occupée en mémoire donc), pas le nombre d'éléménts contenu.</p>
-      <p>Le <strong>for in</strong> ne garanti pas l'ordre de passage des clés, et parcours tous les élements <strong>enummérables</strong> du prototype.</p>
+      <p>Le <strong>for in</strong> ne garanti pas l'ordre de passage des clés, et parcours tous les élements <strong>enumérables</strong> du prototype.</p>
       <p>La longueur du tableau ne tient pas compte des indices (des attributs) non numériques. Cette utilisation est destabilisante pour les lecteurs.</p>
     </details>
   </section>
@@ -576,9 +579,9 @@ exports.circumference = function (r) {
       <summary/>
       <p><a href="http://requirejs.org/" target="_blank">RequireJS</a> est un framework de dépendances entre fichier JS pour le navigateur (chargement dynamique), qui implémente la spécification Asynchronous Module Definition</p>
       <p><a href="http://wiki.commonjs.org/wiki/CommonJS" target="_blank">CommonJS est une spécification pour utiliser le JS en dehors du navigateur, qui inclu une système de <a href="http://wiki.commonjs.org/wiki/Modules/1.1.1" target="_blank">modularisation</a></p>
-      <p>EcmaScript 6 inclu un système de <a href="http://www.2ality.com/2014/09/es6-modules-final.html" target="_blank">modularisation</a>, encore en travaux, dont on peut trouver diverses implémentations</p>
-      <p>NodeJS implémente uniquement cette partie de la spec CommonJS.</p>
-      <p>En NodeJS il y a néanmoins un scope global, accessible depuis un module avec la variable <code>global</code></p> 
+      <p>EcmaScript 6 inclu un système de <a href="http://www.2ality.com/2014/09/es6-modules-final.html" target="_blank">modularisation</a>, dont on peut trouver diverses implémentations</p>
+      <p>NodeJS implémente uniquement la spec CommonJS.</p>
+      <p>En NodeJS il y a néanmoins un scope global, accessible depuis un module avec la variable <code>global</code></p>
     </details>
   </section>
 
@@ -612,7 +615,7 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
       <li class="guideline">Dépendances internes au projet : syntaxe relative</li>
       <li class="guideline">Dépendances externes : syntaxe externe</li>
       <li class="guideline">Toutes les dépendances externes sont dans un dossier 'node_modules' à la racine du projet</li>
-      <li class="warning">Ne pas include de fichier spécifiques d'une dépendance externe</li>
+      <li class="warning">Ne pas inclure de fichier spécifique d'une dépendance externe</li>
       <li class="warning">Attention au cache des exports</li>
       <li class="warning">Eviter les dépendances cycliques</li>
     </ul>
@@ -630,7 +633,7 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
   <section data-timing="30">
     <h1>Modules NodeJS</h1>
     <ol class="steps hands-on">
-      <li>Sur votre poste, dans un dossier <strong>tps/modules</strong>, créez 4 modules (fichiers):<ol>
+      <li>Dans un dossier <strong>tps/modules</strong>, créez 4 modules (fichiers):<ol>
         <li>Un pour les <strong>stocks</strong>, contenant l'objet <strong>beers</strong></li>
         <li>Un pour les <strong>actions</strong>, contenant la fonction <strong>drink</strong></li>
         <li>Un pour le pattern <strong>command</strong>, contenant la fonction <strong>doMove</strong></li>
@@ -656,7 +659,7 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
   <section data-timing="10">
     <h1>Les opérations asynchrones</h1>
     <ul class="steps">
-      <li>V8 est mono-thread : 1 instruction en parallèle</li>
+      <li>V8 est mono-thread : 1 instruction à la fois</li>
       <li>Les I/O sont toujours* asynchrones : <pre><code class="javascript">console.log(1);
 require('fs').readfile('package.json', function(err, content) {
   console.log(2);
@@ -677,10 +680,10 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
   <section data-timing="15">
     <h1>The Event Loop</h1>
     <ul>
-      <li class="step">NodeJS utilise des threads parallèles pour ses I/O: sinon il ne pourrait traiter qu'une requête à la fois !</li>
+      <li class="step">NodeJS utilise soit un pool de threads soit des I/O asynchrones (epoll/kqueue/IOCP): sinon il ne pourrait traiter qu'une requête à la fois !</li>
       <li class="step">Les callback sont empilés et l'event loop les dépile lorsqu'il n'y a plus d'autres instructions</li>
       <li class="guideline step">Plus de programmation concurrente : plus simple</li>
-      <li class="guideline step">Performant : quant le coût I/O > coût du processing</li>
+      <li class="guideline step">Performant : quand le coût I/O > coût du processing</li>
     </ul>
     <div class="video-container step">
       <video controls>
@@ -694,7 +697,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <p>Tant qu'il y a des instructions a exécuter, l'event loop ne dépile pas les callback.</p>
       <p>Lorsque le processing devient trop important, il est nécessaire de le déporter dans un autre thread : une autre instance VM (à l'instar d'un webworker) voire un exécutable d'un autre langage.</p>
       <p>Une exception levée dans un callback ne peut être catché par un <code>try</code> autour de la fonction asynchrone</p>
-      <p>La gestion des erreur devient alors explicite et locale au callback</p>
+      <p>La gestion des erreurs devient alors explicite et locale au callback</p>
     </details>
   </section>
 
@@ -720,8 +723,8 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     </ul>
     <details open>
       <summary/>
-      <p>L'usage des fonctions en mode synchrone est a réserver à des cas très spécifique, comme le chargement de configuration car il est alors normal que l'I/O soit bloquant au démarrage de l'application.</p>
-      <p>Les versions synchrones ne prennent pas de callback en paramètre, et leur retour est les paramètres du callback.</p>
+      <p>L'usage des fonctions en mode synchrone est a réserver à des cas très spécifiques, comme le chargement de configuration car il est alors normal que l'I/O soit bloquant au démarrage de l'application.</p>
+      <p>Les versions synchrones ne prennent pas de callback en paramètre, et leur retour est le résultat de l'opération, si une erreur a lieu il y a un throw d'Error.</p>
     </details>
   </section>
 
@@ -800,7 +803,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     </ul>
     <details open>
       <summary/>
-      <p><code>loadavg()</code> est un concept Unix, indiqué sous la forme d'un nombre réel, qu'il est généralement bien de maintenir en dessous du nombre de processus logiques</p>
+      <p><code>loadavg()</code> est un concept Unix, indiqué sous la forme d'un nombre réel, qu'il est généralement bien de maintenir en dessous du nombre de processeurs logiques</p>
       <p><code>loadavg()</code> est toujours nul sous Windows</p>
       <p>Une partie des API de NodeJS sont écrites en C/C++, l'autre repose sur celle-ci</p>
     </details>
@@ -810,15 +813,17 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     <h1>Et quelques bonus</h1>
     <ul class="steps">
       <li>La <strong>console</strong> globale : <code>log()</code>, <code>info()</code>, <code>warn()</code>, <code>error()</code>, <code>dir()</code>, <code>time()</code> + <code>timeEnd()</code>, <code>trace()</code></li>
-      <li>Les timers : <code>setTimeout()</code> + <code>cleatTimeout()</code>, <code>setInterval()</code> + <code>clearInterval()</code>
+      <li>Les timers : <code>setTimeout()</code> + <code>clearTimeout()</code>, <code>setInterval()</code> + <code>clearInterval()</code>, <code>setImmediate()</code> + <code>clearImmediate()</code>
       <li>Le module <strong>util</strong> : <code>format()</code>, <code>inspect()</code>, <code>inherits()</code></li>
       <li><code>global</code>, <code>__filename</code> et <code>__dirname</code></li>
     </ul>
     <details open>
       <summary/>
       <p><code>console.X()</code> sont des fonctions synchrones (à moins de configurer la sortie standard dans un pipe) : attention à leur impact sur l'exécution !</p>
-      <p>Comme nous le verrons plus tard, <code>SetTimeout</code> empille un callback dans la pile asynchrone</p>
-      <p><code>setInterval()</code> est particulièrement déconseillé, car il monopolise du CPU, là où <code>process.nextTick()</code> limite l'usage de resources</p>
+      <p>Comme nous le verrons plus tard, <code>SetTimeout</code> empile un callback dans la pile asynchrone</p>
+      <p><code>setTimeout(fn, 0)</code> est particulièrement déconseillé, car il crée des timers système, là où <code>process.nextTick()</code> a une connaissance de l'event loop et s'y intègre à moindre coût</p>
+      <p><code>setInterval()</code> est à manipuler avec précaution car il peut provoquer un phénomène d'engorgement</p>
+      <p><code>setImmediate()</code> est déterministe et passe après l'I/O, les autres ne le sont pas</p>
       <p><code>util.format()</code> est une implémentation allégée de sprintf() qui supporte le JSON</p>
       <p><code>util.inspect()</code> est utilisé par <code>console.dir()</code></p>
       <p><code>util.inherits()</code> permet de chainer les prototypes, et est utilisable en remplacement de <code>Object.create()</code> lors de la déclaration d'une classe fille</p>
@@ -839,7 +844,7 @@ console.log(__filename); // /Users/a127380/example.js</code></pre></p>
     <details open>
       <summary/>
       <p>C'est l'argument de <code>process.exit()</code> qui spécifie le code de fin d'exécution du programme : très utile pour les tests lors de l'intégration continue !</p>
-      <p>Pour afficher le code de sortie de la dernière commande, tappez <code>echo $?</code> sous Unix, <code>echo %errorlevel%</code> sous Windows CMD et <code>echo $LastExitCode</code> sous Windows Powershell</p>
+      <p>Pour afficher le code de sortie de la dernière commande, tapez <code>echo $?</code> sous Unix, <code>echo %errorlevel%</code> sous Windows CMD et <code>echo $LastExitCode</code> sous Windows Powershell</p>
       <p>Dans la fonction qui s'enregistre toute les secondes et déclenche une exception, n'oubliez pas qu'aucune instruction ne peut être exécutée après un <code>throw</code> !</p>
       <p>Pour prouvez que vous catchez correctement les 3 exceptions, il peut être utile de différentier leur message d'erreur et de les afficher</p>
       <p>L'explication de l'inscription d'un auditeur d'évènement sera détaillée dans la prochaine partie de la formation</p>
