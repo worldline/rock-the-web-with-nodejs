@@ -716,7 +716,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <li>Le module <strong>fs</strong> regroupe les I/O sur le file-system</li>
       <li>Fichier : <code>readFile</code>, <code>writeFile</code>, <code>appendFile</code>, <code>watchFile</code>, <code>unlink</code></li>
       <li>Dossier : <code>readdir</code>, <code>mkdir</code>, <code>rmdir</code></li>
-      <li>Fichier + dossier : <code>rename</code>, <code>exists</code>, <code>link</code>, <code>stats</code></li>
+      <li>Fichier + dossier : <code>rename</code>, <code>exists</code>, <code>link</code>, <code>stat</code></li>
       <li>Permissions : <code>chown</code>, <code>chmod</code></li>
       <li>File descriptors : <code>open</code>, <code>read</code>, <code>write</code>, <code>close</code>...</li>
       <li class="warning">Certaines fonctions existent en mode synchrone</li>
@@ -799,7 +799,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
       <li>Accès aux réglages : <code>tmpdir()</code>, <code>hostname()</code></li>
       <li>A sa capacité : <code>cpus()</code>, <code>freemem()</code>, <code>totalmem()</code>, <code>loadavg()</code></li>
       <li>Et ses interfaces réseau <code>networkInterfaces()</code></li>
-      <li class="convention">Pour utiliser les spécificités de l'OS (drivers, devices...), il est nécessaire d'écrier des <a href="http://nodejs.org/api/addons.html" target="_blank">addons en C/C++</a></li>
+      <li class="convention">Pour utiliser les spécificités de l'OS (drivers, devices...), il est nécessaire d'écrire des <a href="http://nodejs.org/api/addons.html" target="_blank">addons en C/C++</a></li>
     </ul>
     <details open>
       <summary/>
