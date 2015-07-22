@@ -84,7 +84,7 @@ package.json
       <li>Descripteur du projet<pre><code class="json">{
   "name": "nom-du-projet",
   "version": "0.3.1",
-  "description": "Elle sera publiée",,
+  "description": "Elle sera publiée",
   "author": "You <you@yopmail.com>",
   "license": "MIT",
   "repository": "https://github.com/you/nom-du-projet.git",
@@ -415,7 +415,7 @@ request('http://www.google.com', function (err, response, body) {
   </section>
 
   <section data-timing="10">
-    <h1>Streaming et forumulaires</h1>
+    <h1>Streaming et formulaires</h1>
     <ul class="steps">
       <li><code>request</code>/<code>request.get</code> renvoient un <strong>ReadableStream</strong>: <pre><code class="javascript">request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'));</code></pre></li>
       <li>Pour <code>request.post</code>/<code>request.put</code>, un <strong>WritableSteam</strong>: <pre><code class="javascript">fs.createReadStream('file.json').pipe(request.put('http://mysite.com/obj.json'));</code></pre></li>
