@@ -4,3 +4,4 @@ css/
 *.zip
 coverage.html
 npm-debug.log
+*.doc

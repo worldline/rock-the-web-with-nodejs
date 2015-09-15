@@ -1,6 +1,13 @@
 {
   "name": "rock-the-web-with-nodejs",
-  "author": "Damien Simonin Feugas <damien.feugas@gmail.com>",
+  "author": {
+    "name": "Damien Simonin Feugas",
+    "email": "damien.feugas@gmail.com"
+  },
+  "contributors": [{
+    "name": "Nicolas Morel",
+    "email": "marsup@gmail.com"
+  }],
   "version": "2.0.0",
   "description": "A node.js introduction training to rock your daily developper life !",
   "scripts": {
