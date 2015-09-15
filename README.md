@@ -53,7 +53,7 @@ Then simply open with a browser one of the three root html files.
 Tps corrections are also available.
 
 
-# Descriptif (Franch)
+# Descriptif (French)
 
 ## Public concerné
 
