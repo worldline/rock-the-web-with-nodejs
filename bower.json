@@ -11,5 +11,9 @@
   "dependencies": {
     "ruban": "https://github.com/feugy/ruban.git#presenter",
     "font-awesome": "~4.3.0"
+  },
+  "resolutions": {
+    "font-awesome": "~4.3.0"
   }
+
 }

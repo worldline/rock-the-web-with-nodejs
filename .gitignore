@@ -1,6 +1,6 @@
 node_modules/
 components/
-js/
 css/
 *.zip
 coverage.html
+npm-debug.log
