@@ -4,10 +4,10 @@ if (process.argv.length !== 4) {
 }
 var inputFile = process.argv[2];
 var outputFile = process.argv[3];
- 
+
 var input = fs.createReadStream(inputFile);
 var output = fs.createWriteStream(outputFile);
- 
+
 input.on('readable', function() {
   var data = input.read();
   output.write(data.toString('base64'));

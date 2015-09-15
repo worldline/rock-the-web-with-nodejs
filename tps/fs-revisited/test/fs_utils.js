@@ -10,7 +10,7 @@ describe('FS utils', function() {
   var expected = [{
     path: 'coverage.html',
     status: 'file'
-  },{
+  }, {
     path: 'fs_utils.js',
     status: 'file'
   }, {

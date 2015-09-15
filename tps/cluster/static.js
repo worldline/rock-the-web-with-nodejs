@@ -5,14 +5,14 @@ var cluster = require('cluster');
 var numCPUs = require('os').cpus().length-1;
 
 if (cluster.isMaster) {
+  cluster.schedulingPolicy = cluster.SCHED_RR;
+
   for (var i = 0; i < numCPUs; i++) {
-    // use an IIFE to avoid scope problems
-    (function(worker) {
-      // wire logging facilities
-      worker.on('message', function(path) {
-        console.log(worker.id + ' processed file ' + path);
-      });
-    })(cluster.fork());
+    var worker = cluster.fork();
+    // wire logging facilities
+    worker.on('message', function(status) {
+      console.log(status.id + ' processed file ' + status.path);
+    });
   }
   cluster.on('online', function(worker) {
     console.log('worker ' + worker.id + '(' + worker.process.pid + ') is online !');
@@ -25,7 +25,7 @@ if (cluster.isMaster) {
   http.createServer(function(req, res){
     var path = parse(req.url).pathname.slice(1);
     // just send request to master for logging
-    process.send(path);
+    process.send({id: cluster.worker.id, path: path});
     fs.createReadStream(path).on('error', function() {
       res.statusCode = 404;
       res.end();
