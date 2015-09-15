@@ -7,7 +7,7 @@
     "mocha": "^2.1.0"
   },
   "scripts": {
-    "test": ".\\node_modules\\.bin\\mocha test"
+    "test": ".\\node_modules\\.bin\\lab -r html -o coverage.html"
   },
   "devDependencies": {
     "lab": "^5.13.0"

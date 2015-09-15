@@ -1,19 +1,26 @@
-// get value from father
-process.on('message', function(n) {
+var compute = function(n) {
   var prime = 2;
   // results
-  var results = [prime];
+  var primes = [prime];
   while (prime < n) {
     prime++;
     // prime is really prime if not dividible per existing primes
     var dividible = false;
-    for (var i = 0; !dividible && i < results.length; i++) {
-      dividible = (prime % results[i]) === 0;
+    for (var i = 0; !dividible && i < primes.length; i++) {
+      dividible = (prime % primes[i]) === 0;
     }
     if (!dividible) {
-      results.push(prime);
+      primes.push(prime);
     }
   }
   // send last results
-  process.send(results.pop());
-}); 
+  console.log('primes : ', primes.length);
+  return primes.pop();
+}
+
+// get value from father
+process.on('message', function(n) {
+  process.send(compute(n));
+});
+
+module.exports = compute;

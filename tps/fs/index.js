@@ -27,5 +27,8 @@ utils.getDirStat('.', function(err, stats) {
   if (err) {
     console.error('unexpected error:', err);
   }
-  console.log('\ngetDirStat(\'.\'):\n', stats);
+  console.log('\ngetDirStat(\'.\'):');
+  stats.forEach(function(stat){
+    console.log(stat);
+  })
 });

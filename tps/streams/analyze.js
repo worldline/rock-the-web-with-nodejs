@@ -6,7 +6,7 @@ if (process.argv.length !== 3) {
 var file = process.argv[2];
 
 var analysis = {
-  nbChunks: 0,
+  readable: 0,
   totalSize: 0,
   nbReads: 0,
   chunkSize: 0
@@ -20,11 +20,12 @@ readable.on('readable', function() {
     analysis.nbReads++;
     analysis.chunkSize = analysis.chunkSize === 0 ? chunk.length : analysis.chunkSize;
   }
-  analysis.nbChunks++;
+  analysis.readable++;
 }).on('error', function(err) {
   console.error('failed to cat file ' + file + ':', err);
 }).on('end', function() {
-  console.log('read ' + analysis.nbChunks + ' chunks (average ' + 
-    analysis.chunkSize + ') in ' + analysis.nbReads + ' reads for ' + 
+  console.log('received ' + analysis.readable + ' events and read ' +
+    analysis.nbReads + ' chunks (average ' +
+    analysis.chunkSize + ') for ' +
     analysis.totalSize + 'o');
 });

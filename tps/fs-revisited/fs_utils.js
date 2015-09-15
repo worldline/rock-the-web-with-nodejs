@@ -1,5 +1,4 @@
 var fs = require('fs');
-var join = require('path').join;
 var resolve = require('path').resolve;
 var async = require('async');
 
@@ -23,7 +22,7 @@ exports.getDirContent = function(path, done) {
     // It will invoke the parameter function on each file, and will replace an array with
     // returned strings
     var result = content.map(function(item) {
-      return resolve(join(path, item));
+      return resolve(path, item);
     });
     // Returns result
     done(null, result);
@@ -48,15 +47,13 @@ exports.getDirStat = function(path, done) {
     if (err) {
       return done(err);
     }
-    // fs.stat take as parmeter item and a callback.
-    // Therefore, It can be directly used as the processing function
-    async.map(content, fs.stat, function(err, stats) {
+    async.map(content, fs.stat, function(err, results) {
       if (err) {
         return done(err);
       }
-      done(null, stats.map(function(stat, i) {
+      done(null, results.map(function(stat, i) {
         return {
-          path: resolve(join(path, content[i])),
+          path: resolve(path, content[i]),
           status: stat.isFile() ? 'file' : stat.isDirectory() ? 'directory' : 'unknown',
           size: stat.size
         }
