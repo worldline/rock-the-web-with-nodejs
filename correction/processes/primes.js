@@ -14,15 +14,16 @@ var display = function() {
   } else {
     process.stdout.write('.');
   }
-  setTimeout(display, 1000);
+  timeout = setTimeout(display, 1000);
 };
+
 // create processing child
-var child = fork('compute', [n]);
-setTimeout(display, 1000);
+var child = fork('compute');
+var timeout = setTimeout(display, 1000);
 // get result and display it
 child.on('message', function(result) {
   console.log('highest prime bellow ' + n + ':', result);
-  process.exit(0);
+  clearTimeout(timeout);
 });
 // send number
 child.send(n);

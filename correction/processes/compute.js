@@ -4,12 +4,12 @@ var compute = function(n) {
   var primes = [prime];
   while (prime < n) {
     prime++;
-    // prime is really prime if not dividible per existing primes
-    var dividible = false;
-    for (var i = 0; !dividible && i < primes.length; i++) {
-      dividible = (prime % primes[i]) === 0;
+    // prime is really prime if not divisible per existing primes
+    var divisible = false;
+    for (var i = 0; !divisible && i < primes.length; i++) {
+      divisible = (prime % primes[i]) === 0;
     }
-    if (!dividible) {
+    if (!divisible) {
       primes.push(prime);
     }
   }
@@ -21,6 +21,7 @@ var compute = function(n) {
 // get value from father
 process.on('message', function(n) {
   process.send(compute(n));
+  process.exit(0);
 });
 
 module.exports = compute;

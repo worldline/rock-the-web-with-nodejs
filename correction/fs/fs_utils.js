@@ -1,5 +1,4 @@
 var fs = require('fs');
-var join = require('path').join;
 var resolve = require('path').resolve;
 
 /**
@@ -22,7 +21,7 @@ exports.getDirContent = function(path, done) {
     // It will invoke the parameter function on each file, and will replace an array with
     // returned strings
     var result = content.map(function(item) {
-      return resolve(join(path, item));
+      return resolve(path, item);
     });
     // Returns result
     done(null, result);
@@ -63,7 +62,7 @@ exports.getDirStat = function(path, done) {
         }
         // Make details for that item: order in results will differ from content
         results.push({
-          path: join(path, item),
+          path: resolve(path, item),
           status: stat.isFile() ? 'file' : stat.isDirectory() ? 'directory' : 'unknown',
           size: stat.size
         });

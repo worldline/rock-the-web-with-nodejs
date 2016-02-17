@@ -1,0 +1,8 @@
+#! /usr/bin/env node
+
+require('../server').start(function(err) {
+  if (err) {
+    return console.error('Failed to start server: ', err);
+  }
+  console.log('server started');
+});

@@ -121,7 +121,7 @@ package.json
   <section data-timing="5">
     <h1>Déclarer ses dépendances</h1>
     <ul class="steps">
-      <li>Dépendance = nom du package + containte de version</li>
+      <li>Dépendance = nom du package + contrainte de version</li>
       <li><code>x.y.z</code> : exactement la version</li>
       <li><code>^x.y.z</code> : la version x la plus haute (y.z au minimum)</li>
       <li>l'<strong>url</strong> d'un dépôt git : <code>git://github.com/user/project.git#commit</code></li>
@@ -661,9 +661,9 @@ exports.register.attributes = {
   // err est la première erreur renvoyée
   // results est le tableau (ordonné) des résultats intermédiaires
 });</code></pre></li>
-      <li class="step">Tous les traitement sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
+      <li class="step">Tous les traitements sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
       <li class="step">Le callback de fin est déclenché... à la fin</li>
-      <li class="step">Le premièr échec déclenche le callback de fin, et ignore les résultats en cours</li>
+      <li class="step">Le premier échec déclenche le callback de fin, et ignore les résultats en cours</li>
     </ul>
     <details open>
       <summary/>

@@ -1,14 +1,21 @@
 {
   "name": "hapi-server",
   "version": "1.0.0",
+  "bin": {
+    "hapi-server": "./bin/server"
+  },
+  "scripts": {
+    "test": "lab test -v"
+  },
   "dependencies": {
-    "boom": "^2.8.0",
-    "handlebars": "^3.0.3",
-    "hapi": "^8.8.0",
-    "joi": "^6.5.0"
+    "handlebars": "^4.0.2",
+    "hapi": "^10.0.0",
+    "joi": "^6.7.1",
+    "vision": "^3.0.0"
   },
   "devDependencies": {
-    "chai": "^3.0.0",
-    "lab": "^5.13.0"
+    "chai": "^3.2.0",
+    "lab": "^5.17.0",
+    "request": "^2.62.0"
   }
 }

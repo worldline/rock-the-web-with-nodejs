@@ -47,11 +47,9 @@ exports.getDirStat = function(path, done) {
     if (err) {
       return done(err);
     }
+
     async.map(content, fs.stat, function(err, results) {
-      if (err) {
-        return done(err);
-      }
-      done(null, results.map(function(stat, i) {
+      done(err, !err && results.map(function(stat, i) {
         return {
           path: resolve(path, content[i]),
           status: stat.isFile() ? 'file' : stat.isDirectory() ? 'directory' : 'unknown',

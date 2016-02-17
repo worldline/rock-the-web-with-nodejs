@@ -1,6 +1,7 @@
 var lab = exports.lab = require('lab').script();
 var expect = require('chai').expect;
 var server = require('../server');
+var request = require('request');
 
 var describe = lab.describe;
 var it = lab.it;
@@ -37,10 +38,14 @@ describe('Hapi server', function() {
       });
 
       it('should fail on too short name', function(done) {
-        server.inject('/hello/jo', function(response) {
+        request.get({
+          url: 'http://localhost:3000/hello/jo',
+          json: true
+        }, function(err, response, body) {
+          expect(err).not.to.exist;
           expect(response).to.have.property('statusCode').that.equals(400);
           expect(response).to.have.deep.property('headers.content-type').that.includes('application/json');
-          expect(response.result).to.have.property('message').that.includes('be at least 3 characters');
+          expect(body).to.have.property('message').that.includes('be at least 3 characters');
           done();
         });
       });
@@ -70,8 +75,7 @@ describe('Hapi server', function() {
   });
 
   afterEach(function(done) {
-    server.stop();
-    done();
+    server.stop(done);
   });
 
 });
