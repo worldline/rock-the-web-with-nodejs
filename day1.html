@@ -508,7 +508,7 @@ basket['apples'] = 2;</code></pre><span class="hints"><span class="step">Utilise
   <section data-timing="5">
     <h1>Awful parts: autres...</h1>
     <ul>
-      <li class="step">Egalité vs Identité<pre><code class="javascript">var a = 10, b = Number(10);
+      <li class="step">Egalité vs Identité<pre><code class="javascript">var a = 10, b = new Number(10);
 a == b; // true : cast, ou type coercion
 a === b; // false : identité</code></pre><span class="hints"><span class="step">Toujours <strong>===</strong></span></span></li>
       <li class="step">Valeurs <strong>falsy</strong><pre><code class="javascript">false == 0 == '' == NaN == null == undefined == Boolean('') === false</code></pre><span class="hints"><span class="step">Linter !</span></span></li>
@@ -749,7 +749,7 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     <ol class="steps hands-on">
       <li>Créez un module <strong>tps/fs/fs_utils.js</strong> qui exporte une fonction <strong>getDirContent()</strong>.</li>
       <li><strong>getDirContent()</strong> accepte 2 paramètres : le chemin du dossier, et une fonction callback.</li>
-      <li>Lorsque vous aurez lu le dossier, invoquez le callback avec 2 paramètres : une erreur et le tableau contenant les noms des fichiers/sous-dossiers.
+      <li>Lorsque vous aurez lu le dossier, invoquez le callback avec 2 paramètres : une erreur et le tableau contenant les chemin absolus des fichiers/sous-dossiers.
       Si le chemin est un dossier valide, le paramètre erreur doit être <code>null</code>.</li>
       <li>Testez votre fonction sur un fichier, un dossier invalide et un valide.</li>
       <li>Ajouter une fonction <strong>getDirStat()</strong> qui fonctionne comme <strong>getDirContent()</strong>, mais renvoi pour chaque fichier/sous-dossier : le chemin, le statut (file, directory) et la taille.</li>

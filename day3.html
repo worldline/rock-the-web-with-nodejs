@@ -84,7 +84,7 @@ package.json
       <li>Descripteur du projet<pre><code class="json">{
   "name": "nom-du-projet",
   "version": "0.3.1",
-  "description": "Elle sera publiée",,
+  "description": "Elle sera publiée",
   "author": "You <you@yopmail.com>",
   "license": "MIT",
   "repository": "https://github.com/you/nom-du-projet.git",
@@ -121,7 +121,7 @@ package.json
   <section data-timing="5">
     <h1>Déclarer ses dépendances</h1>
     <ul class="steps">
-      <li>Dépendance = nom du package + containte de version</li>
+      <li>Dépendance = nom du package + contrainte de version</li>
       <li><code>x.y.z</code> : exactement la version</li>
       <li><code>^x.y.z</code> : la version x la plus haute (y.z au minimum)</li>
       <li>l'<strong>url</strong> d'un dépôt git : <code>git://github.com/user/project.git#commit</code></li>
@@ -415,7 +415,7 @@ request('http://www.google.com', function (err, response, body) {
   </section>
 
   <section data-timing="10">
-    <h1>Streaming et forumulaires</h1>
+    <h1>Streaming et formulaires</h1>
     <ul class="steps">
       <li><code>request</code>/<code>request.get</code> renvoient un <strong>ReadableStream</strong>: <pre><code class="javascript">request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'));</code></pre></li>
       <li>Pour <code>request.post</code>/<code>request.put</code>, un <strong>WritableSteam</strong>: <pre><code class="javascript">fs.createReadStream('file.json').pipe(request.put('http://mysite.com/obj.json'));</code></pre></li>
@@ -436,9 +436,15 @@ formData: {
     </details>
   </section>
 
-  <section data-timing="30">
-    <h1>TODO mise en oeuvre request</h1>
+  <section data-timing="10">
+    <h1>La librairie <i>request<i></h1>
     <ol class="steps hands-on">
+      <li>Créer un nouveau fichier <strong>tps/request/request.js</strong> qui appelle l'API <a href="http://api.icndb.com/jokes/random">http://api.icndb.com/jokes/random</a> et logguer la joke retournée.
+        <ol>
+          <li class="warning">Attention au proxy</li>
+        </ol>
+      </li>
+      <li>Modifier la requête pour remplacer le prénom de la fact par votre prénom (voir la doc de l'API : <a href="http://www.icndb.com/api/">http://www.icndb.com/api/</a>)
     </ol>
     <details open>
       <summary/>
@@ -661,9 +667,9 @@ exports.register.attributes = {
   // err est la première erreur renvoyée
   // results est le tableau (ordonné) des résultats intermédiaires
 });</code></pre></li>
-      <li class="step">Tous les traitement sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
+      <li class="step">Tous les traitements sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
       <li class="step">Le callback de fin est déclenché... à la fin</li>
-      <li class="step">Le premièr échec déclenche le callback de fin, et ignore les résultats en cours</li>
+      <li class="step">Le premier échec déclenche le callback de fin, et ignore les résultats en cours</li>
     </ul>
     <details open>
       <summary/>
