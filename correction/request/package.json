@@ -1,0 +1,9 @@
+{
+  "name": "chuck-request",
+  "version": "1.0.0",
+  "main": "request.js",
+  "dependencies": {
+    "request": "^2.72.0"
+  },
+  "devDependencies": {}
+}

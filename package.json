@@ -13,7 +13,7 @@
   "version": "2.0.0",
   "description": "A node.js introduction training to rock your daily developper life !",
   "scripts": {
-    "postinstall": "bower install && grunt dist"
+    "postinstall": "bower install --allow-root && grunt dist"
   },
   "devDependencies": {
     "bower": "^1.5.2",
