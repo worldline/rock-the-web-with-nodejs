@@ -1,16 +1,10 @@
 var fs_utils = require('../fs_utils');
 var expect = require('chai').expect;
 var path = require('path');
-var lab = exports.lab = require('lab').script();
-var describe = lab.describe;
-var it = lab.it;
 
 describe('FS utils', function() {
 
   var expected = [{
-    path: 'coverage.html',
-    status: 'file'
-  }, {
     path: 'fs_utils.js',
     status: 'file'
   }, {

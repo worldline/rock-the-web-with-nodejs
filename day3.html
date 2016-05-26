@@ -96,7 +96,7 @@ package.json
     "start-project": "./bin/start"
   },
   "scripts": {
-    "test": "lab test"
+    "test": "mocha test"
   },
   "engines": {"node": ">=0.10.3"}
 }
@@ -186,76 +186,54 @@ package.json
     <img class="bg" src="images/mocha.jpg">
     <h1>Behaviour Driven Development !</h1>
   </section>
-
-  <section data-timing="10">
-    <h1><a href="https://github.com/hapijs/lab" target="_blank">Lab</a> : le test runner</h1>
+  
+  <section>
+    <h1><a href="http://mochajs.org">Mocha</a> : le test runner</h1>
     <ul class="steps">
-      <li class="no-bullet"><pre><code class="javascript">var assert = require('assert');
-var lab = exports.lab = require('lab').script();
-// describe est un fonction qui définit un "groupe" de tests
-lab.describe('Array#indexOf', function() {
-
-  // it est une fonction qui définit un test
-  lab.it('should return -1 when the value is not present', function(done){
+      <li>Dans un fichier test/my-lib.js<pre><code class="javascript">var assert = require('assert')
+// describe est une fonction qui définit un "groupe" de tests
+describe('Array#indexOf', function() {
+  // it est une fonction qui définit un test (pas d'inclusion)
+  it('should return -1 when the value is not present', function(){
+    // contenu du test : si le test lance une exception, il échoue
     assert.equal(-1, [1,2,3].indexOf(5));
     assert.equal(-1, [1,2,3].indexOf(0));
-    done(); // si une exception est levée avant done(), le test échoue
-  });
+  })
 
-  lab.it('should return index when the value is present', function(done){
+  it('should return index when the value is present', function(){
     assert.equal(2, [1,2,3].indexOf(3));
     assert.equal(0, [1,2,3].indexOf(1));
-    done(); // si done() est invoquée (sans erreur), le test est réussit
-  });
-});</code></pre></li>
-      <li>En ligne de commande : <code>lab test/array.js -v</code></li>
+    // s'il arrive à la fin, il réussit
+  })
+})</code></pre></li>
+      <li>En ligne de commande : <code>mocha test</code></li>
     </ul>
     <details open>
       <summary/>
-      <p>Il est fréquent de définir des variable pour <code>describe()</code> et <code>it()</code> pour éviter le préfix <code>lab.</code></p>
-      <p><strong>Lab</strong> propose l'interface BDD (par défaut), celle de l'exemple. Il propose aussi l'interface TDD, où <code>describe()</code> = <code>experiment()</code> et <code>it()</code> = <code>test()</code></p>
-      <div>Il y a 2 phases lors de l'exécution des tests :
-      <ol>
-        <li>invocation des fonctions des <code>describe</code> pour avoir la liste des <code>it()</code> (déclaration des tests)</li>
-        <li>invocation séquentielle des fonctions des <code>it()</code> (réalisation des tests)</li>
-      </ol></div>
-      <p><code>assert</code> est un module NodeJS que nous n'utiliserons pas à cause de ses faibles capacités de reporting</p>
+      <p><code>describe()</code> et <code>it()</code> sont des fonctions globales, définies par <strong>mocha</strong>. Il en existe d'autre que nous verrons plus loins</p>
+      <p><strong>Mocha</strong> propose l'interface BDD (par défaut), celle de l'exemple. Il propose aussi l'interface TDD, où <code>describe()</code> = <code>suite()</code> et <code>it()</code> = <code>test()</code></p>
+      <p>Nous verrons plus loin en quoi l'interface TDD est moins intéressante</p>
+      <p>Mocha fonctionne en 2 phases : la détection des tests : <ol>
+        <li>il exécute tous les contenus de <code>describe</code> pour avoir la liste des <code>it()</code></li>
+        <li>il exécute les <code>it()</code> un à un</li></ol></p>
+      <p><code>assert</code> est un module NodeJS que nous n'utiliseront pas à cause de ses faibles capacités de reporting</p>
+      <p><strong>Mocha</strong> est totallement décoréllé de NodeJS, et s'utilise très bien dans un navigateur</p>
+      <p>Il existe différents reporters, essayer le reporter <a href="https://www.youtube.com/watch?v=QH2-TGUlwu4">nyan !</a></p>
     </details>
+    <div class="timing" data-duration>10</div>
   </section>
 
-  <section data-timing="5">
-    <h1>Lab ou <a href="http://mochajs.org/" target="_blank">Mocha</a> ?</h1>
-    <ul class="steps">
-      <li>Fonctionnement général et fonctions similaires</li>
-      <li>Mocha a pour principaux avantages :<ol>
-        <li>De fonctionner sur un navigateur</li>
-        <li>D'être plus synthétique</li>
-        <li>D'avoir plein de jolis reporters</li>
-      </ol></li>
-      <li>Lab a pour principaux avantages :<ol>
-        <li>D'exécuter un linter et une couverture de test</li>
-        <li>D'utiliser les domaines pour récupérer les erreurs</li>
-        <li>De pouvoir lancer les tests en parallèle</li>
-      </ol></li>
-    </ul>
-    <details open>
-      <summary/>
-      <p>Mocha utilise des variables globales pour <code>describe()</code>, <code>it()</code>..., une syntaxe raccourcie pour <strong>skip</strong> et <strong>only</strong>, et le callback <strong>done</strong> est facultatif.</p>
-      <p><a href="https://github.com/gotwarlost/istanbul" target="_blank">Istanbul</a> est un bon outil de couverture de code utilisable avec Mocha.</p>
-      <p>Si votre projet requiert du code JS coté server et client, mocha est un bon choix pour harmoniser les tests des deux cotés.</p>
-      <p>Si votre projet utilise <a href="http://hapijs.com/" target="_blank">Hapi</a>, Lab est plus approprié car il gère mieux les éventuelles erreurs.</p>
-    </details>
-  </section>
+
 
   <section data-timing="5">
     <h1><a href="http://chaijs.com/" target="_blank">Chai</a> : les assertions</h1>
     <ul class="steps">
-      <li class="no-bullet"><pre><code class="javascript">var lab = exports.lab = require('lab').script();
+      <li class="no-bullet"><pre><code class="javascript">
 // notez l'inclusion de chai
 var expect = require('chai').expect;
 
-lab.describe('Array#indexOf', function() {
-  lab.it('should return -1 when the value is not present', function(done){
+describe('Array#indexOf', function() {
+  it('should return -1 when the value is not present', function(done){
     var array = [1, 2, 3];
 
     // permet de faire la même chose...
@@ -272,7 +250,7 @@ lab.describe('Array#indexOf', function() {
     </ul>
     <details open>
       <summary/>
-      <p>La combinaison <strong>Lab mode BDD</strong> + <strong>Chai mode expect</strong> donne suffisamment de lisibilité au code pour qu'il reflète des spécifications fonctionnelles ! Vous n'aurez plus besoin de documenter vos assertions et vos cas de tests, car ils doivent être suffisamment parlants</p>
+      <p>La combinaison <strong>Mocha mode BDD</strong> + <strong>Chai mode expect</strong> donne suffisamment de lisibilité au code pour qu'il reflète des spécifications fonctionnelles ! Vous n'aurez plus besoin de documenter vos assertions et vos cas de tests, car ils doivent être suffisamment parlants</p>
       <p>Tout comme <strong>Mocha</strong>, <strong>Chai</strong> est totalement décorrélé de NodeJS, et s'utilise très bien dans un navigateur, il a malgré tout une API inconsistante</p>
       <p>Le style d'assertion <strong>should</strong> est mal supporté sur IE car il instrumente les objets testés</p>
       <p>Le style d'assertion <strong>assert</strong> est vraiment trop has-been :)</p>
@@ -309,15 +287,15 @@ lab.describe('Array#indexOf', function() {
   <section data-timing="5">
     <h1><i>hooks</i> et exclusions</h1>
     <ul class="steps">
-      <li>A l'intérieur d'un <code>describe()</code> : <pre><code class="javascript">lab.describe('Array', function() {
+      <li>A l'intérieur d'un <code>describe()</code> : <pre><code class="javascript">describe('Array', function() {
   var array = []
 
-  lab.beforeEach(function(done) { // before(), after(), afterEach()
+  beforeEach(function(done) { // before(), after(), afterEach()
     array = [1, 2, 3];
     done();
   });
 
-  lab.it('should splice() remove elements', {skip: true}, function(done){
+  it('should splice() remove elements', {skip: true}, function(done){
     expect(array.splice(1, 1)).to.deep.equals([1, 3]);
     done();
   })
@@ -346,18 +324,17 @@ lab.describe('Array#indexOf', function() {
     <h1>Tests en actions</h1>
     <ol class="steps hands-on">
       <li>Vous allez tester le module <strong>tp/fs/fs_utils.js</strong>. Dans <strong>tp/fs</strong> utilisez <code>npm init</code> pour générer un descripteur <strong>package.json</strong></li>
-      <li>Toujours dans <strong>tp/fs</strong>, installez <strong>lab</strong> et <strong>chai</strong>: <code>npm install --save-dev lab chai</code></li>
+      <li>Toujours dans <strong>tp/fs</strong>, installez <strong>mocha</strong> et <strong>chai</strong>: <code>npm
+          install --save-dev mocha chai</code></li>
       <li>Dans un module <strong>tp/fs/test/fs_utils.js</strong> réalisez les tests suivants :<ol>
         <li>FS utils getDirContent should return current folder content with absolute paths</li>
         <li>FS utils getDirContent should fail when reading an unknown folder</li>
         <li>FS utils getDirStat should return alphabetically ordered current folder</li>
         <li>FS utils getDirStat should fail when reading an unknown folder</li>
-      </ol>avec une couverture de test de plus de 90%</li>
-      <li>Lancement avec <code>lab -r html -o coverage.html</code> pour voir la couverture</li>
     </ol>
     <details open>
       <summary/>
-      <p>Il est plus pratique d'installer <strong>lab</strong> de manière globale avec <code>npm install -g lab</code> dans le contexte de cet exercice, sinon on le mettra en devDependencies du projet</p>
+      <p>Il est plus pratique d'installer <strong>mocha</strong> de manière globale avec <code>npm install -g mocha </code> dans le contexte de cet exercice, sinon on le mettra en devDependencies du projet</p>
     </details>
   </section>
 
@@ -763,7 +740,7 @@ exports.register.attributes = {
     <h1>Récap du troisième jour</h1>
     <ul class="steps">
       <li class="no-bullet"><i class="fa fa-fw fa-archive"></i>Node Package Manager</li>
-      <li class="no-bullet"><i class="fa fa-fw fa-recycle"></i>TDD avec Lab et Chai</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-recycle"></i>TDD avec Mocha et Chai</li>
       <li class="no-bullet"><i class="fa fa-fw fa-fighter-jet"></i>Client évolué avec Request</li>
       <li class="no-bullet"><i class="fa fa-fw fa-space-shuttle"></i>Serveur évolué avec Hapi</li>
       <li class="no-bullet"><i class="fa fa-fw fa-phone"></i>Algorithmie asynchrone avec Async</li>
