@@ -33,7 +33,7 @@ Discover the power of NodeJS !
     - Declare external dependencies
     - The public registry and the CLI
 - Behaviour Driven Development
-    - The Lab test runner
+    - The Mocha test runner
     - The assertion library Chai
 - Request, a powerfull Http client
 - The Hapi Web framework
