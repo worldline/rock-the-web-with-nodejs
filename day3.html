@@ -361,6 +361,7 @@ lab.describe('Array#indexOf', function() {
     </details>
   </section>
 
+  <!-- Request -->
   <section class="title">
     <div class="bg">
       <img src="images/request.jpg">
@@ -459,161 +460,150 @@ formData: {
       <summary>Pause</summary>
     </details>
   </section>
-
-  <section id="hapi" class="title">
+  
+  <!-- express -->
+  <section id="express" class="title">
     <div class="bg">
-      <img src="images/happy.jpg">
+      <img src="images/express.jpg">
     </div>
-    <h1>Le framework Web Hapi</h1>
+    <h1>La librairie <a href="http://expressjs.com">express</a></h1>
   </section>
 
-  <section id="hapi-intro" data-timing="10">
-    <h1><a href="http://hapijs.com" target="_blank"><img src="images/hapi-logo.png"><img src="images/hapi.png"></a></h1>
+  <section id="express-intro" data-timing="10">
+    <h1><a href="http://expressjs.com">express</a></a></h1>
     <ul>
-      <li class="step">Surcharge de http.Server avec les améliorations :
+      <li class="step">Utilisation de http.Server avec les améliorations suivantes :
       <ol>
         <li class="step">Routage des url par chemin et verbe HTTP</li>
-        <li class="step">Validation de la requête et outillage de la réponse</li>
+        <li class="step">Parsage des paramètres d'entrée</li>
+        <li class="step">Gestion des fichiers statiques</li>
         <li class="step">Templating HTML</li>
-        <li class="step">Mécanisme de plugins</li>
+        <li class="step">Et c'est tout !</li>
       </ol>
       </li>
-      <li class="step">Structure les développements du serveur</li>
-      <li class="step">Philosophie différente des middleware d'<a href="http://expressjs.com/" target="_blank">Express</a></li>
-      <li class="step">Projet initié par Walmart, maintenant communautaire</li>
+      <li class="step">Mécanisme de middlewares pour ajouter des fonctionnalités</li>
     </ul>
     <details open>
       <summary/>
       <p>Le <strong>router</strong> permet d'associer un traitement spécifique (une fonction) à une url et un verbe bien particulier.</p>
-      <p>La requête d'entrée est parsée (JSON, multi-part) et éventuellement validée avec <strong>Joi</strong>.</p>
-      <p>La constitution des réponses (en-têtes, cache HTTP...) est facilitée, et des fonction existent pour le contenu statique (fichier, dossiers).</p>
-      <p>Le mécanisme des vues permet d'utiliser des templates handlebars (par exemple) pour constituer la réponse avec des placeholders.</p>
-      <p>Le mécanisme de plugin permet d'augmenter son serveur en lui ajoutant des capacités particulières (authentification, logging, partage de session...)</p>
-      <p>Contrairement à <strong>Express</strong> qui se veut simple et maléable, <strong>Hapi</strong> propose une structure bien définie pour aider les équipes volumineuses à développer des serveurs applicatifs importants.</p>
+      <p>La requête d'entrée est parsée (JSON) et éventuellement validée avec un middleware.</p>
+      <p>La constitution des réponses (en-têtes, cache HTTP...) est facilitée, et des middlewares existent pour le contenu statique (fichier, dossiers).</p>
+      <p>Le mécanisme de templating permet d'utiliser des templates handlebars (par exemple) pour constituer la réponse avec des placeholders.</p>
+      <p>Une librairie volontairement simple et réduite en terme de fonctionnalité, mais les middlewares permettent d'ajouter des fonctionnalités (gzip, authent...)</p>
+      <p>La structure en middlewares rend son utilisation simple à comprendre et facile à faire évoluer</p>
     </details>
   </section>
 
   <section data-timing="5">
     <h1>Anatomie du serveur</h1>
     <ul class="steps">
-      <li class="no-bullet"><pre><code class="javascript">var Hapi = require('hapi');
-var server = new Hapi.Server();
-server.connection({ port: 3000 });
+      <li class="no-bullet"><pre><code class="javascript">var express = require('express');
+var app = express();
 
-server.route({
-  method: 'GET',
-  path: '/hello/{user}',
-  handler: function (request, reply) {
-    reply('Hello ' + encodeURIComponent(request.params.user) + '!');
-  }
+app.get('/:name', function (req, res) {
+  res.send('Hello ' + req.params.name);
 });
 
-server.start();</code></pre></li>
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});</code></pre></li>
       <li>Les routes peuvent contenir des paramètres</li>
-      <li><code>request</code> contient la requête parsée</li>
-      <li><code>reply()</code> est une factory pour constituer la réponse</li>
+      <li><code>req</code> étend http.IncomingMessage</li>
+      <li><code>res</code> étend http.ServerResponse</li>
     </ul>
     <details open>
       <summary/>
-      <p>Les paramètres de chemins peuvent être facultatif (suffixé par <code>?</code>) ou en plusieurs parties (<code>{user*2}</code> matchera <code>john/doe</code>).</p>
-      <p><code>request</code> encapsule l'objet <a href="https://nodejs.org/api/http.html#http_http_incomingmessage" target="_blank"><code>IncomingMessage</code></a> de Node, et propose ses propres <a href="http://hapijs.com/api#request-object" target="_blank">propriétés</a> comme les paramètres de requêtes extraits (<code>query</code>), le corps de la requête parsé (<code>payload</code>)</p>
-      <p><code>reply()</code> renvoit un objet <a href="http://hapijs.com/api#response-object" target="_blank">réponse</a> permettant de modifier les entêtes de réponse (<code>header()</code>, <code>type()</code>, <code>etag()</code>, <code>charset()</code>, <code>encoding()</code>, <code>ttl()</code>), le code HTTP (<code>code()</code>), les cookies (<code>state()</code>), les redirections...</p>
+      <p>Les paramètres de chemins peuvent être facultatif (suffixé par <code>?</code>).</p>
+      <p><code>req</code> encapsule l'objet <a href="https://nodejs.org/api/http.html#http_http_incomingmessage" target="_blank"><code>IncomingMessage</code></a> de Node, et propose ses propres <a href="http://expressjs.com/en/4x/api.html#req" target="_blank">propriétés</a> comme les paramètres de requêtes extraits (<code>query</code>), le corps de la requête parsé (<code>body</code>)</p>
+      <p><code>resp</code> est un objet <a href="http://expressjs.com/en/4x/api.html#res" target="_blank">réponse</a> permettant de modifier les entêtes de réponse (<code>header()</code>, <code>type()</code>, le code HTTP (<code>status()</code>), les cookies (<code>cookie()</code>), les redirections...</p>
     </details>
   </section>
 
-  <section data-timing="5">
-    <h1>Validation des paramètes</h1>
-    <ul class="steps">
-      <li>Se repose sur le module externe <a href="https://github.com/hapijs/joi" target="_blank">Joi</a>:<pre><code class="javascript">var Joi = require('joi');
-
-server.route({
-  method: 'GET',
-  path: '/hello/{user}',
-  handler: function (request, reply) {
-    reply('Hello ' + encodeURIComponent(request.params.user) + '!');
-  },
-  config: {
-    validate: { params: { user: Joi.string().min(3).max(10) } }
-  }
-});</code></pre></li>
-      <li>Contrôle les paramètres de chemin (<code>params</code>), ceux de requête (<code>query</code>), les entêtes (<code>headers</code>) et le corps (<code>payload</code>)</li>
-      <li>Réponses intelligibles avec un code de retour 400</li>
-    </ul>
-    <details open>
-      <summary/>
-      <p><strong>Joi</strong> est un validateur puissant permettant de tester des chaînes, nombres, booléens, tableaux, objets... avec des validation très poussées.</p>
-      <p>Les utilitaires proposés par <a href="" target="_blank">Boom</a> sont également très utiles pour la génération de page d'erreurs intelligibles.</p>
-    </details>
-  </section>
 
   <section data-timing="5">
-    <h1>Architecture de plugins</h1>
+    <h1>Les middlewares</h1>
     <ul class="steps">
-      <li>Les plugins permettent de déporter vos routes</li>
-      <li>Un plugin doit exporter une fonction <code>register</code> : <pre><code class="javascript">exports.register = function(server, options, next) {
-  // Manipulation du serveur: par exemple ajout de routes.
-  // Lorsque les manipulations sont terminées, appel de next()
+      <li>Liste de fonctions à exécuter pour chaque requête, dans l'ordre où elles sont définies</li>
+      <li>Par exemple:<pre><code class="javascript">function(req, res, next) {
   next();
-};
-
-exports.register.attributes = {
-  name: 'plugin-name',
-  version: '1.0.0' // facultatif
-};</code></pre></li>
-      <li>Lors de son chargement, les routes d'un plugin pourront être préfixées</li>
+};</code></pre>
+      </li>
+      <li>Un middleware peut:
+        <ul>
+          <li>modifier la requête ou la réponse</li>
+          <li>répondre immédiatement au client et stopper le traitement de la requête</li>
+          <li>émettre une erreur</li>
+        </ul>
+      </li>
+      <li class="step">Plein de middlewares ! <a href="http://expressjs.com/en/resources/middleware.html">http://expressjs.com/en/resources/middleware.html</a></li>
     </ul>
     <details open>
       <summary/>
-      <p>L'organisation en plugin est à la base de la structuration des applications avec Hapi.</p>
-      <p>Le plugin peut être un simple fichier, un dossier avec fichier <strong>index.js</strong> et <strong>package.json</strong>, un module externe complet.</p>
-      <p>Le premire paramètre de <code>register</code> est l'instance du serveur lui même, le second est un objet d'options totalement libre, le troisième est une fonction à invoquer lorsque le plugin est chargé, avec une éventuelle erreur en paramètre s'il y a eu un problème.</p>
+      <p><strong>next()</strong> n'est pas obligatoire</p>
+      <p>manipuler les variables <strong>req</strong> et <strong>res</strong></p>
+      <p>Appeler <strong>res.end()</strong> ou <strong>res.send()</strong> pour mettre fin au traitement</p>
+      <p>Appeler <strong>next()</strong> pour passer au middleware suivant, ou <strong>next(err)</strong> pour passer au middleware d'erreur</p>
     </details>
   </section>
 
-  <section data-timing="10">
-    <h1>Les principaux plugins</h1>
+  <section data-timing="5">
+    <h1>Le middleware d'erreur</h1>
     <ul class="steps">
-      <li>Les plugins se chargent dans le serveur:<pre><code class="javascript">server.register([{
-  register: require('myplugin'),
-  options: {}
-}], function (err) {
-  // plugins chargés
-});</code></pre></li>
-      <li>Logging des requêtes avec <a href="https://github.com/hapijs/good" target="_blank">Good</a></li>
-      <li>Websocket avec <a href="https://github.com/sibartlett/hapi-io" target="_blank">Hapi-io</a></li>
-      <li>Authentification externe avec <a href="https://github.com/hapijs/bell" target="_blank">Bell</a> et <a href="https://www.npmjs.com/package/hapi-oauth2orize" target="_blank">Hapi-oauth2orize</a></li>
-      <li>Documentation des API avec <a href="https://github.com/hapijs/lout" target="_blank">Lout</a> et <a href="https://github.com/z0mt3c/hapi-swaggered" target="_blank">Swaggered</a></li>
+      <li>appelé en cas d'erreur (appel à <strong>next()</strong> avec une erreur en paramètre)</li>
+      <li>par exemple:<pre><code class="javascript">function(err,req, res, next) {
+  res.status(500).send('an error occured');
+};</code></pre>
+      </li>
+      <li class="warning">le paramètre <strong>next</strong> est obligatoire (même s'il n'est pas utilisé)</li>
     </ul>
     <details open>
       <summary/>
-      <p>Il y a plus de 75 plugins sur la <a href="http://hapijs.com/plugins" target="_blank">page officielle du site d'Hapi</a>, sans compter les nombreux autres disponibles directement sur NPM.</p>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Utilisation d'un middleware</h1>
+    <ul class="steps">
+      <li>app.use([path,] function [, function...]):<pre><code class="javascript">app.use(function(req, res, next) {
+  console.log('start request %s %s', req.method, req.originalUrl);
+  next();
+});</code></pre></li>
+      <li>app.get(path, function [, function...]):<pre><code class="javascript">app.get('/hello', function(req, res, next) {
+  res.send('Hello world!')
+});</code></pre></li>
+      <li>existe pour toutes les methodes: post(), put()...</li>
+    </ul>
+    <details open>
+      <summary/>
+      <p>Le path est optionnel pour use(), plusieurs middlewares peuvent être passés en paramètre</p>
     </details>
   </section>
 
   <section data-timing="45">
-    <h1>Hapi server !</h1>
+    <h1>Express !</h1>
     <ol class="hands-on">
-      <li class="step">Créez un serveur Hapi dans un module <strong>tps/hapi-server/server.js</strong>.</li>
-      <li class="step">Créez un module de test avec dans <strong>tps/hapi-server/test/server.js</strong>. Ce module doit importer le serveur du fichier éponyme et tester :<ol>
-      <li class="step"><strong>Hapi server should be started</strong> > vérifiez que le serveur démarre et renvoi une 404 sur n'importe quelle url</li>
-      <li class="step"><strong>Hapi server hello API should say hello John</strong> > le serveur renvoi le text 'Hi JohnX !' à l'url GET '/hello/JohnX' X étant un nombre aléatoire</li>
-      <li class="step"><strong>Hapi server hello API should fail on too short name</strong> > renvoi un code 400 avec une erreur intelligible si le nom n'a pas entre 3 et 10 caractères</li>
-      <li class="step"><strong>Hapi server hello view should render xml content</strong> > réponse <code>&lt;msg&gt;Hello JohnX&lt;/msg&gt;</code>  pour l'url si le header 'accept' contient 'xml'</li>
-      </ol></li>
-      <li class="bonus step">Transformez votre API en un plugin <strong>tps/hapi-server/routes/hello.js</strong></li>
+      <li class="step">Créez un serveur express dans un module <strong>tps/express/server.js</strong>.</li>
+      <li class="step">Ajouter les fonctionnalités suivantes avec les tests associés (dans un fichier tps/express/test/server.js)
+        <ol>
+          <li class="step">Le serveur démarre et renvoit une 404 sur n'importe quelle url</li>
+          <li class="step">Le serveur répond 'Hello XXX' quand on appel l'URL '/hello/XXX', l'utilisateur pouvant remplacer XXX par le prénom de son choix</li>
+          <li class="step">Le serveur répond une erreur 400 si le prénom passé en paramètre fait moins de 3 caractères. La réponse sera en JSON et le message d'erreur sera dans une propriété 'message'</li>
+          <li class="step">Logguer toutes les requêtes en utilisant <a href="https://www.npmjs.com/package/morgan">morgan</a> (pas de test à faire)</li>
+        </ol>
+      </li>
+      <li class="step">Bonus: Utiliser un moteur de template pour que l'URL '/hello/XXX' retourne une page au format HTML</li>
     </ol>
     <details open>
       <summary/>
       <p>Pour créez rapidement son fichier <strong>package.json</strong> : <code>> npm init</code>.</p>
       <p>Ajouter rapidement des modules externes : <code>> npm install --save(-dev) moduleA moduleB</code>.</p>
       <p>Le fichier source doit exporter le serveur sans le démarrer : c'est le test qui appelera <code>start()</code> et <code>stop()</code>.</p>
-      <p>Pour invoquer une url du serveur depuis les tests, utilisez la méthode <a href="http://hapijs.com/api#serverinjectoptions-callback" target="_blank"><code>server.inject(path, function(resp) {...});</code></a>.</p>
-      <p>Pensez a tester les codes de retour HTTP, et les entêtes importants. La réponse parsée est disponible depuis le test avec <code>resp.result</code>.</p>
-      <p>Faites la validation avec Joi, et pour le fichier xml, utiliser un template <a href="http://handlebarsjs.com/" target="_blank">handlebars</a>.</p>
-      <p>Le principe d'adapter le format de réponse du serveur en fonction de ce que demande la requête client s'appelle <strong>la négociation de contenu (content negociation)</strong></p>
+      <p>Pour invoquer une url du serveur depuis les tests, utilisez la librairie request.</p>
+      <p>Pensez a tester les codes de retour HTTP, et les entêtes importants. La réponse parsée est disponible depuis le test avec <code>res.body</code>.</p>
+      <p>Mettre morgan en premier pour bien logguer toutes les requêtes</p>
     </details>
   </section>
-
+  
   <section id="async" class="title">
     <div class="bg">
       <img src="images/async.jpg">
@@ -765,7 +755,7 @@ exports.register.attributes = {
       <li class="no-bullet"><i class="fa fa-fw fa-archive"></i>Node Package Manager</li>
       <li class="no-bullet"><i class="fa fa-fw fa-recycle"></i>TDD avec Lab et Chai</li>
       <li class="no-bullet"><i class="fa fa-fw fa-fighter-jet"></i>Client évolué avec Request</li>
-      <li class="no-bullet"><i class="fa fa-fw fa-space-shuttle"></i>Serveur évolué avec Hapi</li>
+      <li class="no-bullet"><i class="fa fa-fw fa-space-shuttle"></i>Serveur évolué avec Express</li>
       <li class="no-bullet"><i class="fa fa-fw fa-phone"></i>Algorithmie asynchrone avec Async</li>
     </ul>
   </section>
@@ -784,7 +774,7 @@ exports.register.attributes = {
       <li>Slide 2 - Npm inc.</li>
       <li>Slide 9 - Bark</li>
       <li>Slide 17 - Antonio Santa-Pau Ramírez</li>
-      <li>Slide 23 - Pharell Wiliams</li>
+      <li>Slide 23 - <a href="https://www.flickr.com/photos/30474136@N07/21866574824/">https://www.flickr.com/photos/30474136@N07/21866574824/</a></li>
       <li>Slide 30 - Inception</li>
       <li>Slide 38 - Ricardo Fujii/Grudaemmim</li>
     </ul>
