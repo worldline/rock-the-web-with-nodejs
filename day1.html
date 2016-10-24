@@ -310,7 +310,7 @@ for (var i = 0; i < 3; i++) {
     <details open>
       <summary/>
       <p>Dans une fonction, les variable des scopes englobant sont toujours accessibles, sauf si une variable à l'intérieur de la fonction porte le même nom (<strong>shadowing</strong>)</p>
-      <p>L'exemple asynchrone aura pour résultat <code>3, 3, 3</code> et non pas <code>1, 2, 3</code> comme on aurait pû l'espérer</p>
+      <p>L'exemple asynchrone aura pour résultat <code>3, 3, 3</code> et non pas <code>0, 1, 2</code> comme on aurait pû l'espérer</p>
       <div>Pour corriger le problème de l'asynchronisme, il faut déclarer une fonction par itération, car la fonction crée un nouveau scope.
 <pre><code class="javascript">[0,1,2].forEach(function(i) {
   callLater(function() {
