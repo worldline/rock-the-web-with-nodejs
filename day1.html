@@ -775,14 +775,14 @@ console.log(3); // Qu'est ce qui est affiché sur la console ? pourquoi ?</code>
     <ul class="steps">
       <li>Modélise le process et ses arguments <code>argv</code></li>
       <li class="warning">Ligne de commande <code>node server.js 8080</code> : <br/><code>argv ~=  ['node', 'server.js', '8080']</code></li>
-      <li>Donne accès aux flux : <code>stdin</code>, <code>stddout</code>, <code>stderr</code></li>
+      <li>Donne accès aux flux : <code>stdin</code>, <code>stdout</code>, <code>stderr</code></li>
       <li>L'environnement d'exécution : <code>env</code>, <code>versions</code>, <code>arch</code>, <code>platform</code>, <code>cwd()</code>, <code>memoryUsage()</code>...</li>
       <li>Gère des évènements : <strong>uncaughtException</strong>, <strong>exit</strong> et les signaux systèmes (<strong>SIGKILL</strong>, <strong>SIGINT</strong>...)</li>
     </ul>
     <details open>
       <summary/>
       <p><code>process</code> est une variable globale de type object accessible n'importe où depuis votre programme</p>
-      <p><code>stdin</code> est un <strong>Readable stream</strong>, <code>stddout</code> et <code>stderr</code> des <strong>Writable streams</strong></p>
+      <p><code>stdin</code> est un <strong>Readable stream</strong>, <code>stdout</code> et <code>stderr</code> des <strong>Writable streams</strong></p>
       <p><code>console.log()</code>, <code>console.dir()</code>... ne font qu'écrire dans <code>process.stdout</code></p>
       <p>Certaines propriétés du process courant peuvent être modifiées à chaud : <code>setgid()</code>, <code>setuid()</code>, <code>kill()</code>...</p>
       <p><code>process</code> est une instance d'<strong>EventEmitter</strong></p>
