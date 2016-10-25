@@ -28,24 +28,24 @@
 
   <section id="event-programming" data-timing="10">
     <h1>Event programming</h1>
-    <ul>
-      <li class="step">Deux rôles pour vos objets :
+    <ul class="steps">
+      <li>Deux rôles pour vos objets :
         <ol>
           <li>Emetteur : il emet un évènement identifié par son nom</li>
           <li class="step">Auditeur : il s'inscrit à l'évènement d'un émetteur, pour être réveillé lors de l'émission</li>
         </ol>
       </li>
-      <li class="step centered">
+      <li class="centered">
         <figure>
           <img src="images/pubsub-1.png">
           <figcaption>Phase 1 - inscription des auditeurs</figcaption>
         </figure>
-        <figure class="step">
+        <figure>
           <img src="images/pubsub-2.png">
           <figcaption>Phase 2 - émission d'un évènement</figcaption>
         </figure>
       </li>
-      <li class="step example">
+      <li class="example">
         <pre><code class="javascript">var emitter = new EventEmitter();
 emitter.process = function() {
   this.emit('change', 'a meaningful data');
