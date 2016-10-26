@@ -386,6 +386,7 @@ request('http://www.google.com', function (err, response, body) {
       <summary/>
       <p>Les options possibles dépendent du verbe utilisé : l'option <code>body</code> n'a pas de sens pour un <strong>GET</strong>.</p>
       <p>L'option <code>json</code> permet d'ajouter les en-têtes <strong>content: application/json</strong> et <strong>accept: application/json</strong>, réalise la sérialisation du corps éventuel de la requête et la désérialisation du corps de la réponse.</p>
+
       <p>Pour indiquer que la requête ne DOIT PAS utiliser de proxy, malgré la présence de variable d'environnement, il faut spécifier <code>null</code> ou <code>false</code> dans l'option <code>proxy</code>.</p>
       <p>D'une manière générale, il est plus prudent de toujours spécifier l'option proxy, et de mettre vous même la valeur dans un fichier de configuration.</p>
     </details>
@@ -447,17 +448,17 @@ formData: {
 
   <section id="express-intro" data-timing="10">
     <h1><a href="http://expressjs.com">express</a></a></h1>
-    <ul>
-      <li class="step">Utilisation de http.Server avec les améliorations suivantes :
+    <ul class="steps">
+      <li>Utilisation de http.Server avec les améliorations suivantes :
       <ol>
-        <li class="step">Routage des url par chemin et verbe HTTP</li>
-        <li class="step">Parsage des paramètres d'entrée</li>
-        <li class="step">Gestion des fichiers statiques</li>
-        <li class="step">Templating HTML</li>
-        <li class="step">Et c'est tout !</li>
+        <li>Routage des url par chemin et verbe HTTP</li>
+        <li>Parsage des paramètres d'entrée</li>
+        <li>Gestion des fichiers statiques</li>
+        <li>Templating HTML</li>
+        <li>Et c'est tout !</li>
       </ol>
       </li>
-      <li class="step">Mécanisme de middlewares pour ajouter des fonctionnalités</li>
+      <li>Mécanisme de middlewares pour ajouter des fonctionnalités</li>
     </ul>
     <details open>
       <summary/>
@@ -511,7 +512,7 @@ app.listen(3000, function () {
           <li>émettre une erreur</li>
         </ul>
       </li>
-      <li class="step">Plein de middlewares ! <a href="http://expressjs.com/en/resources/middleware.html">http://expressjs.com/en/resources/middleware.html</a></li>
+      <li>Plein de middlewares ! <a href="http://expressjs.com/en/resources/middleware.html">http://expressjs.com/en/resources/middleware.html</a></li>
     </ul>
     <details open>
       <summary/>
@@ -557,17 +558,17 @@ app.listen(3000, function () {
 
   <section data-timing="45">
     <h1>Express !</h1>
-    <ol class="hands-on">
-      <li class="step">Créez un serveur express dans un module <strong>tps/express/server.js</strong>.</li>
-      <li class="step">Ajouter les fonctionnalités suivantes avec les tests associés (dans un fichier tps/express/test/server.js)
+    <ol class="hands-on steps">
+      <li>Créez un serveur express dans un module <strong>tps/express/server.js</strong>.</li>
+      <li>Ajouter les fonctionnalités suivantes avec les tests associés (dans un fichier tps/express/test/server.js)
         <ol>
-          <li class="step">Le serveur démarre et renvoit une 404 sur n'importe quelle url</li>
-          <li class="step">Le serveur répond 'Hello XXX' quand on appel l'URL '/hello/XXX', l'utilisateur pouvant remplacer XXX par le prénom de son choix</li>
-          <li class="step">Le serveur répond une erreur 400 si le prénom passé en paramètre fait moins de 3 caractères. La réponse sera en JSON et le message d'erreur sera dans une propriété 'message'</li>
-          <li class="step">Logguer toutes les requêtes en utilisant <a href="https://www.npmjs.com/package/morgan">morgan</a> (pas de test à faire)</li>
+          <li>Le serveur démarre et renvoit une 404 sur n'importe quelle url</li>
+          <li>Le serveur répond 'Hello XXX' quand on appel l'URL '/hello/XXX', l'utilisateur pouvant remplacer XXX par le prénom de son choix</li>
+          <li>Le serveur répond une erreur 400 si le prénom passé en paramètre fait moins de 3 caractères. La réponse sera en JSON et le message d'erreur sera dans une propriété 'message'</li>
+          <li>Logguer toutes les requêtes en utilisant <a href="https://www.npmjs.com/package/morgan">morgan</a> (pas de test à faire)</li>
         </ol>
       </li>
-      <li class="step">Bonus: Utiliser un moteur de template pour que l'URL '/hello/XXX' retourne une page au format HTML</li>
+      <li>Bonus: Utiliser un moteur de template pour que l'URL '/hello/XXX' retourne une page au format HTML</li>
     </ol>
     <details open>
       <summary/>
@@ -589,7 +590,7 @@ app.listen(3000, function () {
 
   <section data-timing="5">
     <h1>"Pyramid of Doom" ??</h1>
-    <pre class="step"><code class="javascript">fs.readdir(source, function(err, files) {
+    <pre><code class="javascript">fs.readdir(source, function(err, files) {
   if (err) {
     console.log('Error finding files: ' + err)
   } else {
@@ -624,8 +625,8 @@ app.listen(3000, function () {
 
   <section data-timing="10">
     <h1>Asynchronisme et tableaux</h1>
-    <ul>
-      <li class="step">Appliquer un traitement asynchrone à un tableau<pre><code class="javascript">async.map(['file1','file2','file3'], function(file, next) {
+    <ul class="steps">
+      <li>Appliquer un traitement asynchrone à un tableau<pre><code class="javascript">async.map(['file1','file2','file3'], function(file, next) {
   // appliqué de manière asynchrone sur tous les éléments du tableau
   // la signature de next est next(err, result)
   fs.readFile(file, next);
@@ -633,9 +634,9 @@ app.listen(3000, function () {
   // err est la première erreur renvoyée
   // results est le tableau (ordonné) des résultats intermédiaires
 });</code></pre></li>
-      <li class="step">Tous les traitements sont déclenchés en parallèle<span class="hints line"><span class="step">mapLimit</span><span class="step">mapSeries</span></span></li>
-      <li class="step">Le callback de fin est déclenché... à la fin</li>
-      <li class="step">Le premier échec déclenche le callback de fin, et ignore les résultats en cours</li>
+      <li>Tous les traitements sont déclenchés en parallèle<span class="hints line"><span>mapLimit</span><span>mapSeries</span></span></li>
+      <li>Le callback de fin est déclenché... à la fin</li>
+      <li>Le premier échec déclenche le callback de fin, et ignore les résultats en cours</li>
     </ul>
     <details open>
       <summary/>
@@ -657,8 +658,8 @@ app.listen(3000, function () {
 
   <section data-timing="10">
     <h1>Asynchronisme et functions</h1>
-    <ul>
-      <li class="step">Gérer un flow de fonctions asynchrones<pre><code class="javascript">async.parallel([
+    <ul class="steps">
+      <li>Gérer un flow de fonctions asynchrones<pre><code class="javascript">async.parallel([
   function(done) {
     // la signature de done est done(err, result)
     fs.readFile('in.txt', done);
@@ -669,8 +670,8 @@ app.listen(3000, function () {
     // err est la première erreur renvoyée
     // results est le tableau (ordonné) des resultats intermédiaires
 });</code></pre></li>
-      <li class="step">Tous les traitements sont déclenchés en parallèle<span class="hints line"><span class="step">parallelLimit</span><span class="step">series</span></span></li>
-      <li class="step">Le callback de fin est déclenché à la fin, <br/>ou suite au premier échec</li>
+      <li>Tous les traitements sont déclenchés en parallèle<span class="hints line"><span>parallelLimit</span><span>series</span></span></li>
+      <li>Le callback de fin est déclenché à la fin, <br/>ou suite au premier échec</li>
     </ul>
     <details open>
       <summary/>
