@@ -123,7 +123,8 @@ package.json
     <ul class="steps">
       <li>Dépendance = nom du package + contrainte de version</li>
       <li><code>x.y.z</code> : exactement la version</li>
-      <li><code>^x.y.z</code> : la version x la plus haute (y.z au minimum)</li>
+      <li><code>^x.y.z</code> : le premier chiffre différent de 0 est fixé (les autres chiffres au minimum)</li>
+      <li><code>~x.y.z</code> : la version x.y la plus haute (z au minimum)</li>
       <li>l'<strong>url</strong> d'un dépôt git : <code>git://github.com/user/project.git#commit</code></li>
       <li>l'<strong>url</strong> d'un tarball : <code>http://bitbucket.org/user/repo?format=tar.gz</code></li>
       <li class="convention">Pour rester portable, n'utilisez que ces syntaxes</li>
@@ -135,6 +136,16 @@ package.json
       <p>Enfin l'opérateur chapeau <code>~x.y.z</code> : la version x.y la plus haute (z au minimum)</p>
       <p><a href="https://nodesource.com/blog/semver-tilde-and-caret" target="_blank">Un article détaillé</a> sur le comportement de <code>~</code> et <code>^</code></p>
     </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Déclarer ses dépendances (exemples)</h1>
+    <ul class="steps">
+      <li><code>^1.2.3</code> équivaut à <code>&gt;= 1.2.3 &lt;2.0.0</code></li>
+      <li><code>^0.1.2</code> équivaut à <code>&gt;= 0.1.2 &lt;0.2.0</code></li>
+      <li><code>~1.2.3</code> équivaut à <code>&gt;= 1.2.3 &lt;1.4.0</code></li>
+      <li><code>~0.1.2</code> équivaut à <code>&gt;= 0.1.2 &lt;0.2.0</code></li>
+    </ul>
   </section>
 
   <section data-timing="5">
