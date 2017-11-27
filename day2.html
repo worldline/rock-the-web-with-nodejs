@@ -46,19 +46,20 @@
         </figure>
       </li>
       <li class="step example">
-        <pre><code class="javascript">var emitter = new EventEmitter();
+        <pre><code class="javascript">
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
 emitter.process = function() {
   this.emit('change', 'a meaningful data');
-}
-
-var listener = {
-  onChange: function(data) {
-    console.log('change occured', data);
-  }
 };
-emitter.on('change', listener.onChange);
 
-emitter.process();</code></pre>
+emitter.on('change', (data) => {
+  console.log('change occured', data);
+});
+
+emitter.process();
+        </code></pre>
       </li>
     </ul>
     <details open>
@@ -296,35 +297,41 @@ emitter.process();</code></pre>
   <section data-timing="10">
     <h1>Anatomie du serveur</h1>
     <ul class="steps">
-      <li>Constitution de la résponse<pre><code class="javascript">var http = require('http');
-var server = http.createServer();
+      <li>Constitution de la résponse
+        <pre><code class="javascript">
+const http = require('http');
+const server = http.createServer();
 
-server.on('request', function(req, resp) {
+server.on('request', (req, resp) => {
   resp.setHeader('Content-Type', 'text/plain');
   resp.statusCode = 200;
   resp.write('Hello world !', 'utf8');
   resp.end();
 });
 
-server.listen(8080, function() {
+server.listen(8080, () => {
   console.log('server started on 8080');
-});</code></pre></li>
+});
+        </code></pre></li>
       <li><strong>req</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_http_incomingmessage" target="_blank"><strong>IncomingMessage</strong></a></li>
       <li><strong>resp</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_class_http_serverresponse" target="_blank"><strong>ServerResponse</strong></a></li>
     </ul>
     <details open>
       <summary/>
       <p><code>createServer()</code> accepte un paramètre qui est un auditeur enregistré sur l'évènement <strong>request</strong></p>
-      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extrême : <pre><code class="javascript">var http = require('http');
-var port = 8080;
+      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extrême :
+        <pre><code class="javascript">
+const http = require('http');
+const port = 8080;
 
-http.createServer(function(req, resp) {
+http.createServer((req, resp) => {
   res.end('Hello world !');
-}).listen(port, function() {
+}).listen(port, () => {
   console.log('server started on port', port);
-}).on('error', function(err) {
+}).on('error', (err) => {
   console.error('failed to start server:', err);
-});</code></pre></div>
+});
+        </code></pre></div>
       <p><strong>IncomingMessage</strong> permet de lire (lecture seule) les paramètres d'entrée (méthode, corps, en-tête...)</p>
       <p><strong>ServerResponse</strong> permet d'écrire la réponse (corps, en-tête, redirection...)</p>
     </details>
@@ -333,16 +340,19 @@ http.createServer(function(req, resp) {
   <section data-timing="5">
     <h1>Client Http</h1>
     <ul class="steps">
-      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_clientrequest" target="_blank"><strong>ClientRequest</strong></a> fourni un client Http basique<pre><code class="javascript">http.request({
+      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_clientrequest" target="_blank"><strong>ClientRequest</strong></a> fourni un client Http basique
+        <pre><code class="javascript">
+http.request({
   host:'fr.wikipedia.org',
   method: 'GET',
   path: '/w/index.html?search=Node.js'
-}, function(resp) {
+}, (resp) => {
   console.log(resp.statusCode);
-  res.on('data', function(chunk) {
+  res.on('data', (chunk) => {
     console.log(chunk);
   });
-}).end();</code></pre></li>
+}).end();
+        </code></pre></li>
       <li><pre class="inline"><code class="javascript">http.request()</code></pre> renvoie un objet pour customiser les en-têtes et le contenu (<strong>POST</strong>, <strong>PUT</strong>) de la requête</li>
       <li>La réponse arrive par paquets de manière différée</li>
     </ul>
@@ -417,13 +427,13 @@ http.createServer(function(req, resp) {
   <section data-timing="10">
     <h1>3 ways to be born</h1>
     <ul>
-      <li class="step"><code>exec()</code> éxécute la commande et renvoi le résultat<pre><code class="javascript">exec('ls -la', function (error, stdout, stderr) {
+      <li class="step"><code>exec()</code> éxécute la commande et renvoi le résultat<pre><code class="javascript">exec('ls -la', (error, stdout, stderr) => {
   console.log(''+ stdout);
   console.log('end');
 });</code></pre></li>
-      <li class="step"><code>spawn()</code> éxécute et renvoi le process fils<pre><code class="javascript">var child = spawn('ls', ['-la']);
+      <li class="step"><code>spawn()</code> éxécute et renvoi le process fils<pre><code class="javascript">const child = spawn('ls', ['-la']);
 child.stdout.pipe(process.stdout);
-child.on('exit', function() {
+child.on('exit', () => {
   console.log('end');
 });</code></pre></li>
       <li class="step"><code>fork()</code> est un <code>spawn()</code> d'un fichier NodeJS, et établi un canal de communication <span class="hints"><span class="step">WebWorkers</span></span></li>
@@ -521,20 +531,23 @@ while candidate < n
   <section data-timing="15">
     <h1>Anatomie du cluster</h1>
     <ul class="steps">
-      <li>Généralement, le même code pour tous<pre><code class="javascript">var cluster = require('cluster');
-var http = require('http');
-var numCPUs = require('os').cpus().length;
-if (cluster.isMaster) {
+      <li>Généralement, le même code pour tous
+        <pre><code class="javascript">
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
+if (cluster.isMaster()) {
   // code du master : cré autant de workers que de CPUs
-  for (var i = 0; i < numCPUs; i++) {
+  for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
 } else {
   // code d'un worker : crée un serveur et traite les requêtes
-  http.createServer(function(req, res) {
+  http.createServer((req, res) => {
     res.end("hello world\n");
   }).listen(8000);
-}</code></pre></li>
+}
+        </code></pre></li>
       <li>Les <strong>workers</strong> délèguent la création et le partage de la socket au <strong>master</strong> qui va la partager</li>
     </ul>
     <details open>
