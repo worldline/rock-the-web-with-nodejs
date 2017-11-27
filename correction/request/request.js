@@ -1,10 +1,10 @@
-var request = require('request');
+const request = require('request');
 
 request.get('http://api.icndb.com/jokes/random', {
   qs: {
     firstName: 'Florian'
   },
   json: true
-}, function(err, resp, body) {
+}, (err, resp, body) => {
   console.log(body.value.joke);
 });

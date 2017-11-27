@@ -1,35 +1,35 @@
-var http = require('http');
-var expect = require('chai').expect;
-var startServer = require('../static');
+const http = require('http');
+const expect = require('chai').expect;
+const startServer = require('../static');
 
-describe('Static server', function() {
+describe('Static server', () => {
 
-  var server = null;
-  var port = 8001;
+  let server = null;
+  const port = 8001;
 
-  before(function(done) {
-    server = startServer(port, function(err) {
+  before((done) => {
+    server = startServer(port, (err) => {
       done(err);
     });
   });
 
-  it('should return existing file', function(done) {
-    http.get('http://localhost:1000/greetings.txt', function(res) {
+  it('should return existing file', (done) => {
+    http.get('http://localhost:' + port + '/greetings.txt', (res) => {
       expect(res).to.have.property('statusCode').that.equal(200);
-      var data = '';
-      res.on('data', function(chunk) {
+      let data = '';
+      res.on('data', (chunk) => {
         data += chunk.toString();
-      }).on('error', done).on('end', function() {
+      }).on('error', done).on('end', () => {
         expect(data).to.include('Hello');
         done();
       });
-    }).on('error', function(err) {
+    }).on('error', (err) => {
       console.log('coucou');
       done(err);
     });
   });
 
-  after(function(done) {
+  after((done) => {
     server.close(done);
   });
 

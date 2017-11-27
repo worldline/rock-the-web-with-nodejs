@@ -1,6 +1,6 @@
-var fs = require('fs');
-var resolve = require('path').resolve;
-var async = require('async');
+const fs = require('fs');
+const resolve = require('path').resolve;
+const async = require('async');
 
 /**
  * Built an array of item names contained in a directory
@@ -13,7 +13,7 @@ var async = require('async');
  */
 exports.getDirContent = function(path, done) {
   // Rely on built-in function
-  fs.readdir(path, function(err, content) {
+  fs.readdir(path, (err, content) => {
     if (err) {
       // Or if (err != null), which is equivalent to err !== null || err !== undefined
       return done(err);
@@ -21,12 +21,12 @@ exports.getDirContent = function(path, done) {
     // map is not an asynchronous operation (no I/O), but looks like one
     // It will invoke the parameter function on each file, and will replace an array with
     // returned strings
-    var result = content.map(function(item) {
+    const result = content.map((item) => {
       return resolve(path, item);
     });
     // Returns result
     done(null, result);
-  })
+  });
 };
 
 /**
@@ -43,18 +43,18 @@ exports.getDirContent = function(path, done) {
  */
 exports.getDirStat = function(path, done) {
   // It begins like getDirContent()
-  fs.readdir(path, function(err, content) {
+  fs.readdir(path, (err, content) => {
     if (err) {
       return done(err);
     }
 
-    async.map(content, fs.stat, function(err, results) {
-      done(err, !err && results.map(function(stat, i) {
+    async.map(content, fs.stat, (err, results) => {
+      done(err, !err && results.map((stat, i) => {
         return {
           path: resolve(path, content[i]),
           status: stat.isFile() ? 'file' : stat.isDirectory() ? 'directory' : 'unknown',
           size: stat.size
-        }
+        };
       }));
     });
   });

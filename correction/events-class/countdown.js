@@ -1,5 +1,5 @@
-var EventEmitter = require('events').EventEmitter;
-var inherits = require('util').inherits;
+const EventEmitter = require('events').EventEmitter;
+const inherits = require('util').inherits;
 
 /**
  * The tick function is private to avoid external usage.
@@ -7,8 +7,8 @@ var inherits = require('util').inherits;
  * In this case, stop is invoked.
  * @param {Countdown} countdown - The concerned countdown.
  */
-function tick(countdown) {
-  countdown.timer = setTimeout(function() {
+const tick = (countdown) => {
+  countdown.timer = setTimeout(() => {
     countdown.remains--;
     if(countdown.remains === 0) {
       return countdown.stop();
@@ -16,7 +16,7 @@ function tick(countdown) {
     countdown.emit('tick', countdown.remains);
     tick(countdown);
   }, 1000);
-}
+};
 
 /**
  * Creates a simple class the extends EventEmitter.
@@ -30,7 +30,7 @@ function tick(countdown) {
  * @event Countdown#stop - When countdown reaches its end of if manually stopped, with the remaining seconds
  * @type {Number}
  */
-var Countdown = function() {
+const Countdown = function() {
   this.remains = 0;
   this.timer = null;
 };
