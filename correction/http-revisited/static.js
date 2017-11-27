@@ -1,31 +1,19 @@
-var http = require('http');
-var parse = require('url').parse;
-var fs = require('fs');
-var cluster = require('cluster');
-var numCPUs = require('os').cpus().length-1;
-var port = process.argv[2];
+const http = require('http');
+const parse = require('url').parse;
+const fs = require('fs');
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length-1;
 
-if (cluster.isMaster) {
-  for (var i = 0; i < numCPUs; i++) {
-    // use an IIFE to avoid scope problems
-    (function(worker) {
-      // wire logging facilities
-      worker.on('message', function(path) {
-        console.log(worker.id + ' (' + worker.process.pid + ') processed file ' + path);
-      });
-    })(cluster.fork());
-  }
-} else {
+module.exports = (port, done) => {
   // worker code, similar to http://code.runnable.com/VZ04KJR4mWIbiHca/rocktheweb-server
-  http.createServer(function(req, res){
-    var path = parse(req.url).pathname.slice(1);
-    // just send request to master for logging
-    process.send(path);
-    fs.createReadStream(path).on('error', function() {
+  return http.createServer((req, res) => {
+    const path = parse(req.url).pathname.slice(1);
+    fs.createReadStream(path).on('error', () => {
       res.statusCode = 404;
       res.end();
     }).pipe(res);
-  }).listen(port, function() {
+  }).listen(port, () => {
     console.log('worker ' + process.pid + ' listening on port ' + port);
+    done();
   });
-}
+};

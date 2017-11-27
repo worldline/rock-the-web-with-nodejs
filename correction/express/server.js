@@ -1,13 +1,13 @@
-var express = require('express');
-var app = express();
-var morgan = require('morgan');
+const express = require('express');
+const app = express();
+const morgan = require('morgan');
 
-var server;
+let server;
 
 app.use(morgan());
 
-app.get('/hello/:name', function (req, res, next) {
-  var name = req.params.name;
+app.get('/hello/:name', (req, res, next) => {
+  const name = req.params.name;
   if(name.length < 3) {
     return next('Firstname is too short: ' + name);
   }
@@ -15,13 +15,13 @@ app.get('/hello/:name', function (req, res, next) {
 });
 
 // error middleware
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(400).send({ message: err });
 });
 
-exports.start = function(cb) {
-  cb = cb || function() {};
-  server = app.listen(3000, function (err, httpServer) {
+exports.start = (cb) => {
+  cb = cb || (()  => {});
+  server = app.listen(3000, (err) => {
     if(err) {
       console.log('Cannot start server !', err);
       return cb(err);
@@ -31,6 +31,6 @@ exports.start = function(cb) {
   });
 };
 
-exports.stop = function() {
+exports.stop = () => {
   server.close();
 };

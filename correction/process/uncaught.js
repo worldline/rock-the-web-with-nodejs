@@ -1,6 +1,6 @@
 // count how many error where caught
-var caught = 0;
-process.on('uncaughtException', function(err) {
+let caught = 0;
+process.on('uncaughtException', (err) => {
   // display which error was caught an optionnaly quit
   console.error('caught ', err.message);
   if (++caught === 3) {

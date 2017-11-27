@@ -1,5 +1,5 @@
-var EventEmitter = require('events').EventEmitter;
-var countdown = new EventEmitter();
+const EventEmitter = require('events').EventEmitter;
+const countdown = new EventEmitter();
 
 /**
  * The tick function is private to avoid external usage.
@@ -7,8 +7,8 @@ var countdown = new EventEmitter();
  * In this case, emit the 'stop' event
  * @param {Number} duration - remaining duration
  */
-var tick = function(duration) {
-  setTimeout(function() {
+const tick = (duration) => {
+  setTimeout(() => {
     duration--;
     if(duration === 0) {
       return countdown.emit('stop');

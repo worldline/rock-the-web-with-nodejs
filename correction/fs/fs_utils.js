@@ -1,5 +1,5 @@
-var fs = require('fs');
-var resolve = require('path').resolve;
+const fs = require('fs');
+const resolve = require('path').resolve;
 
 /**
  * Built an array of item names contained in a directory
@@ -10,9 +10,9 @@ var resolve = require('path').resolve;
  * @param {Error} err - an optionnal error if path cannot be read as directory
  * @param {String[]} result - directory content.
  */
-exports.getDirContent = function(path, done) {
+exports.getDirContent = (path, done) => {
   // Rely on built-in function
-  fs.readdir(path, function(err, content) {
+  fs.readdir(path, (err, content) => {
     if (err) {
       // Or if (err != null), which is equivalent to err !== null || err !== undefined
       return done(err);
@@ -20,12 +20,12 @@ exports.getDirContent = function(path, done) {
     // map is not an asynchronous operation (no I/O), but looks like one
     // It will invoke the parameter function on each file, and will replace an array with
     // returned strings
-    var result = content.map(function(item) {
+    const result = content.map((item) => {
       return resolve(path, item);
     });
     // Returns result
     done(null, result);
-  })
+  });
 };
 
 /**
@@ -40,17 +40,17 @@ exports.getDirContent = function(path, done) {
  * @param {String} result.status - file, directory or unknown nature of the item
  * @param {Number} result.size - item size in octets
  */
-exports.getDirStat = function(path, done) {
+exports.getDirStat = (path, done) => {
   // It begins like getDirContent()
-  fs.readdir(path, function(err, content) {
+  fs.readdir(path, (err, content) => {
     if (err) {
       return done(err);
     }
-    var abort = false;
-    var results = [];
-    content.forEach(function(item) {
+    let abort = false;
+    const results = [];
+    content.forEach((item) => {
       // Another asynchronous call: can't invoke done at end
-      fs.stat(item, function(err, stat) {
+      fs.stat(item, (err, stat) => {
         if (abort) {
           // In case of a previous error: stop now
           return;
