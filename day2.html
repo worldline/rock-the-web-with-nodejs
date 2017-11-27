@@ -146,7 +146,7 @@ emitter.process();</code></pre>
     <h1>Streamz ?</h1>
     <ul class="steps">
       <li>Les streams traitent la donnée au fil de l'eau<div class="centered"><img src="images/stream.png"></div></li>
-      <li>Ils sont en <strong>Readable</strong>, <strong>Writable</strong>, <strong>Duplex</strong> ou <strong>Transform</strong></li>
+      <li>Ils sont en <strong>Readable</strong>, <strong>Writable</strong>, <strong>Duplex</strong>,  <strong>Transform</strong> ou <strong>Passthrough</strong></li>
       <li>Ce sont des objets qui héritent d'<strong>EventEmitter</strong></li>
       <li>Utilisent une structure de données binaire : <strong>Buffer</strong></li>
       <li><strong>Buffer</strong> est un tableau de mémoire pré-allouée</li>
@@ -170,13 +170,12 @@ emitter.process();</code></pre>
       <li class="step guideline">Pour traiter les données au plus vite</li>
       <li class="step guideline">Pour enchainer différentes opérations :<br/> Lecture disque > Compression > Écriture réseau</li>
       <li class="step">À la base de nombreuses API NodeJS<span class="hints line"><span class="step">fs</span><span class="step">net</span><span class="step">zlib</span><span class="step">crypto</span></span></li>
-      <li class="step">Refondus avec la version 0.10 puis simplifié en version 0.12</li>
+      <li class="step">Ajout de standardisation en version 8 : <strong>destroy</strong> et <strong>final</strong></li>
     </ul>
     <details open>
       <summary/>
       <p>Un <a href="https://github.com/substack/stream-handbook" target="_blank">guide pratique</a> pour utiliser et implémenter les streams</p>
       <p>Un <a href="https://github.com/substack/stream-adventure" target="_blank">tutoriel interactif</a> pour expérimenter les streams (14 challenges)</p>
-      <p>L'annonce du changement de l'implémentation des streams en version <a href="http://blog.nodejs.org/2012/12/20/streams2/" target="_blank">0.10</a>, explication supplémentaire pour <a href="https://strongloop.com/strongblog/whats-new-io-js-beta-streams3/" target="_blank">streams3</a></p>
     </details>
   </section>
 
@@ -254,7 +253,7 @@ emitter.process();</code></pre>
       <p>Attention, dans l'ordre des arguments du programme, <code>node</code> est le premier, le nom du fichier est le second, vos paramètres sont donc à partir du 3ème</p>
       <p>Les fonctions de création de stream à partir de fichier sont <code>fs.createReadStream()</code> et <code>fs.createWriteStream()</code></p>
       <p>Pour <strong>analyze</strong>, il est nécessaire d'écouter <strong>readable</strong>, et d'invoker <code>read()</code></p>
-      <p>Sans arguments, <code>read()</code> lit autant d'octets qu'il le peut, mais il est possible de spécifier une taille, et de lire jusqu'à ce qu'il renvoi <code>null</code></p>
+      <p>Sans arguments, <code>read()</code> lit autant d'octets qu'il le peut, mais il est possible de spécifier une taille, et de lire jusqu'à ce qu'il renvoie <code>null</code></p>
       <p>Dans le cas d'encoder, on pourrait aussi créer un <strong>stream</strong> de type <strong>Transform</strong></p>
       <p><a href="http://code.runnable.com/VLEaR7roaoU0P1wf/rocktheweb-streams" target="_blank">Correction</a></p>
     </details>
