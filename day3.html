@@ -760,6 +760,217 @@ app.listen(3000, () => {
     </details>
   </section>
 
+  <section id="promises" class="title">
+    <div class="bg">
+      <img src="https://media.giphy.com/media/l1J9wZJLPywQuKovK/giphy.gif">
+    </div>
+    <h1>Les promesses</h1>
+  </section>
+
+  <section data-timing="5">
+    <h1>Une promesse ?</h1>
+    <ul>
+      <li>Classe présente dans Javascript (ES6, NodeJS >= 6.5.0)</li>
+
+      <li>Le constructeur :
+        <code>
+            new Promise((resolve, reject) => { ... });
+        </code>
+        <ul>
+          <li><code>resolve()</code> doit être appelé en cas de succès (accepte en paramètre le résultat du traitement)</li>
+          <li><code>reject()</code> doit être appelé en cas d'erreur (accepte en paramètre l'erreur)</li>
+        </ul>
+      </li>
+
+      <li>Le prototype contient les méthodes :
+        <ul>
+          <li><code>catch()</code> définit une fonction appelée lors que la promesse est résolue</li>
+          <li><code>reject()</code> définit une fonction appelée lors que la promesse est rejetée</li>
+        </ul>
+      </li>
+    </ul>
+    <details open>
+      <summary/>
+    </details>
+  </section>
+
+  <section data-timing="5">
+    <h1>Une promesse ? L'exemple</h1>
+    <ul>
+      <li>Création de la promesse<pre><code class="javascript">const request = require('request');
+const getHello = () => {
+return new Promise((resolve, reject) => {
+  request('http://google.com/', (err, res) {
+    if(err) {
+      reject(err);
+      return;
+    }
+    resolve(res);
+  });
+});</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+    </details>
+  </section>
+
+  <section data-timing="5">
+      <h1>Une promesse ? L'exemple</h1>
+      <ul>
+        <li>Utilisation de la promesse<pre><code class="javascript">getHello().then((res) => {
+  console.log(res.statusCode);
+})
+.reject((err) => {
+  console.log(err);
+})
+</code></pre></li>
+      </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="5">
+      <h1>Les états de la promesse</h1>
+      <div>
+        <img src="images/promises.svg">
+      </div>
+      <ul>
+        <li>source : <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a></li>
+      </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="5">
+      <h1>Le chaînage</h1>
+      <ul>
+        <li>Exécution en série<pre><code class="javascript">doSomething().then(function(result) {
+  // doSomethingElse retourne une promesse
+  return doSomethingElse(result);
+})
+.then(function(newResult) {
+  // doThirdThing retourne une promesse
+  return doThirdThing(newResult);
+})
+.then(function(finalResult) {
+  console.log('Got the final result: ' + finalResult);
+})
+.catch(failureCallback);
+          </code></pre></li>
+          <li>Chaînage possible si la fonction dans <code>then()</code> retourne une promesse</li>
+          <li>Equivalent pour les promesses de <code>async.series()</code></li>
+          <li>
+            source : <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">MDN</a>
+          </li>
+        </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="5">
+      <h1>Promesses : autres outils</h1>
+      <ul>
+        <li><code>Promise.all</code>
+          <ul>
+            <li>Accepte en paramètre un tableau de promesses</li>
+            <li>Permet d'exécuter plusieurs promesses en parallèle</li>
+            <li>Retourne une promesse, rejetée à la première erreur, ou résolue quand toutes les promesses en entrée sont résolues</li>
+            <li>Equivalent pour les promesses de <code>async.map()</code></li>
+          </ul>
+        </li>
+        <li>A partir de NodeJS 8 : <code>util.promisify()</code> et <code>util.callbackify()</code> pour convertir des fonctions "callback-style" en fonction "promise-style" et inversement</li>
+      </ul>
+      <details open>
+        <summary/>
+        <p><code>util.promisify()</code> nécessite que le callback soit le dernier paramètre de la fonction</p>
+      </details>
+    </section>
+
+    <section id="async-await" class="title">
+      <div class="bg">
+        <img src="https://media.giphy.com/media/UO95NWY0PmoWk/giphy.gif">
+      </div>
+      <h1>Async / Await</h1>
+    </section>
+
+    <section data-timing="5">
+      <h1>async</h1>
+      <ul>
+        <li>A partir de NodeJS 8</li>
+        <li><code>async</code> est un nouveau mot-clé à placer devant une déclaration de fonction</li>
+        <li>La fonction va alors retourner une promesse qui sera
+          <ul>
+            <li>rejetée si une erreur survient</li>
+            <li>résolue avec le résultat retourné par la fonction</li>
+          </ul>
+        </li>
+        <li>Exemple: <pre><code class="javascript">const doHello = async (name) => {
+  if(! name) {
+    throw 'name is missing';
+  }
+  return `Hello ${name}`
+};</code></pre></li>
+      </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="5">
+      <h1>await</h1>
+      <ul>
+        <li><code>await</code> est un nouveau mot-clé à placer devant une promesse
+          <ul>
+            <li>si elle est résolue, son résultat est retourné</li>
+            <li>si elle est réjetée, une erreur survient (équivalent du <code>throw</code>)</li>
+          </ul>
+        </li>
+        <li><code>await</code> ne peut être utilisé que dans une fonction<code></code></li>
+        <li>Exemple: <pre><code class="javascript">const doHelloTwice = async () => {
+  const hello1 = await doHello('bob');
+  const hello2 = await doHello('alice');
+  return `${hello1}, ${hello2}`;
+};</code></pre></li>
+      </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="5">
+      <h1>async/await : les avantages</h1>
+      <ul>
+        <li>Meilleure gestion des erreurs
+          <ul><li>Les erreurs synchrones et asynchrones sont gérées de la même façon</li></ul>
+        </li>
+        <li>Code simplifié et plus lisible</li>
+      </ul>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
+    <section data-timing="40">
+      <h1>Utiliser <i>async/await</i></h1>
+      <ol class="steps hands-on">
+        <li>Maintenant que <strong>tps/fs/fs_utils.js</strong> est testé, nous allons le refactoriser</li>
+        <li>Refactorisez l'implémentation de <code>getDirContent</code> en utilisant <strong>async/await</strong></li>
+        <li>Mettre à jour les tests :
+          <ol>
+            <li>pour le test de succès : voir la <a href="https://mochajs.org/#using-async--await">documentation de mocha</a></li>
+            <li>pour le test d'erreur, utiliser le plugin <a href="http://chaijs.com/plugins/chai-as-promised/">chai-as-promised</a></li>
+          </ol>
+        </li>
+        <li>Bonus : refactorisez l'implémentation de <code>getDirStat</code> en utilisant <strong>async/await</strong></li>
+      </ol>
+      <details open>
+        <summary/>
+      </details>
+    </section>
+
   <section id="sumup" data-timing="10">
     <h1>Récap du troisième jour</h1>
     <ul class="steps">
