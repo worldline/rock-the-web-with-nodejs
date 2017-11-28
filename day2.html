@@ -45,22 +45,15 @@
           <figcaption>Phase 2 - émission d'un évènement</figcaption>
         </figure>
       </li>
-      <li class="step example">
-        <pre><code class="javascript">
-const EventEmitter = require('events');
+      <li class="step example"><pre><code class="javascript">const EventEmitter = require('events');
 const emitter = new EventEmitter();
-
 emitter.process = function() {
   this.emit('change', 'a meaningful data');
 };
-
 emitter.on('change', (data) => {
   console.log('change occured', data);
 });
-
-emitter.process();
-        </code></pre>
-      </li>
+emitter.process();</code></pre></li>
     </ul>
     <details open>
       <summary/>
@@ -297,9 +290,7 @@ emitter.process();
   <section data-timing="10">
     <h1>Anatomie du serveur</h1>
     <ul class="steps">
-      <li>Constitution de la résponse
-        <pre><code class="javascript">
-const http = require('http');
+      <li>Constitution de la résponse<pre><code class="javascript">const http = require('http');
 const server = http.createServer();
 
 server.on('request', (req, resp) => {
@@ -311,17 +302,14 @@ server.on('request', (req, resp) => {
 
 server.listen(8080, () => {
   console.log('server started on 8080');
-});
-        </code></pre></li>
+});</code></pre></li>
       <li><strong>req</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_http_incomingmessage" target="_blank"><strong>IncomingMessage</strong></a></li>
       <li><strong>resp</strong> est une instance de <a href="http://nodejs.org/api/http.html#http_class_http_serverresponse" target="_blank"><strong>ServerResponse</strong></a></li>
     </ul>
     <details open>
       <summary/>
       <p><code>createServer()</code> accepte un paramètre qui est un auditeur enregistré sur l'évènement <strong>request</strong></p>
-      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extrême :
-        <pre><code class="javascript">
-const http = require('http');
+      <div><code>end()</code> accepte un paramètre data et encoding (par défaut <strong>utf8</strong>), qui revient à faire un <code>write(data, encoding)</code>. Le status par défaut étant 200, on peut ainsi simplifier à l'extrême :<pre><code class="javascript">const http = require('http');
 const port = 8080;
 
 http.createServer((req, resp) => {
@@ -330,8 +318,7 @@ http.createServer((req, resp) => {
   console.log('server started on port', port);
 }).on('error', (err) => {
   console.error('failed to start server:', err);
-});
-        </code></pre></div>
+});</code></pre></div>
       <p><strong>IncomingMessage</strong> permet de lire (lecture seule) les paramètres d'entrée (méthode, corps, en-tête...)</p>
       <p><strong>ServerResponse</strong> permet d'écrire la réponse (corps, en-tête, redirection...)</p>
     </details>
@@ -340,9 +327,7 @@ http.createServer((req, resp) => {
   <section data-timing="5">
     <h1>Client Http</h1>
     <ul class="steps">
-      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_clientrequest" target="_blank"><strong>ClientRequest</strong></a> fourni un client Http basique
-        <pre><code class="javascript">
-http.request({
+      <li>Classe <a href="http://nodejs.org/api/http.html#http_class_http_clientrequest" target="_blank"><strong>ClientRequest</strong></a> fourni un client Http basique<pre><code class="javascript">http.request({
   host:'fr.wikipedia.org',
   method: 'GET',
   path: '/w/index.html?search=Node.js'
@@ -351,8 +336,7 @@ http.request({
   res.on('data', (chunk) => {
     console.log(chunk);
   });
-}).end();
-        </code></pre></li>
+}).end();</code></pre></li>
       <li><pre class="inline"><code class="javascript">http.request()</code></pre> renvoie un objet pour customiser les en-têtes et le contenu (<strong>POST</strong>, <strong>PUT</strong>) de la requête</li>
       <li>La réponse arrive par paquets de manière différée</li>
     </ul>
@@ -531,9 +515,7 @@ while candidate < n
   <section data-timing="15">
     <h1>Anatomie du cluster</h1>
     <ul class="steps">
-      <li>Généralement, le même code pour tous
-        <pre><code class="javascript">
-const cluster = require('cluster');
+      <li>Généralement, le même code pour tous<pre><code class="javascript">const cluster = require('cluster');
 const http = require('http');
 const numCPUs = require('os').cpus().length;
 if (cluster.isMaster()) {
@@ -546,8 +528,7 @@ if (cluster.isMaster()) {
   http.createServer((req, res) => {
     res.end("hello world\n");
   }).listen(8000);
-}
-        </code></pre></li>
+}</code></pre></li>
       <li>Les <strong>workers</strong> délèguent la création et le partage de la socket au <strong>master</strong> qui va la partager</li>
     </ul>
     <details open>
