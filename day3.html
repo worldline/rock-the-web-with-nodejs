@@ -299,7 +299,7 @@ describe('Array#indexOf', () => {
       <li>égalité <pre class="inline"><code class="javascript">expect(x)/*not.*/.to./*deep.*/equals(y)</code></pre></li>
       <li>existance <pre class="inline"><code class="javascript">expect(x).to.be.null</code></pre> <pre class="inline"><code class="javascript">expect(x).to.exist</code></pre></li>
       <li>taille des tableaux <pre class="inline"><code class="javascript">expect(x).to.be.empty</code></pre> <pre class="inline"><code class="javascript">expect(x).to.have.length(y)</code></pre></li>
-      <li>objets <pre class="inline"><code class="javascript">expect(x).to.have./*deep.*/property('model.name').that.equals(z)</code></pre></li>
+      <li>objets <pre class="inline"><code class="javascript">expect(x).to.have./*nested.*/property('model.name').that.equals(z)</code></pre></li>
       <li>contenu <pre class="inline"><code class="javascript">expect(x).to.contain/*.keys*/(y)</code></pre></li>
       <li>nombres <pre class="inline"><code class="javascript">expect(x).to.be.at.least(y).and.at.most(z)</code></pre>
       <li>fourre-tout <pre class="inline"><code class="javascript">expect(1).to.satisfy((num) => {return num > 0;})</code></pre></li>
@@ -597,7 +597,7 @@ app.listen(3000, () => {
       <li class="step">Ajouter les fonctionnalités suivantes avec les tests associés (dans un fichier tps/express/test/server.js)
         <ol>
           <li class="step">Le serveur démarre et renvoit une 404 sur n'importe quelle url</li>
-          <li class="step">Le serveur répond 'Hello XXX' quand on appel l'URL '/hello/XXX', l'utilisateur pouvant remplacer XXX par le prénom de son choix</li>
+          <li class="step">Le serveur répond 'Hello XXX' quand on appelle l'URL '/hello/XXX', l'utilisateur pouvant remplacer XXX par le prénom de son choix</li>
           <li class="step">Le serveur répond une erreur 400 si le prénom passé en paramètre fait moins de 3 caractères. La réponse sera en JSON et le message d'erreur sera dans une propriété 'message'</li>
           <li class="step">Logguer toutes les requêtes en utilisant <a href="https://www.npmjs.com/package/morgan">morgan</a> (pas de test à faire)</li>
         </ol>
@@ -784,8 +784,8 @@ app.listen(3000, () => {
 
       <li>Le prototype contient les méthodes :
         <ul>
-          <li><code>catch()</code> définit une fonction appelée lors que la promesse est résolue</li>
-          <li><code>reject()</code> définit une fonction appelée lors que la promesse est rejetée</li>
+          <li><code>then()</code> définit une fonction appelée lors que la promesse est résolue</li>
+          <li><code>catch()</code> définit une fonction appelée lors que la promesse est rejetée</li>
         </ul>
       </li>
     </ul>
@@ -820,7 +820,7 @@ return new Promise((resolve, reject) => {
         <li>Utilisation de la promesse<pre><code class="javascript">getHello().then((res) => {
   console.log(res.statusCode);
 })
-.reject((err) => {
+.catch((err) => {
   console.log(err);
 })
 </code></pre></li>
@@ -878,7 +878,7 @@ return new Promise((resolve, reject) => {
             <li>Accepte en paramètre un tableau de promesses</li>
             <li>Permet d'exécuter plusieurs promesses en parallèle</li>
             <li>Retourne une promesse, rejetée à la première erreur, ou résolue quand toutes les promesses en entrée sont résolues</li>
-            <li>Equivalent pour les promesses de <code>async.map()</code></li>
+            <li>Equivalent pour les promesses de <code>async.parallel()</code></li>
           </ul>
         </li>
         <li>A partir de NodeJS 8 : <code>util.promisify()</code> et <code>util.callbackify()</code> pour convertir des fonctions "callback-style" en fonction "promise-style" et inversement</li>
