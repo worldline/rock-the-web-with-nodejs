@@ -556,6 +556,77 @@ console.log(rental[1].model.manufacturer);
     </ul>
   </section-->
 
+    <section data-timing="3">
+    <h1>Un peu d'ES6</h1>
+    <ul>
+		<li class="step">Mots clé <pre class="inline"><code class="javascript">const</code></pre> et <pre class="inline"><code class="javascript">let</code></pre>
+			<pre><code class="javascript">const movie = { 
+  title: 'Alien' 
+};
+
+movie = 'Terminator'; // Erreur : affectation impossible
+movie.title = 'Fight Club'; // OK
+
+{
+  let myMovie; // Scope block
+}</code></pre></li>
+
+		<li class="step">Valeur par défaut d'un param. et litéral
+			<pre><code class="javascript">function movie (id, title = 'Alien', year = 1979) {
+  return `Movie ${id} : ${title} (${year})!`; 
+// Evite 'Movie ' + id + ' : ' + title + ' (' + year + ')' + '!'
+}
+
+movie(426); // Donne 'Movie 426 : Alien (1979)'</code></pre></li>
+    </ul>
+    <details open>
+      <summary/>
+    </details>
+  </section>
+  
+  <section data-timing="3">
+    <h1>ES6 - Fonc. fléchée</h1>
+    <ul>
+		<li class="step">Notation fonction anonyme
+			<pre><code class="javascript">movies.map(function(movie) {
+  return '${movie.id}' + ' : ' + '${movie.title}';
+});
+// Devient
+movies.map(movie => `${movie.id} : ${movie.title}`);</code></pre></li>
+
+		<li class="step">Multi-arguments 
+			<pre><code class="javascript">movies.map((movie, actor) => { // Un peu de traitement métier
+  return `${movie.id} : ${actor}`
+};</code></pre></li>
+
+		<li class="step">Conservation du contexte <pre class="inline"><code class="javascript">this</code></pre>
+			<pre><code class="javascript">Person.prototype.callMeLater = function() {
+  setTimeout(() => {
+    console.log(this.name + ' calls you back !');
+  }, 1);
+};</code></pre></li>
+	</ul>
+    <details open>
+      <summary/>
+    </details>
+  </section>
+    
+    <section data-timing="1">
+    <h1>ES6 - Et beaucoup +</h1>
+    <ul>
+		<li class="step">Définition de classe</li>
+		<li class="step">Nommage des propriétés fonctions</li>
+		<li class="step">...</li>
+		<br/>
+		<li class="step">Possibilité de transpiler ES6. Ex: BabelJS</li>
+		<li class="step">Features ES6 : http://es6-features.org/</li>
+		<li class="step">Doc MDN</li>
+	</ul>
+    <details open>
+      <summary/>
+    </details>
+  </section>
+  
   <section class="title" id="modularity-nbio">
     <img class="bg" src="images/blocking-io.jpg">
     <h1>Modularité et I/O asynchrones</h1>
@@ -610,7 +681,7 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
   </section>
 
   <section data-timing="5">
-    <h1>Modules NodeJS : a faire</h1>
+    <h1>Modules NodeJS : à faire</h1>
     <ul class="steps">
       <li class="guideline">Dépendances internes au projet : syntaxe relative</li>
       <li class="guideline">Dépendances externes : syntaxe externe</li>
