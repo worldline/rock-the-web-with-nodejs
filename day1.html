@@ -341,7 +341,7 @@ for (var i = 0; i < 3; i++) {
       <p><code>arguments</code> n'est pas un vrai tableau : il n'a pas de fonction reduce, et il faut le "caster".</p>
       <p>La fonction <a href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array/reduce" target="_blank"><code>reduce</code></a> prends 2 paramètres : une fonction de traitement, appliquée sur chaque élément du tableau, et dont le retour est stocké dans un accumulateur. Elle prend 2 paramètres : la valeur de l'accumulateur précédent, et l'élément courant. Le second paramètre de <code>reduce</code> est l'accumulateur initial.</p>
       <p><strong>getAttr()</strong> peut être réalisée récursivement ou itérativement.</p>
-      <p><a href="http://jsbin.com/jumora/edit?js,console" target="_blank">Correction</a></li>
+      <p><a href="http://jsbin.com/jumora/edit?js,console" target="_blank">Correction</a></p>
     </details>
   </section>
 
@@ -560,8 +560,8 @@ console.log(rental[1].model.manufacturer);
     <h1>Un peu d'ES6</h1>
     <ul>
 		<li class="step">Mots clé <pre class="inline"><code class="javascript">const</code></pre> et <pre class="inline"><code class="javascript">let</code></pre>
-			<pre><code class="javascript">const movie = { 
-  title: 'Alien' 
+			<pre><code class="javascript">const movie = {
+  title: 'Alien'
 };
 
 movie = 'Terminator'; // Erreur : affectation impossible
@@ -573,7 +573,7 @@ movie.title = 'Fight Club'; // OK
 
 		<li class="step">Valeur par défaut d'un param. et litéral
 			<pre><code class="javascript">function movie (id, title = 'Alien', year = 1979) {
-  return `Movie ${id} : ${title} (${year})!`; 
+  return `Movie ${id} : ${title} (${year})!`;
 // Evite 'Movie ' + id + ' : ' + title + ' (' + year + ')' + '!'
 }
 
@@ -583,7 +583,7 @@ movie(426); // Donne 'Movie 426 : Alien (1979)'</code></pre></li>
       <summary/>
     </details>
   </section>
-  
+
   <section data-timing="3">
     <h1>ES6 - Fonc. fléchée</h1>
     <ul>
@@ -594,7 +594,7 @@ movie(426); // Donne 'Movie 426 : Alien (1979)'</code></pre></li>
 // Devient
 movies.map(movie => `${movie.id} : ${movie.title}`);</code></pre></li>
 
-		<li class="step">Multi-arguments 
+		<li class="step">Multi-arguments
 			<pre><code class="javascript">movies.map((movie, actor) => { // Un peu de traitement métier
   return `${movie.id} : ${actor}`
 };</code></pre></li>
@@ -610,7 +610,7 @@ movies.map(movie => `${movie.id} : ${movie.title}`);</code></pre></li>
       <summary/>
     </details>
   </section>
-    
+
     <section data-timing="1">
     <h1>ES6 - Et beaucoup +</h1>
     <ul>
@@ -626,7 +626,7 @@ movies.map(movie => `${movie.id} : ${movie.title}`);</code></pre></li>
       <summary/>
     </details>
   </section>
-  
+
   <section class="title" id="modularity-nbio">
     <img class="bg" src="images/blocking-io.jpg">
     <h1>Modularité et I/O asynchrones</h1>
@@ -649,7 +649,7 @@ exports.circumference = function (r) {
     <details open>
       <summary/>
       <p><a href="http://requirejs.org/" target="_blank">RequireJS</a> est un framework de dépendances entre fichier JS pour le navigateur (chargement dynamique), qui implémente la spécification Asynchronous Module Definition</p>
-      <p><a href="http://wiki.commonjs.org/wiki/CommonJS" target="_blank">CommonJS est une spécification pour utiliser le JS en dehors du navigateur, qui inclu une système de <a href="http://wiki.commonjs.org/wiki/Modules/1.1.1" target="_blank">modularisation</a></p>
+      <p><a href="http://wiki.commonjs.org/wiki/CommonJS" target="_blank">CommonJS est une spécification pour utiliser le JS en dehors du navigateur, qui inclu une système de <a href="http://wiki.commonjs.org/wiki/Modules/1.1.1" target="_blank">modularisation</a></a></p>
       <p>EcmaScript 6 inclu un système de <a href="http://www.2ality.com/2014/09/es6-modules-final.html" target="_blank">modularisation</a>, dont on peut trouver diverses implémentations</p>
       <p>NodeJS implémente uniquement la spec CommonJS.</p>
       <p>En NodeJS il y a néanmoins un scope global, accessible depuis un module avec la variable <code>global</code></p>
@@ -661,7 +661,8 @@ exports.circumference = function (r) {
     <ul class="steps">
       <li>Un module peut importer d'autres modules<pre><code class="javascript">var common = require('../utils/common'); // relatif
 var request = require('request'); // core ou externe
-var render = require('stylus/render.js'); // fichier particulier du module externe 'stylus'</code></pre></li>
+var render = require('stylus/render.js'); // fichier particulier du module externe 'stylus'
+const { area, circumference } = require('../utils/common'); // fonction spécifique du module</code></pre></li>
       <li>Chargement des modules externes: <ol>
         <li>Dans le dossier <strong>node_modules</strong> à la hauteur que le module courant</li>
         <li>Sinon, cherche dans le dossier <strong>node_modules</strong> à la hauteur du parent</li>
@@ -670,12 +671,14 @@ var render = require('stylus/render.js'); // fichier particulier du module exter
       <li>Si le chemin dans <pre class="inline"><code class="javascript">require()</code></pre> est un dossier: <ol>
         <li>Lecture du <strong>package.json</strong> et chargement du chemin pointé dans <strong>main</strong></li>
         <li>Sinon chargement du fichier <strong>index.js</strong> ou <strong>index.node</strong></li>
+      </ol></li>
     </ul>
     <details open>
       <summary/>
       <p>L'import relatif l'est par rapport au fichier (module) courant, et commence par <code>./</code> ou <code>../</code>.</p>
       <p>Le séparateur de chemin est <strong>toujours</strong> <code>/</code> quelque soit l'OS utilisé.</p>
       <p>L'extension de fichier '.js', '.json' et '.node' sont facultatives: <code>../utils/common</code> équivaut <code>../utils/common.js</code></p>
+      <p>L'import d'une fonction spécifique permet un allègement de l'import et ainsi un chargement plus rapide.</p>
       <p>Un import commençant par <code>/</code> est un import absolu. C'est une syntaxe déconseillée.</p>
     </details>
   </section>
