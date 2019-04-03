@@ -1,3 +1,5 @@
+# Une nouvelle version de la formation est disponible ici : https://github.com/worldline/nodejs-training !
+
 # Rock the Web with NodeJS
 
 This is an 3 days internal formation delivered by Nicolas Morel and Damien Simonin Feugas as Worldline.
